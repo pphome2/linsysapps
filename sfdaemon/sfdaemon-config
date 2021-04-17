@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# SFDaemon - rendszer
+#
+# Beállítások, konfiguráció
+#
+
+# indítási könyvtár
+TPATH=`pwd`
+
+FILETOLISTEN="file.txt"
+FILETIME=``
+
+# daemon script
+SFDAEMON="ls"
+PIDFILE="sfdaemon.pid"
+
+# utasítások
+COMMAND="ls -l"
+
+# modulok engedélyezése: 0 - letiltva, 1 - engedélyezve
+ENABLE_LOG=1
+
+# a program helye
+BINDIR="/usr/local/bin"
+
+# logok
+LOGDIR="/var/log"
+LOGFILE="sfdaemon.log"
+LOGARCHFILE="sfdaemon.log.1 sfdaemon.log.2 sfdaemon.log.3"
+
+# log rotáció - a héten belüli nap száma: 1-7, 0 - letiltva
+LOGROTATEDAY=5
+
+#

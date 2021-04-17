@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+# SFDaemon - rendszer
+#
+# daemon
+#
+
+d=`dirname $0`
+. $d/sfdaemon-config
+
+#cd $BINDIR
+
+sd=`stat --printf=%Y $FILETOLISTEN`
+
+while true; do
+	ld=`stat --printf=%Y $FILETOLISTEN`
+	#echo $FILETOLISTEN $sd $ld
+	if [ $ld != $sd ]; then
+		echo $sd $ld
+		sd=$ld
+		d=`date`
+		echo "$d Program futtatása: $COMMAND" >> $LOGDIR/$LOGFILE
+		eval "$COMMAND";
+	#else
+		#echo eq
+	fi
+	sleep 5
+done
+
+#cd $TPATH
+
+#

@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# SFDaemon - rendszer
+#
+# daemon indítása
+#
+
+d=`dirname $0`
+. $d/sfdaemon-config
+
+#cd $BINDIR
+
+d=`date`
+echo "$d Daemon indítása." >> $LOGDIR/$LOGFILE
+
+# log rotáció
+if [ $ENABLE_LOG = 1 ]; then
+		d=`date`
+		./backup-log 2>/dev/null
+		echo "$d Log rotáció." >> $LOGDIR/$LOGFILE
+fi
+
+$SFDAEMON > /dev/nul 2>/dev/nul & echo $! > $PIDFILE
+
+d=`date`
+echo "$d Kész." >> $LOGDIR/$LOGFILE
+
+#cd $TPATH
+
+#

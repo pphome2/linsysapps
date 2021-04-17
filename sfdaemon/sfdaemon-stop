@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# SFDaemon - rendszer
+#
+# daemon leállítása
+#
+
+d=`dirname $0`
+. $d/sfdaemon-config
+
+#cd $BINDIR
+
+if [ -f $PIDFILE ]; then
+	pid=`cat $PIDFILE`
+	kill -9 $pid 2>/dev/nul
+	rm $PIDFILE #2>/dev/nul
+fi
+
+killall $SFDAEMON 2>/dev/nul
+
+#cd $TPATH
+
+#
