@@ -18,6 +18,9 @@ PIDFILE="sfdaemon.pid"
 # másodpercben a daemon alvóideje
 SLEEPTIME=5
 
+# kilépési kód (a fájl tartalma)
+EXIT_CODE="x"
+
 # utasítások
 COMMAND="ls -l"
 COMMANDS="ls df"
@@ -25,6 +28,7 @@ COMMANDS="ls df"
 # modulok engedélyezése: 0 - letiltva, 1 - engedélyezve
 ENABLE_LOG=1
 ENABLE_MULTI_COMMAND=1
+ENABLE_EXIT_CODE=1
 
 # a program helye
 BINDIR="/usr/local/bin"
