@@ -15,6 +15,9 @@ FILETIME=``
 SFDAEMON="sfdaemon"
 PIDFILE="sfdaemon.pid"
 
+# másodpercben a daemon alvóideje
+SLEEPTIME=5
+
 # utasítások
 COMMAND="ls -l"
 COMMANDS="ls df"

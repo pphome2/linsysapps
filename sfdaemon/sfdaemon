@@ -35,7 +35,7 @@ while true; do
 	#else
 		#echo eq
 	fi
-	sleep 5
+	sleep $SLEEPTIME
 done
 
 #cd $TPATH
