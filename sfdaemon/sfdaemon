@@ -22,6 +22,9 @@ while $al; do
 			fv=`cat $FILETOLISTEN`
 			if [ $fv = $EXIT_CODE ]; then
 				al=false
+				if [ -f $PIDFILE ]; then
+					rm $PIDFILE #2>/dev/nul
+				fi
 			fi
 		fi
 		if $al; then

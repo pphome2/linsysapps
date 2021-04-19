@@ -10,16 +10,19 @@ d=`dirname $0`
 
 #cd $BINDIR
 
-if [ -f $PIDFILE ]; then
-	pid=`cat $PIDFILE`
-	kill -9 $pid 2>/dev/null
-	rm $PIDFILE #2>/dev/nul
+if [ $ENABLE_EXIT_CODE  != "0" ]; then
+	echo $EXIT_CODE > $FILETOLISTEN
 else
-	pid=`ps -A | grep $SFDAEMON | awk '{print $1}'`
-	kill -9 $pid 2>/dev/null
-	#echo $pid
-	#killall $SFDAEMON 2>/dev/null
-
+	if [ -f $PIDFILE ]; then
+		pid=`cat $PIDFILE`
+		kill -9 $pid 2>/dev/null
+		rm $PIDFILE #2>/dev/nul
+	else
+		pid=`ps -A | grep $SFDAEMON | awk '{print $1}'`
+		kill -9 $pid 2>/dev/null
+		#echo $pid
+		#killall $SFDAEMON 2>/dev/null
+	fi
 fi
 
 d=`date`
