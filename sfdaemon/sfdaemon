@@ -16,11 +16,22 @@ while true; do
 	ld=`stat --printf=%Y $FILETOLISTEN`
 	#echo $FILETOLISTEN $sd $ld
 	if [ $ld != $sd ]; then
-		echo $sd $ld
+		#echo $sd $ld
 		sd=$ld
 		d=`date`
 		echo "$d Program futtatása: $COMMAND" >> $LOGDIR/$LOGFILE
-		eval "$COMMAND";
+		if [ $ENABLE_MULTI_COMMAND != "0" ]; then
+			comid=`cat $FILETOLISTEN`
+			i=0
+			for f in $COMMANDS; do
+				if [ $i -eq $comid ]; then
+					eval "$f";
+				fi
+				i=$((i+1))
+			done
+		else
+			eval "$COMMAND";
+		fi
 	#else
 		#echo eq
 	fi

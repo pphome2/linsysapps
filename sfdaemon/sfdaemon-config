@@ -12,14 +12,16 @@ FILETOLISTEN="file.txt"
 FILETIME=``
 
 # daemon script
-SFDAEMON="ls"
+SFDAEMON="sfdaemon"
 PIDFILE="sfdaemon.pid"
 
 # utasítások
 COMMAND="ls -l"
+COMMANDS="ls df"
 
 # modulok engedélyezése: 0 - letiltva, 1 - engedélyezve
 ENABLE_LOG=1
+ENABLE_MULTI_COMMAND=1
 
 # a program helye
 BINDIR="/usr/local/bin"

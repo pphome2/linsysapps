@@ -10,20 +10,25 @@ d=`dirname $0`
 
 #cd $BINDIR
 
-d=`date`
-echo "$d Daemon indítása." >> $LOGDIR/$LOGFILE
+if [ -f $PIDFILE ]; then
+	d=`date`
+	echo "$d Daemon már fut." >> $LOGDIR/$LOGFILE
+else
+	d=`date`
+	echo "$d Daemon indítása." >> $LOGDIR/$LOGFILE
 
-# log rotáció
-if [ $ENABLE_LOG = 1 ]; then
-		d=`date`
-		./backup-log 2>/dev/null
-		echo "$d Log rotáció." >> $LOGDIR/$LOGFILE
+	# log rotáció
+	if [ $ENABLE_LOG = 1 ]; then
+			d=`date`
+			./backup-log 2>/dev/null
+			echo "$d Log rotáció." >> $LOGDIR/$LOGFILE
+	fi
+	#echo $SFDAEMON
+	./$SFDAEMON & echo $! > $PIDFILE
+
+	d=`date`
+	echo "$d Daemon fut." >> $LOGDIR/$LOGFILE
 fi
-
-$SFDAEMON > /dev/nul 2>/dev/nul & echo $! > $PIDFILE
-
-d=`date`
-echo "$d Kész." >> $LOGDIR/$LOGFILE
 
 #cd $TPATH
 

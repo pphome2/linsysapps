@@ -12,11 +12,18 @@ d=`dirname $0`
 
 if [ -f $PIDFILE ]; then
 	pid=`cat $PIDFILE`
-	kill -9 $pid 2>/dev/nul
+	kill -9 $pid 2>/dev/null
 	rm $PIDFILE #2>/dev/nul
+else
+	pid=`ps -A | grep $SFDAEMON | awk '{print $1}'`
+	kill -9 $pid 2>/dev/null
+	#echo $pid
+	#killall $SFDAEMON 2>/dev/null
+
 fi
 
-killall $SFDAEMON 2>/dev/nul
+d=`date`
+echo "$d Daemon leállítva." >> $LOGDIR/$LOGFILE
 
 #cd $TPATH
 
