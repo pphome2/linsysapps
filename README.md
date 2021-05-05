@@ -23,3 +23,11 @@ Egy daemon, ami egy fájlt figyel, amiben utasításokat kap.
 ### Működés
 
 ?
+
+## SysInfo
+
+Rendszeradatok összegyüjtése, beépólőmodulokkal.
+
+### Működés
+
+?

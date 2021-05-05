@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# SysInfo - rendszer
+#
+# Beállítások, konfiguráció
+#
+
+# indítási könyvtár
+TPATH=`pwd`
+
+# adatok tárolója
+OUTPUTFILE="sysinfo.txt"
+
+# kilépéskor az adatok megjelenítése: 0 - nem, 1 - igen
+SHOW_OUTPUTFILE=1
+
+# a process futásának ellenőrzése
+PROCESS="systemd firewalld cron sshd cupsd apache2 mariadb postfix dovecot exim"
+
+# modulok
+PLUGINS="sysinfo-wserver sysinfo-sql"
+
+# a program helye
+BINDIR="/usr/local/bin"
+
+# nyelvi elemek - language
+L_UPTIME="Indítás óta eltelt idő"
+L_PROCESSORNAME="Processzor"
+L_CORENUMBER="magok száma"
+L_LOAD="Processzor terhelés"
+L_MEMORY="Memória"
+L_MEMORYFREE="ebből szabad"
+L_PARTITIONS="Partíció - foglalt - csatolási hely"
+L_PROCESS="Process-ek ellenőrzése"
+L_PLUGINSTART="Modul indítása"
+L_RUN="fut"
+L_NORUN="nem fut"
+
+#
