@@ -12,25 +12,38 @@ d=`dirname $0`
 
 sd=`stat --printf=%Y $FILETOLISTEN`
 
-while true; do
+al=true
+
+while $al; do
 	ld=`stat --printf=%Y $FILETOLISTEN`
 	#echo $FILETOLISTEN $sd $ld
 	if [ $ld != $sd ]; then
-		#echo $sd $ld
-		sd=$ld
-		d=`date`
-		echo "$d Program futtatása: $COMMAND" >> $LOGDIR/$LOGFILE
-		if [ $ENABLE_MULTI_COMMAND != "0" ]; then
-			comid=`cat $FILETOLISTEN`
-			i=0
-			for f in $COMMANDS; do
-				if [ $i -eq $comid ]; then
-					eval "$f";
+		if [ $ENABLE_EXIT_CODE  != "0" ]; then
+			fv=`cat $FILETOLISTEN`
+			if [ $fv = $EXIT_CODE ]; then
+				al=false
+				if [ -f $PIDFILE ]; then
+					rm $PIDFILE #2>/dev/nul
 				fi
-				i=$((i+1))
-			done
-		else
-			eval "$COMMAND";
+			fi
+		fi
+		if $al; then
+			#echo $sd $ld
+			sd=$ld
+			d=`date`
+			echo "$d Program futtatása: $COMMAND" >> $LOGDIR/$LOGFILE
+			if [ $ENABLE_MULTI_COMMAND != "0" ]; then
+				comid=`cat $FILETOLISTEN`
+				i=0
+				for f in $COMMANDS; do
+					if [ $i = $comid ]; then
+						eval "$f";
+					fi
+					i=$((i+1))
+				done
+			else
+				eval "$COMMAND";
+			fi
 		fi
 	#else
 		#echo eq
