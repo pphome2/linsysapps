@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# SysInfo - rendszer
+#
+# Beállítások, konfiguráció
+#
+
+# indítási könyvtár
+TPATH=`pwd`
+
+# adatok tárolója
+OUTPUTFILE="rmlchk.log"
+
+# kilépéskor az adatok megjelenítése: 0 - nem, 1 - igen
+SHOW_OUTPUTFILE=1
+
+# távoli gépek
+REMOTE_MACHINES="192.168.16.10 192.168.16.100"
+
+# portok ellenőrzése
+PORTS="22 80"
+
+# modulok
+PLUGINS="rmlchk-m"
+
+# a program helye
+BINDIR="/usr/local/bin"
+
+# e-mail küldése
+ALL_REPORT_TO_MAIL=1
+ERROR_REPORT_TO_MAIL=1
+MAIL_TO="hidden@mai.com"
+MAIL_FROM="hidden@mail.com"
+MAIL_BCC=""
+
+# nyelvi elemek - language
+L_PLUGIN_START="Modul indítása"
+L_ALL_OK="A vizsgált eszközön a szolgáltatások működnek."
+L_ERROR="A vizsgált eszjközön nem minden szolgáltatás működik."
+L_DOWN="A vizsgált eszközön nincs működő szolgáltatás."
+L_ANYWHEREERROR="Valamelyik ezközön hibák találhatók."
+L_MAIL_SUBJECT="Hibajelentés"
+L_MAIL_TEXT="Szolgáltatások ellenőrzése"
+L_MAIL_ERROR="A levélküldés nem sikerült."
+
+#

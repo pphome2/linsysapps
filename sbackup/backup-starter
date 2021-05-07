@@ -82,6 +82,13 @@ if [ $ENABLE_WEBDIR = 1 ]; then
 		./backup-webdir 2>/dev/null
 fi
 
+# beépülő modulok
+for i in $PLUGINS; do
+	if [ -f $i ]; then
+		. ./$i >> $LOGDIR/$LOGFILE
+	fi
+done
+
 d=`date`
 echo "$d Kész." >> $LOGDIR/$LOGFILE
 

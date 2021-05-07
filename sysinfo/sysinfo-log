@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# SysInfo - rendszer
+#
+# Modul: log
+#
+
+LOGLINECOUNT=100
+
+echo
+echo "Messages ($LOGLINECOUNT):"
+tail -$LOGLINECOUNT /var/log/messages | grep ERROR | tac | cut -c1-79
+echo
+
+echo Kernel:
+tail -$LOGLINECOUNT /var/log/kern.log | grep ERROR | tac | cut -c1-79
+echo
+
+echo Daemon:
+tail -$LOGLINECOUNT /var/log/daemon.log | grep ERROR | tac | cut -c1-79
+echo
+
+echo Syslog:
+tail -$LOGLINECOUNT /var/log/syslog | grep ERROR | tac | cut -c1-79
+echo
+
+echo Apache2:
+tail -$LOGLINECOUNT /var/log/apache2/error.log | tac | cut -c1-79
+echo
+
+echo Mariadb/MySQL:
+#tail -$LOGLINECOUNT /var/log/mysql/error.log | tac | cut -c1-79
+echo
+
+echo Cups:
+#tail -$LOGLINECOUNT /var/log/cups/error.log | tac | cut -c1-79
+echo
+
+
+#

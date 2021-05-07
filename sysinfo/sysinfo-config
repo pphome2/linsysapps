@@ -18,7 +18,7 @@ SHOW_OUTPUTFILE=1
 PROCESS="systemd firewalld cron sshd cupsd apache2 mariadb postfix dovecot exim"
 
 # modulok
-PLUGINS="sysinfo-wserver sysinfo-sql"
+PLUGINS="sysinfo-log"
 
 # a program helye
 BINDIR="/usr/local/bin"

@@ -1,0 +1,88 @@
+#!/bin/bash
+#
+# RemoteMachineLiveCheck
+#
+# vezérlés
+#
+
+localdir=`dirname $0`
+. $localdir/rmlchk-config
+
+#cd $BINDIR
+
+d=`date`
+echo > $OUTPUTFILE
+echo $d >> $OUTPUTFILE
+echo >> $OUTPUTFILE
+
+# valami hiba van
+anywhereerror=0
+
+# rendszer
+for i in $REMOTE_MACHINES; do
+	ok=0
+	globalerror=10
+	for k in $PORTS; do
+		(echo >/dev/tcp/$i/$k) >/dev/null 2>&1
+		if [ $? -eq 0 ]; then
+			echo "$i : $k - +" >> $OUTPUTFILE
+			globalerror=0
+		else
+			echo "$i : $k - -" >> $OUTPUTFILE
+			ok=1
+			if [ $globalerror != 0 ]; then
+				globalerror=1
+			fi
+		fi
+	done
+	echo >> $OUTPUTFILE
+	if [ $globalerror -eq 0 ]; then
+		if [ $ok != 0 ]; then
+			echo $L_ERROR >> $OUTPUTFILE
+			anywhereerror=1
+		else
+			echo $L_ALL_OK >> $OUTPUTFILE
+		fi
+	else
+		echo $L_DOWN >> $OUTPUTFILE
+		anywhereerror=1
+	fi
+	echo >> $OUTPUTFILE
+done
+
+#echo >> $OUTPUTFILE
+
+# beépülő modulok
+for i in $PLUGINS; do
+	if [ -f $i ]; then
+		echo $L_PLUGIN_START: $i >> $OUTPUTFILE
+		. ./$i >> $OUTPUTFILE
+		echo >> $OUTPUTFILE
+	fi
+done
+
+# valahol hiba történt
+if [ $anywhereerror != 0 ]; then
+	echo $L_ANYWHEREERROR >> $OUTPUTFILE
+	echo >> $OUTPUTFILE
+fi
+
+# e-mail küldése
+if [ $ALL_REPORT_TO_MAIL = 1 ]; then
+	. $localdir/rmlchk-mail
+else
+	if [ $ERROR_REPORT_TO_MAIL = 1 ]; then
+		if [ $anywhereerror != 0 ]; then
+			. $localdir/rmlchk-mail
+		fi
+	fi
+fi
+
+# adatfájl megjelenítése
+if [ $SHOW_OUTPUTFILE = 1 ]; then
+	cat $OUTPUTFILE
+fi
+
+#cd $TPATH
+
+#

@@ -77,6 +77,9 @@ NETUSER="admin"
 NETPASSWORD="Valami"
 NETTARGET="/mnt/backupdir"
 
+# modulok
+PLUGINS=""
+
 if [ "$DEVICENAME" = "" ]; then
 	DEVICENAME="0"
 fi
