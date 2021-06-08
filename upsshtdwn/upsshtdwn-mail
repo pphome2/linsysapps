@@ -1,13 +1,13 @@
 #!/bin/bash
 #
-# RemoteMachineLiveCheck
+# UPSShutDown
 #
 # E-mail küldés
-# Szükséges: SSMTP vagy MSMTP
+# Szükséges: SSMTP
 #
 
 d=`dirname $0`
-. $d/rmlchk-config
+. $d/upsshtdwn-config
 
 echo "To: $MAIL_TO" > ./mail.txt
 echo "Bcc: $MAIL_BCC" >> ./mail.txt
@@ -25,7 +25,7 @@ echo "$L_MAIL_TEXT" >> ./mail.txt
 echo "<br />" >> ./mail.txt
 echo "<br />" >> ./mail.txt
 
-f=`cat $OUTPUTFILE`
+f=`cat $LOGFILE`
 bifs=$IFS
 IFS='
 '
@@ -38,12 +38,12 @@ echo "<br />" >> ./mail.txt
 echo "</body>" >> ./mail.txt
 echo "</html>" >> ./mail.txt
 
-#cat ./mail.txt | ssmtp $MAIL_TO >/dev/null 2>&1
-cat ./mail.txt | usmtp $MAIL_TO >/dev/null 2>&1
+cat ./mail.txt | ssmtp $MAIL_TO >/dev/null 2>&1
 
 if [ $? != 0 ]; then
-	echo $L_MAIL_ERROR >>$OUTPUTFILE
-	echo >>$OUTPUTFILE
+	echo $L_MAIL_ERROR >>$LOGFILE
+else
+	echo $L_MAIL_OK >>$LOGFILE
 fi
 
 #

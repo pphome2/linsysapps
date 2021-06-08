@@ -53,3 +53,13 @@ Távoli eszközök (szerverek) portjainak ellenőrzése, hogy működik-e a szol
 Az 'rmlchk-config' fájlban megadott ip című eszközök megadott protjait ellenőrzi
 és log fájlba menti. A log tartalmát e-mail-en keresztül el tudja küldeni egy
 megadott címre.
+
+## UPSHTDWN
+
+Szünetmentes jelzésének továbbítása és eszközök leállítása.
+
+### Működés
+
+A helyi szünetmentest kezelő szolgáltatás ( 'nut' ) jelzést ad a host rendszernek a
+'/etc/killpower' fájlon keresztül. A program ezt a fájlt 'ssh'-n keresztül átadja a
+kliens eszközöknek, melyek leállnak. Mail küldés és modulok támagatása.

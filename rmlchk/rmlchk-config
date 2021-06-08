@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# SysInfo - rendszer
+# RemoteMachineLiveCheck
 #
 # Beállítások, konfiguráció
 #
@@ -29,7 +29,7 @@ BINDIR="/usr/local/bin"
 # e-mail küldése
 ALL_REPORT_TO_MAIL=1
 ERROR_REPORT_TO_MAIL=1
-MAIL_TO="hidden@mai.com"
+MAIL_TO="hidden@mail.com"
 MAIL_FROM="hidden@mail.com"
 MAIL_BCC=""
 

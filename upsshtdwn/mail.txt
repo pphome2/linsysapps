@@ -1,0 +1,24 @@
+To: hidden@mail.com
+Bcc: 
+From: hidden@mail.com
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+Subject: Szerver leállítás
+<html>
+<head>
+<meta Content-Type: text/html; charset=utf-8>
+<head>
+<body>
+<br />
+A szünetmentes leállítást kezdeményezett.
+<br />
+<br />
+2021. jún. 8., kedd, 14:18:42 CEST <br />
+Szerver neve: debpp <br />
+A szerveren nincs szünetmentes. <br />
+A figyelt fájl létezik. <br />
+A leállítás indítása... <br />
+A szünetmentesen nincs áram, a leállítás folyamatban. <br />
+<br />
+</body>
+</html>

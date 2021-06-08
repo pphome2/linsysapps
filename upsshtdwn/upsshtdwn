@@ -1,0 +1,81 @@
+#!/bin/bash
+#
+# UPSShutDown
+#
+# vezérlés
+#
+
+localdir=`dirname $0`
+. $localdir/upsshtdwn-config
+
+#cd $BINDIR
+
+d=`date`
+echo > $LOGFILE
+echo $d >> $LOGFILE
+h=`hostname`
+echo "$L_HOSTNAME: $h" >> $LOGFILE
+echo >> $LOGFILE
+
+action="0"
+
+# kliens vagy host
+upsmon=`ps -A | grep upsmon`
+# teszteléshez
+#upsmon=""
+if [ "$upsmon" != "" ]; then
+	# szerver, jelzés a klienseknek, ha szükséges
+	echo $L_UPS_SERVER >> $LOGFILE
+	if [ -f $UPS_LISTEN_FILE ]; then
+		echo $L_LISTEN_FILE_FOUND >> $LOGFILE
+		action="1"
+		echo $L_SHUTDOWN_TO_CLIENT >> $LOGFILE
+		for i in $REMOTE_MACHINES; do
+			scp $UPS_LISTEN_FILE "$REMOTE_USER"@"$i":"$UPS_CLIENT_LISTEN_FILE" >> /dev/null 2>> /dev/null
+		done
+		echo $L_SHUTDOWN_START >> $LOGFILE
+		#/sbin/shutdown -h +1 &
+		$SHUTDOWN_COMMAND &
+	fi
+else
+	# kliens, leállítás
+	echo $L_UPS_NOSERVER >> $LOGFILE
+	if [ -f $UPS_CLIENT_LISTEN_FILE ]; then
+		echo $L_LISTEN_FILE_FOUND >> $LOGFILE
+		action="1"
+		echo $L_SHUTDOWN_START >> $LOGFILE
+		#/sbin/shutdown -h +1 &
+		$SHUTDOWN_COMMAND &
+	fi
+fi
+
+echo >> $LOGFILE
+
+if [ $action == "1" ]; then
+	echo $L_ACTION >> $LOGFILE
+	# beépülő modulok
+	for i in $PLUGINS; do
+		if [ -f $i ]; then
+			echo $L_PLUGIN_START: $i >> $LOGFILE
+			. ./$i >> $LOGFILE
+			echo >> $LOGFILE
+		fi
+	done
+
+	# e-mail küldése
+	if [ $REPORT_TO_MAIL = 1 ]; then
+		. $localdir/upsshtdwn-mail
+	fi
+else
+	echo $L_NOACTION >> $LOGFILE
+fi
+echo >> $LOGFILE
+
+# adatfájl megjelenítése
+if [ $SHOW_LOGFILE = 1 ]; then
+	cat $LOGFILE
+fi
+
+#cd $TPATH
+
+#
