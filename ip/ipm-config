@@ -11,6 +11,9 @@ TPATH=`pwd`
 # adatok tárolója
 LOGFILE="ipm.log"
 
+# levélfájl
+MAILFILE="ipmmal.txt"
+
 # kilépéskor az adatok megjelenítése: 0 - nem, 1 - igen
 SHOW_LOGFILE=1
 

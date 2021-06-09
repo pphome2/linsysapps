@@ -15,6 +15,9 @@ UPS_CLIENT_LISTEN_FILE="/home/peter/killpower"
 # adatok tárolója
 LOGFILE="upsshtdwn.log"
 
+# levélfájl
+MAILFILE="upsshtdwnmail.txt"
+
 # kilépéskor az adatok megjelenítése: 0 - nem, 1 - igen
 SHOW_LOGFILE=1
 

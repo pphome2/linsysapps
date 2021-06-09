@@ -9,37 +9,37 @@
 d=`dirname $0`
 . $d/rmlchk-config
 
-echo "To: $MAIL_TO" > ./mail.txt
-echo "Bcc: $MAIL_BCC" >> ./mail.txt
-echo "From: $MAIL_FROM" >> ./mail.txt
-echo "MIME-Version: 1.0" >> ./mail.txt
-echo "Content-Type: text/html; charset=utf-8" >> ./mail.txt
-echo "Subject: $L_MAIL_SUBJECT" >> ./mail.txt
-echo "<html>" >> ./mail.txt
-echo "<head>" >> ./mail.txt
-echo "<meta Content-Type: text/html; charset=utf-8>" >> ./mail.txt
-echo "<head>" >> ./mail.txt
-echo "<body>" >> ./mail.txt
-echo "<br />" >> ./mail.txt
-echo "$L_MAIL_TEXT" >> ./mail.txt
-echo "<br />" >> ./mail.txt
-echo "<br />" >> ./mail.txt
+echo "To: $MAIL_TO" > "$MAILFILE"
+echo "Bcc: $MAIL_BCC" >> "$MAILFILE"
+echo "From: $MAIL_FROM" >> "$MAILFILE"
+echo "MIME-Version: 1.0" >> "$MAILFILE"
+echo "Content-Type: text/html; charset=utf-8" >> "$MAILFILE"
+echo "Subject: $L_MAIL_SUBJECT" >> "$MAILFILE"
+echo "<html>" >> "$MAILFILE"
+echo "<head>" >> "$MAILFILE"
+echo "<meta Content-Type: text/html; charset=utf-8>" >> "$MAILFILE"
+echo "<head>" >> "$MAILFILE"
+echo "<body>" >> "$MAILFILE"
+echo "<br />" >> "$MAILFILE"
+echo "$L_MAIL_TEXT" >> "$MAILFILE"
+echo "<br />" >> "$MAILFILE"
+echo "<br />" >> "$MAILFILE"
 
 f=`cat $OUTPUTFILE`
 bifs=$IFS
 IFS='
 '
 for i in $f; do
-	echo "$i <br />" >> ./mail.txt
+	echo "$i <br />" >> "$MAILFILE"
 done
 IFS=$bifs
 
-echo "<br />" >> ./mail.txt
-echo "</body>" >> ./mail.txt
-echo "</html>" >> ./mail.txt
+echo "<br />" >> "$MAILFILE"
+echo "</body>" >> "$MAILFILE"
+echo "</html>" >> "$MAILFILE"
 
-#cat ./mail.txt | ssmtp $MAIL_TO >/dev/null 2>&1
-cat ./mail.txt | usmtp $MAIL_TO >/dev/null 2>&1
+#cat "$MAILFILE" | ssmtp $MAIL_TO >/dev/null 2>&1
+cat "$MAILFILE" | usmtp $MAIL_TO >/dev/null 2>&1
 
 if [ $? != 0 ]; then
 	echo $L_MAIL_ERROR >>$OUTPUTFILE
