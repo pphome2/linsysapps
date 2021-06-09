@@ -1,0 +1,63 @@
+#!/bin/bash
+#
+# Külső ip cím változásának figyelése
+#
+# vezérlés
+#
+
+localdir=`dirname $0`
+. $localdir/ipm-config
+
+#cd $BINDIR
+
+d=`date`
+echo > $LOGFILE
+echo $d >> $LOGFILE
+echo >> $LOGFILE
+
+if [ -e "$IP_OLD" ]; then
+	ipold=`cat ./$IP_OLD`
+else
+	ipold=""
+fi
+
+wget -q ifconfig.me/ip >/dev/null  2>&1
+
+if [ -f ip ]; then
+	mv ip "$IP_NOW" >/dev/null  2>&1
+	ipnow=`cat ./$IP_NOW`
+	if [ "$ipold" == "$ipnow" ]; then
+		echo $L_IP_NOCHANGE >> $LOGFILE
+		echo >> $LOGFILE
+	else
+		cp "$IP_NOW" "$IP_OLD"
+		echo $L_IP_CHANGE >> $LOGFILE
+		echo >> $LOGFILE
+		echo $ipnow >> $LOGFILE
+		echo >> $LOGFILE
+		# beépülő modulok
+		for i in $PLUGINS; do
+			if [ -f $i ]; then
+				echo $L_PLUGIN_START: $i >> $LOGFILE
+				. ./$i >> $LOGFILE
+				echo >> $LOGFILE
+			fi
+		done
+		# e-mail küldése
+		if [ $REPORT_TO_MAIL = 1 ]; then
+			. $localdir/ipm-mail
+		fi
+	fi
+else
+	echo $L_CHECK_ERROR >> $LOGFILE
+	echo >> $LOGFILE
+fi
+
+# adatfájl megjelenítése
+if [ $SHOW_LOGFILE = 1 ]; then
+	cat $LOGFILE
+fi
+
+#cd $TPATH
+
+#

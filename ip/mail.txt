@@ -1,0 +1,21 @@
+To: hidden@mail.com
+Bcc: 
+From: hidden@mail.com
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+Subject: [Hydra] IP cím változás
+<html>
+<head>
+<meta Content-Type: text/html; charset=utf-8>
+<head>
+<body>
+<br />
+Az ip cím megváltozott.
+<br />
+<br />
+2021. jún. 9., szerda, 08:56:19 CEST <br />
+Az IP cím megváltozott. <br />
+195.228.226.193 <br />
+<br />
+</body>
+</html>

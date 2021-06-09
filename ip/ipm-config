@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# Külső ip cím változás figyelése
+#
+# Beállítások, konfiguráció
+#
+
+# indítási könyvtár
+TPATH=`pwd`
+
+# adatok tárolója
+LOGFILE="ipm.log"
+
+# kilépéskor az adatok megjelenítése: 0 - nem, 1 - igen
+SHOW_LOGFILE=1
+
+# távoli gépek
+INTERNET_SITE="ifconfig.me"
+
+# a program helye
+BINDIR="/usr/local/bin"
+
+# ip cím tárolása
+IP_NOW="ipnow.txt"
+IP_OLD="ipold.txt"
+
+# beépülő modulok
+PLUGINS=""
+
+# e-mail küldése
+REPORT_TO_MAIL=1
+MAIL_TO="hidden@mail.com"
+MAIL_FROM="hidden@mail.com"
+MAIL_BCC=""
+
+# nyelvi elemek - language
+L_MAIL_SUBJECT="[Hydra] IP cím változás"
+L_MAIL_TEXT="Az ip cím megváltozott."
+L_PLUGIN_START="Beépülő modul indítása:"
+L_IP_CHANGE="Az IP cím megváltozott."
+L_IP_NOCHANGE="Az IP cím nem változott."
+L_CHECK_ERROR="Az IP cím lekérése nem sikerült."
+L_MAIL_ERROR="Levélküldés nem sikerült."
+L_MAIL_OK="Levélküldés sikeres."
+
+#
