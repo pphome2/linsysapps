@@ -14,6 +14,9 @@ OUTPUTFILE="rmlchk.log"
 # levélfile
 MAILFILE="rmlchkmail.txt"
 
+# html levél: 0 - nem, 1 - igen
+HTMLMAIL=0
+
 # kilépéskor az adatok megjelenítése: 0 - nem, 1 - igen
 SHOW_OUTPUTFILE=1
 

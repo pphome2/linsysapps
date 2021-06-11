@@ -8,35 +8,65 @@
 
 d=`dirname $0`
 . $d/rmlchk-config
-
-echo "To: $MAIL_TO" > "$MAILFILE"
-echo "Bcc: $MAIL_BCC" >> "$MAILFILE"
-echo "From: $MAIL_FROM" >> "$MAILFILE"
-echo "MIME-Version: 1.0" >> "$MAILFILE"
-echo "Content-Type: text/html; charset=utf-8" >> "$MAILFILE"
-echo "Subject: $L_MAIL_SUBJECT" >> "$MAILFILE"
-echo "<html>" >> "$MAILFILE"
-echo "<head>" >> "$MAILFILE"
-echo "<meta Content-Type: text/html; charset=utf-8>" >> "$MAILFILE"
-echo "<head>" >> "$MAILFILE"
-echo "<body>" >> "$MAILFILE"
-echo "<br />" >> "$MAILFILE"
-echo "$L_MAIL_TEXT" >> "$MAILFILE"
-echo "<br />" >> "$MAILFILE"
-echo "<br />" >> "$MAILFILE"
-
-f=`cat $OUTPUTFILE`
-bifs=$IFS
-IFS='
+enter='
 '
-for i in $f; do
-	echo "$i <br />" >> "$MAILFILE"
-done
-IFS=$bifs
 
-echo "<br />" >> "$MAILFILE"
-echo "</body>" >> "$MAILFILE"
-echo "</html>" >> "$MAILFILE"
+if [ "$HTMLMAIL" == "1" ]; then
+	echo "To: $MAIL_TO" > $MAILFILE
+	echo "Bcc: $MAIL_BCC" >> $MAILFILE
+	echo "From: $MAIL_FROM" >> $MAILFILE
+	echo "MIME-Version: 1.0" >> $MAILFILE
+	echo "Content-Type: text/html; charset=utf-8" >> $MAILFILE
+	echo "Subject: $L_MAIL_SUBJECT" >> $MAILFILE
+	echo "<html>" >> $MAILFILE
+	echo "<head>" >> $MAILFILE
+	echo "<meta Content-Type: text/html; charset=utf-8>" >> $MAILFILE
+	echo "</head>" >> $MAILFILE
+	echo "<body>" >> $MAILFILE
+	echo "<br />" >> $MAILFILE
+	echo "$L_MAIL_TEXT" >> $MAILFILE
+	echo "<br />" >> $MAILFILE
+	echo "<br />" >> $MAILFILE
+	f=`cat $OUTPUTFILE`
+	bifs=$IFS
+	IFS=$enter
+	for i in $f; do
+		echo "$i <br />" >> $MAILFILE
+	done
+	IFS=$bifs
+	echo "<br />" >> $MAILFILE
+	echo "</body>" >> $MAILFILE
+	echo "</html>" >> $MAILFILE
+else
+	echo "To: $MAIL_TO" > $MAILFILE
+	echo "Bcc: $MAIL_BCC" >> $MAILFILE
+	echo "From: $MAIL_FROM" >> $MAILFILE
+	echo "MIME-Version: 1.0" >> $MAILFILE
+	echo "Subject: $L_MAIL_SUBJECT" >> $MAILFILE
+	echo "$enter" >> $MAILFILE
+	echo "$enter" >> $MAILFILE
+	echo "$L_MAIL_TEXT" >> $MAILFILE
+	echo "$enter" >> $MAILFILE
+	echo "$enter" >> $MAILFILE
+	f=`cat $OUTPUTFILE`
+	bifs=$IFS
+	IFS=$enter
+	for i in $f; do
+		echo "$i $enter" >> $MAILFILE
+	done
+	IFS=$bifs
+	echo "$enter" >> $MAILFILE
+fi
+
+#cat $MAILFILE | ssmtp $MAIL_TO >/dev/null 2>&1
+cat $MAILFILE | msmtp $MAIL_TO #>/dev/null 2>&1
+
+if [ $? != 0 ]; then
+	echo $L_MAIL_ERROR >>$OUTPUTFILE
+	echo >>$OUTPUTFILE
+fi
+
+#
 
 #cat "$MAILFILE" | ssmtp $MAIL_TO >/dev/null 2>&1
 cat "$MAILFILE" | usmtp $MAIL_TO >/dev/null 2>&1

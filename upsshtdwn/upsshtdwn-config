@@ -18,6 +18,9 @@ LOGFILE="upsshtdwn.log"
 # levélfájl
 MAILFILE="upsshtdwnmail.txt"
 
+# html levél: 0 - nem, 1 - igen
+HTMLMAIL=0
+
 # kilépéskor az adatok megjelenítése: 0 - nem, 1 - igen
 SHOW_LOGFILE=1
 
