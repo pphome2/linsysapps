@@ -1,6 +1,0 @@
-#!/bin/sh
-
-autossh -M 5001 -N -R 5000:localhost:22 ka@ka.hu -p 2222 -f
-
-#
-
