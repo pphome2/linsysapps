@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# ssh client with tunnel
+#
+
+# indítási könyvtár
+TPATH=`pwd`
+
+# adatok tárolója
+LOGFILE="sshcl.log"
+
+# kilépéskor az adatok megjelenítése: 0 - nem, 1 - igen
+SHOW_LOGFILE=1
+
+# a program helye
+BINDIR="/usr/local/bin"
+
+# tunnel szerver
+TUN_SERVER="ka.hu"
+TUN_PORT="2222"
+
+# tunnel szerver felhasználó
+TUN_USER="kauser"
+
+# tunnel szerver jelszó
+TUN_PASSWORD="Password1"
+
+# tunnel átjáró port
+TUN_BRIDGE_PORT="5000"
+
+# tunnel-hez kapcsolódó port a helyi gépen
+TUN_LOCAL_PORT="2222"
+
+# felasználó a cél gépen
+TUN_CONNECT_USER="tunuser"
+
+# nyelvi elemek - language
+
+#

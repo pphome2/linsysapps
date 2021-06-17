@@ -1,6 +1,0 @@
-#!/bin/sh
-
-ssh peter@localhost -p 2222
-
-#
-

@@ -8,10 +8,8 @@ localdir=`dirname $0`
 
 #cd $BINDIR
 
-#killall autossh
-killall sshpass
+ssh "$TUN_CONNECT_USER"@localhost -p "$TUN_LOCAL_PORT"
 
 #cd $TPATH
 
 #
-
