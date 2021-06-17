@@ -1,7 +1,6 @@
 #!/bin/sh
 
-#autossh -L 2111:localhost:2020 karakter@192.168.16.10
-autossh -N -L 2222:localhost:5000 karakter@mail.karakter.info -p 2222 -f
+autossh -N -L 2222:localhost:5000 kar@ka.hu -p 2222 -f
 
 #
 
