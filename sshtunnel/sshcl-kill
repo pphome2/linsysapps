@@ -8,7 +8,6 @@ localdir=`dirname $0`
 
 #cd $BINDIR
 
-#killall autossh
 killall sshpass
 
 #cd $TPATH

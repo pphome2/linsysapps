@@ -15,21 +15,22 @@ SHOW_LOGFILE=1
 # a program helye
 BINDIR="/usr/local/bin"
 
-# tunnel szerver
+# tunnel szerver ipés port
 TUN_SERVER="ka.hu"
 TUN_PORT="2222"
 
 # tunnel szerver felhasználó
 TUN_USER="kauser"
-
-# tunnel szerver jelszó
 TUN_PASSWORD="Password1"
 
-# tunnel átjáró port
+# tunnel átjáró port (a szerveren a két oldal között)
 TUN_BRIDGE_PORT="5000"
 
 # tunnel-hez kapcsolódó port a helyi gépen
 TUN_LOCAL_PORT="2222"
+
+# tunnel-hez kapcsolódó port a távoli gépen
+TUN_REMOTE_PORT="22"
 
 # felasználó a cél gépen
 TUN_CONNECT_USER="tunuser"
