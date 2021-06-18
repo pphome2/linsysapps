@@ -6,7 +6,10 @@
 localdir=`dirname $0`
 . $localdir/sshcl-config
 
+#cd $BINDIR
+
 ssh "$TUN_CONNECT_USER"@localhost -p "$TUN_LOCAL_PORT"
 
-#
+#cd $TPATH
 
+#

@@ -7,7 +7,7 @@
 TPATH=`pwd`
 
 # adatok tárolója
-LOGFILE="sshcl.log"
+LOGFILE="webcl.log"
 
 # kilépéskor az adatok megjelenítése: 0 - nem, 1 - igen
 SHOW_LOGFILE=1
@@ -15,25 +15,22 @@ SHOW_LOGFILE=1
 # a program helye
 BINDIR="/usr/local/bin"
 
-# tunnel szerver ipés port
+# tunnel szerver
 TUN_SERVER="ka.hu"
 TUN_SERVER_PORT="2222"
 
 # tunnel szerver felhasználó
-TUN_SERVER_USER="kauser"
-TUN_SERVER_PASSWORD="Password1"
+TUN_SERVER_USER="ka"
+TUN_SERVER_PASSWORD="Password0"
 
-# tunnel átjáró port (a szerveren a két oldal között)
-TUN_SERVER_BRIDGE_PORT="5000"
-
-# tunnel-hez kapcsolódó port a helyi gépen
-TUN_LOCAL_PORT="2222"
+# tunnel átjáró port
+TUN_SERVER_BRIDGE_PORTS=(5001 5002)
 
 # tunnel-hez kapcsolódó port a távoli gépen
-TUN_REMOTE_PORT="22"
+TUN_REMOTE_PORTS=(80 9090)
 
-# felasználó a cél gépen
-TUN_CONNECT_USER="tunuser"
+# tunnel-hez kapcsolódó port a helyi gépen
+TUN_LOCAL_PORTS=(8080 8081)
 
 # nyelvi elemek - language
 
