@@ -8,7 +8,7 @@ localdir=`dirname $0`
 
 #cd $BINDIR
 
-sshpass -p "$TUN_PASSWORD" ssh -N -L "$TUN_LOCAL_PORT":localhost:"$TUN_BRIDGE_PORT" "$TUN_USER"@"TUN_SERVER" -p "$TUN_PORT" &
+sshpass -p "$TUN_PASSWORD" ssh -N -L "$TUN_LOCAL_PORT":localhost:"$TUN_BRIDGE_PORT" "$TUN_USER"@"$TUN_SERVER" -p "$TUN_PORT" &
 
 #cd $TPATH
 
