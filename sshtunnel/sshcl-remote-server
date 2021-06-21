@@ -9,7 +9,7 @@ localdir=`dirname $0`
 #cd $BINDIR
 
 sshpass -p "$TUN_SERVER_PASSWORD" \
-	ssh -N -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -R \
+	ssh -N -o "ServerAliveInterval=240" -o "ServerAliveCountMax=3" -R \
 	"$TUN_SERVER_BRIDGE_PORT":localhost:"$TUN_REMOTE_PORT" \
 	"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
 
