@@ -13,6 +13,9 @@ for i in ${!TUN_SERVER_BRIDGE_PORTS[@]}; do
 		ssh -N -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" \
 			-R "${TUN_SERVER_BRIDGE_PORTS[$i]}":localhost:"${TUN_REMOTE_PORTS[$i]}" \
 			"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
+	if [ "$?" == 0 ]; then
+			echo $! > webcl-"${TUN_REMOTE_PORTS[$i]}""$PID_EXT"
+	fi
 done
 
 #cd TPATH

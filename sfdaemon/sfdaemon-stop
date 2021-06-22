@@ -16,7 +16,7 @@ else
 	if [ -f $PIDFILE ]; then
 		pid=`cat $PIDFILE`
 		kill -9 $pid 2>/dev/null
-		rm $PIDFILE #2>/dev/nul
+		rm $PIDFILE #2>/dev/null
 	else
 		pid=`ps -A | grep $SFDAEMON | awk '{print $1}'`
 		kill -9 $pid 2>/dev/null

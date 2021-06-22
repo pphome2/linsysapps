@@ -23,7 +23,7 @@ while $al; do
 			if [ $fv = $EXIT_CODE ]; then
 				al=false
 				if [ -f $PIDFILE ]; then
-					rm $PIDFILE #2>/dev/nul
+					rm $PIDFILE #2>/dev/null
 				fi
 			fi
 		fi

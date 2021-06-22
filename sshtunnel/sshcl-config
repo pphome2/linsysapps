@@ -35,6 +35,9 @@ TUN_REMOTE_PORT="22"
 # felasználó a cél gépen
 TUN_CONNECT_USER="tunuser"
 
+# pid-fájl kiterjesztés
+PID_EXT=".pid"
+
 # nyelvi elemek - language
 
 #

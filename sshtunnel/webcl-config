@@ -32,6 +32,9 @@ TUN_REMOTE_PORTS=(80 9090)
 # tunnel-hez kapcsolódó port a helyi gépen
 TUN_LOCAL_PORTS=(8080 8081)
 
+# pid-fájl kiterjesztés
+PID_EXT=".pid"
+
 # nyelvi elemek - language
 
 #

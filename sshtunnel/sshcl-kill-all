@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# ssh client with tunnel
+#
+
+localdir=`dirname $0`
+. $localdir/sshcl-config
+
+#cd $BINDIR
+
+killall sshpass
+
+#cd $TPATH
+
+#
+
