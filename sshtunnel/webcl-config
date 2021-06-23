@@ -36,5 +36,17 @@ TUN_LOCAL_PORTS=(8080 8081)
 PID_EXT=".pid"
 
 # nyelvi elemek - language
+L_CLOSE_TUNNEL="Kilép a kapcsolatból?"
+L_CLOSE_SELECT="i/n"
+L_CLOSE_YES="i"
+L_CLOSE_NO="n"
+L_CLOSE_YES_W="Igen"
+L_CLOSE_NO_W="Nem"
+L_OPEN_TUNNEL="Elindítja a kapcsolatot?"
+L_OPEN_SELECT="i/n"
+L_OPEN_YES="i"
+L_OPEN_NO="n"
+L_OPEN_YES_W="Igen"
+L_OPEN_NO_W="Nem"
 
 #

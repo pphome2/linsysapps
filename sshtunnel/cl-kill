@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# ssh client with tunnel
+#
+
+localdir=`dirname $0`
+. $localdir/webcl-config
+
+#cd $BINDIR
+
+for i in *$PID_EXT; do
+	read -p "$L_CLOSE_TUNNEL ($i) $L_CLOSE_SELECT " yn
+	#echo $yn
+	case $yn in
+		$L_CLOSE_YES )
+			pid=`cat $i`
+			echo "$L_CLOSE_YES_W (PID: $pid)"
+			kill -9 $pid 2&>>/dev/null
+			#rm $i
+			;;
+		$L_CLOSE_NO )
+			echo "$L_CLOSE_NO_W"
+			;;
+	esac
+done
+
+#cd $TPATH
+
+#

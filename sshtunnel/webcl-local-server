@@ -9,12 +9,24 @@ localdir=`dirname $0`
 #cd $BINDIR
 
 for i in ${!TUN_SERVER_BRIDGE_PORTS[@]}; do
-	sshpass -p "$TUN_SERVER_PASSWORD" \
-		ssh -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" \
-		"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
-	if [ "$?" == 0 ]; then
-		echo $! > webcl-"${TUN_REMOTE_PORTS[$i]}""$PID_EXT"
-	fi
+	read -p "$L_OPEN_TUNNEL (${TUN_REMOTE_PORTS[$i]}) $L_OPEN_SELECT " yn
+	#echo $yn
+	case $yn in
+		$L_OPEN_YES )
+			pid="0"
+			sshpass -p "$TUN_SERVER_PASSWORD" \
+				ssh -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" \
+				"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
+			if [ "$?" == 0 ]; then
+				pid=$!
+				echo $pid > webcl-"${TUN_REMOTE_PORTS[$i]}""$PID_EXT"
+			fi
+			echo "$L_OPEN_YES_W (PID: $pid)"
+			;;
+		$L_OPEN_NO )
+			echo "$L_OPEN_NO_W"
+			;;
+	esac
 done
 
 #cd $TPATH
