@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+# port átengedés ssh tunnel-en
+#
+
+killall sshpass
+
+#

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# ssh client with tunnel
+# ssh kliens tunnel-en
 #
 
 localdir=`dirname $0`

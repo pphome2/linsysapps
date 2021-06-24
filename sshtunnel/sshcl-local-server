@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# ssh client with tunnel
+# ssh kliens tunnel-en
 #
 
 localdir=`dirname $0`
@@ -12,7 +12,7 @@ sshpass -p "$TUN_SERVER_PASSWORD" \
 	ssh -N -L "$TUN_LOCAL_PORT":localhost:"$TUN_SERVER_BRIDGE_PORT" \
 	"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
 if [ "$?" == 0 ]; then
-	echo $! > sshcl-"$TUN_REMOTE_PORT$PID_EXT"
+	echo $! > tsshcl-"$TUN_REMOTE_PORT$PID_EXT"
 fi
 
 #cd $TPATH

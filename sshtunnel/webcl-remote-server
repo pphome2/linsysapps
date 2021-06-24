@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# ssh client with tunnel
+# port átengedés ssh tunnel-en
 #
 
 localdir=`dirname $0`

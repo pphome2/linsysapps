@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# ssh client with tunnel
+# port átengedés ssh tunnel-en
 #
 
 localdir=`dirname $0`
@@ -16,7 +16,9 @@ for i in *$PID_EXT; do
 			pid=`cat $i`
 			echo "$L_CLOSE_YES_W (PID: $pid)"
 			kill -9 $pid 2&>>/dev/null
-			#rm $i
+			if [ "$?" == 0 ]; then
+				rm "$i" 2&>>/dev/null
+			fi
 			;;
 		$L_CLOSE_NO )
 			echo "$L_CLOSE_NO_W"
