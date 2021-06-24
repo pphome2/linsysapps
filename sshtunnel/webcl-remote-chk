@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+# port átengedés ssh tunnel-en
+#
+
+localdir=`dirname $0`
+. $localdir/webcl-config
+
+list=`ls webcl-*$PID_EXT 2>>/dev/null`
+if [ ! -z $list ]; then
+	for i in $list; do
+		pid=`cat $i`
+		run=`ps -A | grep $pid | awk {'print $1'}`
+		echo "PID: $pid -> $run"
+		if [ -z $run ]; then
+			bifs=$IFS
+			IFS="-"
+			x=( $i )
+			y=${x[1]}
+			IFS="."
+			x=( $y )
+			y=${x[0]}
+			IFS=$bifs
+			echo $y
+			$localdir/webcl-remote-server $y
+		fi
+	done
+fi
+
+#

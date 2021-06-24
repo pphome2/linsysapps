@@ -8,11 +8,31 @@ localdir=`dirname $0`
 
 #cd $BINDIR
 
-for i in ${!TUN_SERVER_BRIDGE_PORTS[@]}; do
-	read -p "$L_OPEN_TUNNEL (${TUN_REMOTE_PORTS[$i]}) $L_OPEN_SELECT " yn
-	#echo $yn
-	case $yn in
-		$L_OPEN_YES )
+if [ -z "$1" ]; then
+	for i in ${!TUN_SERVER_BRIDGE_PORTS[@]}; do
+		read -p "$L_OPEN_TUNNEL (${TUN_REMOTE_PORTS[$i]}) $L_OPEN_SELECT " yn
+		#echo $yn
+		case $yn in
+			$L_OPEN_YES )
+				pid=0
+				sshpass -p "$TUN_SERVER_PASSWORD" \
+					ssh -N -o "ServerAliveInterval=60" -o "ServerAliveCountMax=3" \
+						-R "${TUN_SERVER_BRIDGE_PORTS[$i]}":localhost:"${TUN_REMOTE_PORTS[$i]}" \
+						"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
+				if [ "$?" == 0 ]; then
+						pid=$!
+						echo $pid > webcl-"${TUN_REMOTE_PORTS[$i]}""$PID_EXT"
+				fi
+				echo "$L_OPEN_YES_W (PID: $pid)"
+				;;
+			$L_OPEN_NO )
+				echo "$L_OPEN_NO_W"
+				;;
+		esac
+	done
+else
+	for i in ${!TUN_SERVER_BRIDGE_PORTS[@]}; do
+		if [ "${TUN_REMOTE_PORTS[$i]}" == "$1" ]; then
 			pid=0
 			sshpass -p "$TUN_SERVER_PASSWORD" \
 				ssh -N -o "ServerAliveInterval=60" -o "ServerAliveCountMax=3" \
@@ -23,13 +43,9 @@ for i in ${!TUN_SERVER_BRIDGE_PORTS[@]}; do
 					echo $pid > webcl-"${TUN_REMOTE_PORTS[$i]}""$PID_EXT"
 			fi
 			echo "$L_OPEN_YES_W (PID: $pid)"
-			;;
-		$L_OPEN_NO )
-			echo "$L_OPEN_NO_W"
-			;;
-	esac
-
-done
+		fi
+	done
+fi
 
 #cd TPATH
 
