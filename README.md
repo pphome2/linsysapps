@@ -63,3 +63,14 @@ Szünetmentes jelzésének továbbítása és eszközök leállítása.
 A helyi szünetmentest kezelő szolgáltatás ( 'nut' ) jelzést ad a host rendszernek a
 '/etc/killpower' fájlon keresztül. A program ezt a fájlt 'ssh'-n keresztül átadja a
 kliens eszközöknek, melyek leállnak. Mail küldés és modulok támagatása.
+
+## SshTunnel
+
+Két végpont között tunnel kapcsolat létewsítése, közbenső szerveren keresztül.
+
+### Működés
+
+SSH port tunnel-en keresztül két végpont között, publikus szerveren keresztül.
+Különböző portok elérhetővé tétele  SSH tunnel segytségével, publikus szerveren
+keresztül. Beállításfájlban megadott adatokkal vezérelhető, figyelhető a tunnel
+leállása.
