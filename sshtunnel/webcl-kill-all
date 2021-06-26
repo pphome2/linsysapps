@@ -7,11 +7,11 @@ localdir=`dirname $0`
 . $localdir/webcl-config
 
 if [ -z "$1" ]; then
-	list=`ls webcl-*$PID_EXT`
+	list=`find webcl-*$PID_EXT 2>/dev/null`
 	#echo $list
 	for i in $list; do
 		pid=`cat $i`
-		echo "$L_CLOSE_YES_W (PID: $pid)"
+		echo "PID: $pid"
 		kill -9 $pid 2&>>/dev/null
 		if [ "$?" == 0 ]; then
 			rm "$i" 2&>>/dev/null

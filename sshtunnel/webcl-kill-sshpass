@@ -3,6 +3,10 @@
 # port átengedés ssh tunnel-en
 #
 
-killall sshpass
+localdir=`dirname $0`
+. $localdir/webcl-config
+
+killall sshpass 2&>>/dev/null
+rm $localdir/*$PID_EXT 2&>>/dev/null
 
 #
