@@ -1,0 +1,43 @@
+Szüksége:
+=========
+
+ffmpeg
+mkvpropedit
+mkvmerge
+mkvsub
+iconv
+
+
+FFMPEG
+======
+
+# delete subtitle
+ffmpeg -i 4.mkv -map 0 -map -0:s -codec copy out.mkv
+
+# add subtitle
+ffmpeg -i out.mkv -i 4.srt -map 0 -map 1 -metadata:s:s:0 language=hun -c copy out2.mkv
+
+# avi to mkv
+ffmpeg -i input.avi -c:a mp3 output.mkv
+
+
+MKVMERGE
+========
+
+# delete subtitle
+mkvmerge -o 4.mkv --no-subtitles out.mkv
+
+# add subtitle
+mkvmerge -o out2.mkv out.mkv 44.srt --chapter-language hun
+
+
+CONVERT SRT TO UTF8
+===================
+
+iconv -f ISO-8859-2 -t UTF8 2.srt -o 22.srt
+
+
+RENAME META FILEINFO
+====================
+
+mkvpropedit out2.mkv -e info -s title="filename"

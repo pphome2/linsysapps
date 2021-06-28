@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# video konvertálás
+#
+# felirat konvertálása UTF8-ra
+
+if [ -f $1 ]; then
+	mv $1 in.srt
+	iconv -f ISO-8859-2 -t UTF8 in.srt -o $1
+else
+	echo "Nincs ilyen file. ( $1 )"
+fi
+
+#

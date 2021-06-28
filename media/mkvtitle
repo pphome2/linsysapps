@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# video konvertálás
+#
+# a cím (title) mező cseréje a fájlnévre
+#
+
+if [ -f $1 ]; then
+	cim=${1%.*}
+	mkvpropedit $1 -e info -s title=$cim 2>/dev/null
+else
+	echo "Nincs ilyen fájl. ( $1 )"
+fi
+
+#

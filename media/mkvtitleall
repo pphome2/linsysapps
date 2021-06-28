@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# video konvertálás
+#
+# összes fájlban cím (title) mező cseréje fájlnére
+#
+
+for i in *; do
+	if [ -f $i ]; then
+		cim=${i%.*}.srt
+		mkvpropedit $i -e info -s title=$cim 2>/dev/null
+	else
+		echo "Hiányzó fájl. ( $i )"
+	fi
+
+done
+
+#
