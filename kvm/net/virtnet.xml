@@ -1,0 +1,18 @@
+<network>
+  <name>vnet1</name>
+  <uuid>98361b46-1581-acb7-1643-85a412626e71</uuid>
+  <forward dev='eno1' mode='nat'>
+    <nat>
+      <port start='1024' end='65535'/>
+    </nat>
+    <interface dev='eno1'/>
+  </forward>
+  <bridge name='virbr1' stp='on' delay='0'/>
+  <mac address='52:54:00:0c:9f:b8'/>
+  <ip address='192.168.110.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.110.128' end='192.168.110.254'/>
+    </dhcp>
+  </ip>
+</network>
+

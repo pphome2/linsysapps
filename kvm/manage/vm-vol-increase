@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gép volume növelése
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  pool="$DEFAULT_POOL"
+else
+  pool=$1
+fi
+
+if [ -z $2 ]; then
+  vname="$DEFAULT_VM"
+else
+  vname=$2
+fi
+
+if [ -z $3 ]; then
+  psize="$DSIZE"
+else
+  psize=$3
+fi
+
+img=`virsh vol-list $pool | grep $vname | awk {'print $2'}`
+qemu-img resize $img $psize
+
+#

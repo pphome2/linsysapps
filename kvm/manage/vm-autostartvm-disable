@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gép automatikusan ne induljon
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vname="$DEFAULT_VM"
+else
+  vname=$1
+fi
+
+virsh autostart --disable $vname
+../runvm/vm-info $vname
+
+#

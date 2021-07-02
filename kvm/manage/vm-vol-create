@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gép új volume
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  pool="$DEFAULT_POOL"
+else
+  pool=$1
+fi
+
+if [ -z $2 ]; then
+  psize="$DSIZE"
+else
+  psize=$2
+fi
+
+if [ -z $3 ]; then
+  vvol="$NEWVOL_NAME"
+else
+  vvol=$3
+fi
+
+virsh vol-create-as $pool $vvol.qcow2 $psize
+
+#

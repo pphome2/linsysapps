@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# vm leállítása és eltávolítása
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vname="$DEFAULT_VM"
+else
+  vname=$1
+fi
+
+virsh destroy $vname
+virsh undefine $vname
+virsh pool-refresh default
+virsh vol-delete --pool default $vname.qcow2
+
+#

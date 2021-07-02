@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gép volume törlése
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  pool="$DEFAULT_POOL"
+else
+  pool=$1
+fi
+
+if [ -z $3 ]; then
+  vvol="$NEWVOL_NAME"
+else
+  vvol=$3
+fi
+
+virsh vol-delete $vvol.qcow2 --pool $pool
+
+#

@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# minden vm leállítása
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+for i in `virsh list | grep running | awk '{print $2}'` do
+  virsh shutdown $i
+done
+
+#

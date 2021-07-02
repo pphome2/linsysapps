@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# bridge létrehozása
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vbr="$DEFAULT_BRIDGE"
+else
+  vbr=$1
+fi
+
+brctl addbr $vbr
+
+#

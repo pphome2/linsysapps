@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gép pillanatkép készítése
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vname="$DEFAULT_VM"
+else
+  vname=$1
+fi
+
+if [ -z $2 ]; then
+  sname="$vname"
+else
+  sname=$2
+fi
+
+virsh snapshot-revert $vname $sname
+
+#

@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gép volume-ok
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  pool="$DEFAULT_POOL"
+else
+  pool=$1
+fi
+
+virsh vol-list $pool
+
+#

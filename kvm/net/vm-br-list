@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# bridge törlése
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+brctl show
+
+#

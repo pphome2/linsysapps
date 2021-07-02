@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# hálózat törlése
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vnet="$DEFAULT_NET"
+else
+  vnet=$1
+fi
+
+virsh net-undefine $vnet
+
+#

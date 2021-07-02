@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# leállítás
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vname="$DEFAULT_VM"
+else
+  vname=$1
+fi
+
+virsh shutdown $vname
+
+#

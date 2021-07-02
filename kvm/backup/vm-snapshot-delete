@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gép pillanatkép törlése
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vname="$DEFAULT_VM"
+else
+  vname=$1
+fi
+
+n=`date +%Y%m%d-%H%M`
+
+if [ -z $2 ]; then
+  sname="$DEFAULT_SNAPSHOT_NAME"
+else
+  sname=$2
+fi
+
+if [ -z $3 ]; then
+  desc="$n"
+else
+  desc=$3
+fi
+
+virsh snapshot-delete --domain "$vname" --snapshotname "$sname"
+
+#

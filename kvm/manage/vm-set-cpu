@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gép cpu száma
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vname="$DEFAULT_VM"
+else
+  vname=$1
+fi
+
+if [ -z $2 ]; then
+  ccpu="2"
+else
+  ccpu=$2
+fi
+
+virsh setvcpus --domain $vname --maximum $ccpu --config
+virsh setvcpus --domain $vname --count $ccpu --config
+
+#

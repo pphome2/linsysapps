@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# hálózat létrehozása
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vname=$DEFAULT_VM
+else
+  vname=$1
+fi
+
+if [ -z $2 ]; then
+  vnet=$DEFAULT_NET
+else
+  vnet=$2
+fi
+
+if [ -z $3 ]; then
+  vmac=`./vm-net-getmac`
+else
+  vmac=$3
+fi
+
+if [ -z $4 ]; then
+  vip=$DEFAULT_STATIC_IP
+else
+  vip=$4
+fi
+
+#echo $vnet - $vmac - $vip
+hostcommand="\"<host mac='$vmac' name='$vname' ip='$vip'/>\""
+
+#virsh net-update $vnet add ip-dhcp-host $hostcommand
+virsh net-update $vnet add ip-dhcp-host $hostcommand --live --config
+
+if [ "$?" == 0 ]; then
+  virsh domif-setlink $vname $vmac down
+  sleep 5
+  virsh domif-setlink $vname $vmac up
+else
+  echo
+  echo "Hiba esetén kézzel kell beírni a következő sort a config fájlba."
+  echo "Indítsd: ./vm-netedit és a DHCP RANGE sor után írd be:"
+  echo $hostcommand
+  echo
+fi
+
+#

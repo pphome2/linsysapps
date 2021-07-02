@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# hálózat létrehozása
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vm=$DEFAULT_VM
+else
+  vm=$1
+fi
+
+virsh domiflist $vm | tail -2 | awk {'if(NR==1) print $5'}
+
+#

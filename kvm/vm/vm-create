@@ -1,0 +1,60 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# új gép létrehozása
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vname="$DEFAULT_VM"
+else
+  vname=$1
+fi
+
+if [ -z $2 ]; then
+  iso="$ISOFILE"
+else
+  iso=$2
+fi
+
+if [ -z $3 ]; then
+  os="$OSNAME"
+else
+  os=$3
+fi
+
+if [ -z $4 ]; then
+  dsize="$DSIZE"
+else
+  dsize=$4
+fi
+
+if [ -z $5 ]; then
+  mem="$MEMSIZE"
+else
+  mem=$5
+fi
+
+if [ -z $6 ]; then
+  vnet="$DEFAULT_NET"
+else
+  vnet=$6
+fi
+
+# hálózat elindítása
+#virsh --connect=qemu:///system net-start default
+../net/vm-netstart
+
+# létrehozás
+virt-install --virt-type kvm \
+  --name  $vname \
+  --cdrom $iso \
+  --os-variant $os \
+  --disk size=$dsize \
+  --memory $mem \
+  --network network=$vnet
+
+#

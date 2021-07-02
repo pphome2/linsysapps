@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gépek listája
+#
+
+echo
+virsh list --all
+
+echo
+virsh list
+
+#

@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gép konzol kapcsolat
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vname="$DEFAULT_VM"
+else
+  vname=$1
+fi
+
+virsh console $vname
+
+# kilépés: CTRL+ALTGR+G
+#
+# virtuális gépen engedélyezni:
+#  systemctl enable serial-getty@ttyS0.service
+# ujraindítás nélkül indítani is kell:
+#  systemctl start serial-getty@ttyS0.service
+#
+
+#

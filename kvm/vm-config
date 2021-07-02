@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# alapbeállítások
+#
+
+# futási könyvtár
+BINDIR="/opt/kvm"
+
+# indítási könyvtár
+TPATH=`pwd`
+
+# alapértelmezett hálózat neve
+DEFAULT_NET="vnet1"
+
+# net létrehozása xml fájlból
+DEFAULT_NET_XML="virtnet.xml"
+
+# bridge a fizikai hálózat és a vm között
+DEFAULT_BRIDGE="virbr0"
+
+# alapértelmezett statikus ip-cím
+DEFAULT_STATIC_IP="192.168.16.115"
+
+# alapértelmezett vm neve
+DEFAULT_VM="virt-debian"
+
+# telepítési ISO fájl
+ISOFILE="debian.iso"
+
+# os neve
+OSNAME="debian10"
+
+# alapételmezett diszk méret
+DSIZE="10"
+
+# alapértelmezett memória méret
+MEMSIZE="1024"
+
+# a vm image-ek tárolója
+DEFAULT_POOL="default"
+
+# új volume létrehozása
+NEWVOL_NAME="new"
+
+# pillanatképhez név
+DEFAULT_SNAPSHOT_NAME="-"
+
+#
