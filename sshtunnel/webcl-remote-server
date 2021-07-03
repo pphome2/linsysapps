@@ -42,7 +42,7 @@ else
 					pid=$!
 					echo $pid > webcl-"${TUN_REMOTE_PORTS[$i]}""$PID_EXT"
 			fi
-			echo "$L_OPEN_YES_W (PID: $pid)"
+			#echo "$L_OPEN_YES_W (PID: $pid)"
 		fi
 	done
 fi
