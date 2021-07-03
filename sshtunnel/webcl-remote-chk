@@ -11,19 +11,29 @@ if [ ! -z $list ]; then
 	for i in $list; do
 		pid=`cat $i`
 		run=`ps -A | grep $pid | awk {'print $1'}`
-		echo "PID: $pid -> $run"
-		if [ -z $run ]; then
-			bifs=$IFS
-			IFS="-"
-			x=( $i )
-			y=${x[1]}
-			IFS="."
-			x=( $y )
-			y=${x[0]}
-			IFS=$bifs
-			echo $y
+		#echo "PID: $pid -> $run"
+		bifs=$IFS
+		IFS="-"
+		x=( $i )
+		y=${x[1]}
+		IFS="."
+		x=( $y )
+		y=${x[0]}
+		IFS=$bifs
+		#echo $y
+		if [ -z "$run" ]; then
 			$localdir/webcl-remote-server $y
 		fi
+		for i in ${!TUN_REMOTE_PORTS[@]}; do
+			if [ "${TUN_REMOTE_PORTS[$i]}" == "$y" ]; then
+				#echo $y - ${TUN_SERVER_BRIDGE_PORTS[$i]}
+				popen=`nmap $TUN_SERVER -p ${TUN_SERVER_BRIDGE_PORTS[$i]} | grep closed`
+				#echo $open
+				if [ -z "$popen" ]; then
+					$localdir/webcl-remote-server $y
+				fi
+			fi
+		done
 	done
 fi
 
