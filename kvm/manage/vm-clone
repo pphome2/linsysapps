@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gépről másolat készítése
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vname="$DEFAULT_VM"
+else
+  vname=$1
+fi
+
+if [ -z $2 ]; then
+  vnew="$DEFAULT_VM-2"
+else
+  vnew=$2
+fi
+
+virsh shutdown $vname
+virt-clone --original $vname --name $vnew --auto-clone
+
+virsh start $vname
+virsh start $vnew
+
+#
