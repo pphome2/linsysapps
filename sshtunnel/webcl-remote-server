@@ -39,8 +39,8 @@ else
 					-R "${TUN_SERVER_BRIDGE_PORTS[$i]}":localhost:"${TUN_REMOTE_PORTS[$i]}" \
 					"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
 			if [ "$?" == 0 ]; then
-					pid=$!
-					echo $pid > webcl-"${TUN_REMOTE_PORTS[$i]}""$PID_EXT"
+				pid=$!
+				echo $pid > webcl-"${TUN_REMOTE_PORTS[$i]}""$PID_EXT"
 			fi
 			#echo "$L_OPEN_YES_W (PID: $pid)"
 		fi

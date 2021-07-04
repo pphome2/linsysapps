@@ -30,6 +30,9 @@ if [ ! -z $list ]; then
 				popen=`nmap $TUN_SERVER -p ${TUN_SERVER_BRIDGE_PORTS[$i]} | grep closed`
 				#echo $open
 				if [ -z "$popen" ]; then
+					pid=`cat $i`
+					rm $i 2>/dev/null
+					kill -9 $pid
 					$localdir/webcl-remote-server $y
 				fi
 			fi
