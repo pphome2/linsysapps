@@ -6,6 +6,9 @@
 localdir=`dirname $0`
 . $localdir/webcl-config
 
+enter="
+"
+
 list=`ls webcl-*$PID_EXT 2>>/dev/null`
 if [ ! -z $list ]; then
 	for i in $list; do
@@ -24,13 +27,13 @@ if [ ! -z $list ]; then
 		if [ -z "$run" ]; then
 			$localdir/webcl-remote-server $y
 		fi
-		for i in ${!TUN_REMOTE_PORTS[@]}; do
-			if [ "${TUN_REMOTE_PORTS[$i]}" == "$y" ]; then
-				#echo $y - ${TUN_SERVER_BRIDGE_PORTS[$i]}
-				popen=`nmap $TUN_SERVER -p ${TUN_SERVER_BRIDGE_PORTS[$i]} | grep closed`
-				#echo $open
+		for x in ${!TUN_REMOTE_PORTS[@]}; do
+			if [ "${TUN_REMOTE_PORTS[$x]}" == "$y" ]; then
+				#echo $y
+				#popen=`nmap $TUN_SERVER -p ${TUN_SERVER_BRIDGE_PORTS[$x]} | grep closed`
+				#echo $popen
+				popen=""
 				if [ -z "$popen" ]; then
-					pid=`cat $i`
 					rm $i 2>/dev/null
 					kill -9 $pid
 					$localdir/webcl-remote-server $y
