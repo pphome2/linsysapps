@@ -6,9 +6,6 @@
 localdir=`dirname $0`
 . $localdir/webcl-config
 
-enter="
-"
-
 list=`ls webcl-*$PID_EXT 2>>/dev/null`
 if [ ! -z $list ]; then
 	for i in $list; do
@@ -35,7 +32,7 @@ if [ ! -z $list ]; then
 				popen=""
 				if [ -z "$popen" ]; then
 					rm $i 2>/dev/null
-					kill -9 $pid
+					kill -9 $pid 2>/dev/null
 					$localdir/webcl-remote-server $y
 				fi
 			fi

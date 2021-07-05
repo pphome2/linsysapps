@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gép mentése
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ -z $1 ]; then
+  vname="$DEFAULT_VM"
+else
+  vname=$1
+fi
+
+if [ -f /$BACKUP_DIR/$vname/$vname.qcow2 ]; then
+	run=`virsh list | grep $vname`
+	if [ -z $run]; then
+		../runvm/vm-shutdown $vname
+	fi
+
+	virsh undefine $vname
+	rm /var/lib/libvirt/images/$vname.qcow2 2>/dev/null
+
+	cp /$BACKUP_DIR/$vname/$vname.qcow2 /var/lib/libvirt/images
+
+	virsh define --file /$BACKUP_DIR/$vname/$vname.xml
+
+	if [ -z $run]; then
+		../runvm/vm-start $vname
+	fi
+else
+	echo "/$BACKUP_DIR/$vname/$vname.qcow2 ????"
+fi
+
+#

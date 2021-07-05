@@ -47,4 +47,7 @@ NEWVOL_NAME="new"
 # pillanatképhez név
 DEFAULT_SNAPSHOT_NAME="-"
 
+# mentési könyvtár
+BACKUP_DIR="/opt/backup"
+
 #
