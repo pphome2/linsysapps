@@ -34,7 +34,7 @@ if [ ! -z $list ]; then
 				#echo $popen
 				popen=""
 				if [ -z "$popen" ]; then
-					#echo $y
+					echo $y > /dev/null
 					#rm $i 2>/dev/null
 					#kill -9 $pid 2>/dev/null
 					#$localdir/webcl-remote-server $y
