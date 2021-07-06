@@ -7,6 +7,6 @@ localdir=`dirname $0`
 . $localdir/webcl-config
 
 rm $localdir/*$PID_EXT 2&>>/dev/null
-killall sshd; systemctl restart ssh
+#killall sshd; systemctl restart ssh
 
 #
