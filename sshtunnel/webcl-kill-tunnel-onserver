@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# port átengedés ssh tunnel-en
+#
+
+localdir=`dirname $0`
+. $localdir/webcl-config
+
+rm $localdir/*$PID_EXT 2&>>/dev/null
+killall sshd; systemctl restart ssh
+
+#
