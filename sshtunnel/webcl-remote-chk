@@ -3,6 +3,8 @@
 # port átengedés ssh tunnel-en
 #
 
+cd /usr/local/bin
+
 localdir=`dirname $0`
 . $localdir/webcl-config
 
@@ -15,13 +17,14 @@ if [ ! -z $list ]; then
 		bifs=$IFS
 		IFS="-"
 		x=( $i )
-		y=${x[1]}
+	y=${x[1]}
 		IFS="."
 		x=( $y )
 		y=${x[0]}
 		IFS=$bifs
 		#echo $y
 		if [ -z "$run" ]; then
+			#echo $y
 			$localdir/webcl-remote-server $y
 		fi
 		for x in ${!TUN_REMOTE_PORTS[@]}; do
@@ -31,13 +34,16 @@ if [ ! -z $list ]; then
 				#echo $popen
 				popen=""
 				if [ -z "$popen" ]; then
-					rm $i 2>/dev/null
-					kill -9 $pid 2>/dev/null
-					$localdir/webcl-remote-server $y
+					#echo $y
+					#rm $i 2>/dev/null
+					#kill -9 $pid 2>/dev/null
+					#$localdir/webcl-remote-server $y
 				fi
 			fi
 		done
 	done
+else
+	$localdir/webcl-remote-server $1
 fi
 
 #
