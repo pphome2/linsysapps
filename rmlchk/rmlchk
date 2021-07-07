@@ -22,19 +22,26 @@ anywhereerror=0
 for i in $REMOTE_MACHINES; do
 	ok=0
 	globalerror=10
-	for k in $PORTS; do
-		(echo >/dev/tcp/$i/$k) >/dev/null 2>&1
-		if [ $? -eq 0 ]; then
-			echo "$i : $k - +" >> $OUTPUTFILE
-			globalerror=0
-		else
-			echo "$i : $k - -" >> $OUTPUTFILE
-			ok=1
-			if [ $globalerror != 0 ]; then
-				globalerror=1
+	ping -c1 -q $i >/dev/null
+	if [ $? == 0 ]; then
+		for k in $PORTS; do
+			#(echo >/dev/tcp/$i/$k) >/dev/null 2>&1
+			sshok=`(cat < /dev/tcp/$i/$k) 2>/dev/null & sleep 1;killall cat 2>/dev/null`
+			if [ $? -eq 0 ]; then
+				echo "$i : $k - +" >> $OUTPUTFILE
+				globalerror=0
+			else
+				echo "$i : $k - -" >> $OUTPUTFILE
+				ok=1
+				if [ $globalerror != 0 ]; then
+					globalerror=1
+				fi
 			fi
-		fi
-	done
+		done
+	else
+		ok=1
+		globalerror=1
+	fi
 	echo >> $OUTPUTFILE
 	if [ $globalerror -eq 0 ]; then
 		if [ $ok != 0 ]; then
