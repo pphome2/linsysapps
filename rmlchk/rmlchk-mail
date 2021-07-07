@@ -67,13 +67,3 @@ if [ $? != 0 ]; then
 fi
 
 #
-
-#cat "$MAILFILE" | ssmtp $MAIL_TO >/dev/null 2>&1
-cat "$MAILFILE" | usmtp $MAIL_TO >/dev/null 2>&1
-
-if [ $? != 0 ]; then
-	echo $L_MAIL_ERROR >>$OUTPUTFILE
-	echo >>$OUTPUTFILE
-fi
-
-#
