@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# git kezelés
+#
+# lokális és online változások összefésülése
+#
+
+#localdir=`dirname $0`
+#. $localdir/git-config
+
+git pull
+
+#
