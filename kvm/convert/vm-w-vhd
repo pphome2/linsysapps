@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gép adatfájl konertálása
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+if [ ! -z $1 ]; then
+	vname=$1
+fi
+
+if [ -z $vname ]; then
+	vname=`find *.vhd 2>/dev/null`
+fi
+
+if [ ! -z $vname ]; then
+	for i in $vname; do
+		outfile=${i%.*}.qcow2
+		qemu-img convert -f vpc $i -O qcow2 $i.qcow2
+	done
+fi
+
+#

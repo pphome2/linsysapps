@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# KVM virtuális gép
+#
+# virtuális gép win driver letöltése
+#
+
+localdir=`dirname $0`
+. $localdir/../vm-config
+
+# https://github.com/virtio-win/virtio-win-pkg-scripts
+wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win-guest-tools.exe
+
+#

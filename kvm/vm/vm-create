@@ -55,6 +55,7 @@ virt-install --virt-type kvm \
   --os-variant $os \
   --disk size=$dsize \
   --memory $mem \
-  --network network=$vnet
+  --network network=$vnet \
+  --graphics vnc,listen=0.0.0.0
 
 #

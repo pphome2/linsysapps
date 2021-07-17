@@ -1,0 +1,51 @@
+<domain type='kvm'>
+  <name>VM-NAME</name>
+  <memory unit='KiB'>4194304</memory>
+  <currentMemory unit='KiB'>4194304</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-trusty'>hvm</type>
+    <boot dev='hd'/>
+    <boot dev='cdrom'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <cpu mode='host-model'/>
+  <clock offset='localtime'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/bin/kvm-spice</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='PATH-TO-DISK-IMAGE'/>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <source file='PATH-TO-INSTALLATION-IMAGE'/>
+      <target dev='hda' bus='ide'/>
+      <readonly/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <source file='PATH-TO-VIRTIO-DRIVER-IMAGE'/>
+      <target dev='hdb' bus='ide'/>
+      <readonly/>
+    </disk>
+    <interface type='network'>
+      <source network='default'/>
+      <model type='virtio'/>
+    </interface>
+    <input type='tablet' bus='usb'/>
+    <graphics type='vnc' port='5901'/>
+    <console type='pty'/>
+    <video>
+      <model type='vga'/>
+    </video>
+  </devices>
+</domain>
