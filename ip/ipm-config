@@ -31,7 +31,7 @@ IP_NOW="ipnow.txt"
 IP_OLD="ipold.txt"
 
 # beépülő modulok
-PLUGINS=""
+PLUGINS="ipm-commands"
 
 # e-mail küldése
 REPORT_TO_MAIL=1

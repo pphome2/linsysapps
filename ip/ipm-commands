@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+# Külső ip cím változásának figyelése
+#
+# változás esetén végrehajtandó programok
+#
+
+localdir=`dirname $0`
+. $localdir/ipm-config
+
+#cd $BINDIR
+
+echo >> $LOGFILE
+
+echo "webcl-remote-server: 9090" >> $LOGFILE
+
+/usr/local/bin/webcl-kill-all >> $LOGFILE 2>>$LOGFILE
+/usr/local/bin/webcl-remote-server 9090 >> $LOGFILE 2>>$LOGFILE
+
+echo >> $LOGFILE
+
+#cd $TPATH
+
+#
