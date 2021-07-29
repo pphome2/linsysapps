@@ -19,7 +19,8 @@ fi
 if [ ! -z $vname ]; then
 	for i in $vname; do
 		outfile=${i%.*}.qcow2
-		qemu-img convert -f vpc $i -O qcow2 $i.qcow2
+		#qemu-img convert -f vpc $i -O qcow2 $i.qcow2
+		qemu-img convert $i -O qcow2 $i.qcow2
 	done
 fi
 

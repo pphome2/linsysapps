@@ -14,6 +14,9 @@ TPATH=`pwd`
 # alapértelmezett hálózat neve
 DEFAULT_NET="vnet1"
 
+# alapértelmezett hoat bridge neve
+DEFAULT_NET_HOST_BRIDGE="br0"
+
 # net létrehozása xml fájlból
 DEFAULT_NET_XML="virtnet.xml"
 

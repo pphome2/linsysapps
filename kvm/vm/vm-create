@@ -44,18 +44,29 @@ else
   vnet=$6
 fi
 
+if [ -z $7 ]; then
+  hbridge="$DEFAULT_NET_HOST_BRIDGE"
+else
+  hbridge=$7
+fi
+
 # hálózat elindítása
-#virsh --connect=qemu:///system net-start default
+# virsh --connect=qemu:///system net-start default
 ../net/vm-netstart
 
 # létrehozás
 virt-install --virt-type kvm \
   --name  $vname \
-  --cdrom $iso \
+  --location $iso \
   --os-variant $os \
   --disk size=$dsize \
   --memory $mem \
+  --network bridge=$hbridge \
   --network network=$vnet \
   --graphics vnc,listen=0.0.0.0
+
+# --disk /opt/linux.qcow2
+
+# kapcsolódás: vnc - host gép ip címével
 
 #

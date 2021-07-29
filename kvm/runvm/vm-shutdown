@@ -16,4 +16,8 @@ fi
 
 virsh shutdown $vname
 
+# win guest esetén:
+# HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon 
+# ShutdownWithoutLogon 1
+
 #

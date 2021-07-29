@@ -1,0 +1,93 @@
+1.
+
+/etc/sysctl.conf:
+
+net.ipv4.ip_forward=1
+net.ipv6.conf.all.forwarding=1
+
+/etc/network/interface:
+
+auto eno1
+iface eno1 inet static
+    address 192.168.16.1
+    netmask 255.255.0.0
+    gateway 192.168.1.1
+
+iface br0 inet static
+    bridge_ports eno1
+    bridge_stp off
+    bridge_fd 0
+    bridge_maxage 12
+    bridge_hello 2
+
+
+2.
+
+virsh net-edit netname:
+
+<network>
+  <name>default</name>
+  <uuid>30859fa7-59e6-4977-8356-b4157f8ac2f9</uuid>
+  <forward dev='eno1' mode='nat'>
+    <interface dev='eno1'/>
+  </forward>
+  <bridge name='virbr0' stp='on' delay='0'/>
+  <mac address='52:54:00:b9:65:24'/>
+  <ip address='192.168.16.200' netmask='255.255.0.0'>
+    <dhcp>
+      <range start='192.168.16.201' end='192.168.16.220'/>
+      <host mac='52:54:00:27:cd:98' name='winokt' ip='192.168.16.201'/>
+    </dhcp>
+  </ip>
+</network>
+
+netname.xml fájlba másolni, javítani
+(külön ip tartomány legyen mint a host)
+
+
+3.
+
+új net konfig létrehozása:
+
+virsh net-define netname.xml
+
+javítás, indítás:
+
+virsh net-edit netname
+virsh net-start netname
+virsh net-autostart netname
+
+
+4.
+
+virt-install --virt-type kvm \
+  --name  virt-deb \
+  --location debian.iso \
+  --os-variant debian10 \
+  --disk size=20 \
+  --memory 4096 \
+  --network bridge=br0 \
+  --network network=default \
+  --graphics vnc,listen=0.0.0.0
+
+vnc kapcsolat: host-ip:5900
+
+telepítés után lehet beállítani fix ip-t,
+ezután elérhető lesz kívülről
+
+
+5.
+
+utólagos módosítás:
+
+virsh shutdown vm
+virsh edit vm
+virsh start vm
+
+
+6.
+
+automatikus indítás:
+
+virsh net-autostart default
+virsh autostart vm
