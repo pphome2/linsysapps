@@ -22,9 +22,12 @@ else
 fi
 
 wget -q ifconfig.me/ip >/dev/null  2>&1
+inetv6=`ip -6 addr| grep inet6 | grep global | awk {'if(NR==1) print $1 " " $2'}`
 
 if [ -f ip ]; then
 	mv ip "$IP_NOW" >/dev/null  2>&1
+	echo >> "$IP_NOW"
+	echo $inetv6 >> "$IP_NOW"
 	ipnow=`cat ./$IP_NOW`
 	if [ "$ipold" == "$ipnow" ]; then
 		echo $L_IP_NOCHANGE >> $LOGFILE
@@ -33,7 +36,7 @@ if [ -f ip ]; then
 		cp "$IP_NOW" "$IP_OLD"
 		echo $L_IP_CHANGE >> $LOGFILE
 		echo >> $LOGFILE
-		echo $ipnow >> $LOGFILE
+		cat "$IP_NOW" >> $LOGFILE
 		echo >> $LOGFILE
 		# beépülő modulok
 		for i in $PLUGINS; do
