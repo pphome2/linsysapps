@@ -1,3 +1,6 @@
+# KVM
+# rövid összefoglaló
+
 1.
 
 /etc/sysctl.conf:
@@ -91,3 +94,50 @@ automatikus indítás:
 
 virsh net-autostart default
 virsh autostart vm
+
+
+7.
+
+Win esetén:
+
+HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon 
+ShutdownWithoutLogon 1
+
+A leállítás ezzel lehetséges távolról.
+
+
+8.
+
+Mentés és visszaállítás:
+
+#!/bin/bash
+
+virsh net-dumpxml default > /opt/backup/default.xml
+
+virsh dumpxml vm > /opt/backup/vm.xml
+virsh shutdown vm
+rm /opt/backup/vm.qcow2
+cp /opt/OKTDC.vm /opt/backup
+virsh start vm
+
+#
+
+#!/bin/bash
+
+virsh shutdown vm
+virsh undefine vm
+
+rm /opt/vm.qcow2
+cp /opt/backup/vm.qcow2 /opt
+
+virsh define --file /opt/backup/vm.xml
+virsh start vm
+
+#
+
+
+9.
+
+10.
+
+#
