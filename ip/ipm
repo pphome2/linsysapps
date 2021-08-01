@@ -10,6 +10,9 @@ localdir=`dirname $0`
 
 #cd $BINDIR
 
+enter='
+'
+
 d=`date`
 echo > $LOGFILE
 echo $d >> $LOGFILE
@@ -22,12 +25,19 @@ else
 fi
 
 wget -q ifconfig.me/ip >/dev/null  2>&1
-inetv6=`ip -6 addr| grep inet6 | grep global | awk {'if(NR==1) print $1 " " $2'}`
+inetv6=`ip -6 addr| grep inet6 | grep global `
+# | awk {'if(NR==1) print $1 " " $2'}`
 
 if [ -f ip ]; then
 	mv ip "$IP_NOW" >/dev/null  2>&1
+	bips=$IFS
+	IFS=$enter
 	echo >> "$IP_NOW"
-	echo $inetv6 >> "$IP_NOW"
+	for i in $inetv6; do
+		i=`echo $i | xargs`
+		echo $i >> "$IP_NOW"
+	done
+	IFS=$bips
 	ipnow=`cat ./$IP_NOW`
 	if [ "$ipold" == "$ipnow" ]; then
 		echo $L_IP_NOCHANGE >> $LOGFILE

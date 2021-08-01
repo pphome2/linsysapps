@@ -7,13 +7,19 @@ Subject: [Hydra] IP cím változás
 Az ip cím megváltozott.
 
 
-2021. júl. 30., péntek, 19:59:35 CEST 
+2021. aug. 1., vasárnap, 12:41:47 CEST 
 
 Az IP cím megváltozott. 
 
 217.65.124.126 
 
-inet6 2001:4c4d:1502:18d:f87:a2cd:8920:789e/64 
+inet6 2001:4c4d:1502:1c0::2a1/128 scope global noprefixroute 
+
+inet6 2001:4c4d:1502:1b1:ea9e:b4ff:fe33:6ef3/64 scope global deprecated dynamic mngtmpaddr noprefixroute 
+
+inet6 2001:4c4d:1502:1c0:b17e:424e:398b:329a/64 scope global temporary dynamic 
+
+inet6 2001:4c4d:1502:1c0:ea9e:b4ff:fe33:6ef3/64 scope global mngtmpaddr noprefixroute 
 
 Beépülő modul indítása:: ipm-commands 
 
