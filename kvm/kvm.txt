@@ -63,6 +63,8 @@ virsh net-autostart netname
 
 4.
 
+Linux:
+
 virt-install --virt-type kvm \
   --name  virt-deb \
   --location debian.iso \
@@ -77,6 +79,19 @@ vnc kapcsolat: host-ip:5900
 
 telepítés után lehet beállítani fix ip-t,
 ezután elérhető lesz kívülről
+
+Win:
+
+virt-install --virt-type kvm \
+  --name  virt-win \
+  --cdrom /opt/2016.iso \
+  --os-variant win10 \
+  --memory 8192 \
+  --vcpus 4 \
+  --disk /opt/VIRTWIN.qcow2,bus=sata,size=120 \
+  --network bridge=br0 \
+  --graphics none \
+  --graphics vnc,listen=0.0.0.0
 
 
 5.
