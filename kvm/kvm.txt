@@ -93,6 +93,8 @@ virt-install --virt-type kvm \
   --graphics none \
   --graphics vnc,listen=0.0.0.0
 
+Létező image fájl:
+  --disk /opt/VIRTWIN.qcow2,bus=sata --import \
 
 5.
 
@@ -166,5 +168,9 @@ virsh edit vm
 
 
 10.
+
+Win driverek:
+
+https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio
 
 #

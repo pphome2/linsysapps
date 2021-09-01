@@ -1,0 +1,140 @@
+    VM-BACKUP
+=================
+
+#!/bin/bash
+
+virsh net-dumpxml default > /opt/backup/default.xml
+
+virsh dumpxml virt-win > /opt/backup/virt-win.xml
+virsh shutdown virt-win
+rm /opt/backup/VIRTWIN.qcow2
+cp /opt/VIRTWIN.qcow2 /opt/backup
+virsh start virt-win
+
+virsh dumpxml virt-deb > /opt/backup/virt-deb.xml
+virsh shutdown virt-deb
+rm /opt/backup/VIRTDEB.qcow2
+cp /opt/VIRTDEB.qcow2 /opt/backup
+virsh start virt-deb
+
+#
+
+
+    VM_NEWDEB
+=================
+
+#!/bin/bash
+
+virt-install --virt-type kvm \
+  --name virt-deb \
+  --os-type linux \
+  --os-variant debian10 \
+  --memory 4096 \
+  --vcpus 4 \
+  --disk /opt/VIRTDEB.qcow2,bus=sata,size=20 \
+  --network network=default \
+  --graphics none \
+  --location debian.iso \
+  --graphics vnc,listen=0.0.0.0
+
+#
+
+
+    VM_NEWWIN
+=================
+
+#!/bin/bash
+# létező image fájl:
+#  --disk OKTDC.qcow2,bus=sata --import \
+
+virt-install --virt-type kvm \
+  --name virt-win \
+  --cdrom /opt/2016.iso \
+  --os-variant win10 \
+  --memory 8192 \
+  --vcpus 4 \
+  --disk /opt/VIRTWIN.qcow2,bus=sata,size=120 \
+  --network bridge=br0 \
+  --graphics none \
+  --graphics vnc,listen=0.0.0.0
+
+#  --network network=default \
+#
+
+
+    VM_RESTOREDEB
+=====================
+
+#!/bin/bash
+
+virsh shutdown virt-deb
+virsh undefine virt-deb
+
+rm /opt/VIRTDEB.qcow2
+cp /opt/backup/VIRTDEB.qcow2 /opt
+
+virsh define --file /opt/backup/virtdeb.xml
+virsh start virt-deb
+
+#
+
+
+    VM_RESTOREWIN
+=====================
+
+#!/bin/bash
+
+virsh shutdown virt-win
+virsh undefine virt-win
+
+rm /opt/VIRTWIN.qcow2
+cp /opt/backup/VIRTWIN.qcow2 /opt
+
+virsh define --file /opt/backup/virtwin.xml
+virsh start virt-win
+
+#
+
+
+    VM_START
+================
+
+#!/bin/sh
+
+virsh net-start default
+
+virsh start virt-win
+virsh start virt-deb
+
+#
+
+
+    VM_STOP
+===============
+
+#!/bin/sh
+
+#virsh net-start default
+
+virsh shutdown virt-win
+virsh shutdown virt-deb
+
+#
+
+
+    VM_WINFROMIMAGE
+=======================
+
+#!/bin/bash
+
+virt-install --name virt-win \
+  --memory 8192 \
+  --vcpus 4 \
+  --disk /opt/VIRTWIN.qcow2,bus=sata \
+  --import \
+  --os-variant win10 \
+  --graphics vnc,listen=0.0.0.0 \
+  --noautoconsole \
+  --network bridge=br0
+
+#
