@@ -22,7 +22,12 @@ if [ ! -z $list ]; then
 			y=${x[0]}
 			IFS=$bifs
 			#echo $y
-			$localdir/webcl-local-server $y
+			#$localdir/webcl-local-server $y
+			srv=`sudo lsof -i -n | egrep '\<'$TUN_SERVER_SERVER'\>'`
+			if [ -z "$srv" ]; then
+				#echo $srv
+				$localdir/webcl-local-server $y
+			fi
 		fi
 	done
 fi
