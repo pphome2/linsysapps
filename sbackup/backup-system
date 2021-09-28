@@ -17,7 +17,7 @@ for f in $SYSDIRTOSAVE; do
 	if [ -f $DEVICENAME-system-$f2.tar.gz ]; then
 		rm $DEVICENAME-system-$f2.tar.gz 2>/dev/null
 	fi
-	tar rf $DEVICENAME-system-$f2.tar $f 2>/dev/null >>$LOGDIR/$LOGFILE
+	tar rf $DEVICENAME-system-$f2.tar --exclude=*.tar* $f 2>/dev/null >>$LOGDIR/$LOGFILE
 	gzip ./$DEVICENAME-system-$f2.tar 2>/dev/null
 done
 
