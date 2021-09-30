@@ -11,17 +11,19 @@ net.ipv6.conf.all.forwarding=1
 /etc/network/interface:
 
 auto eno1
-iface eno1 inet static
-    address 192.168.16.1
-    netmask 255.255.0.0
-    gateway 192.168.1.1
+iface eno1 inet manual
 
+auto br0
 iface br0 inet static
-    bridge_ports eno1
-    bridge_stp off
-    bridge_fd 0
-    bridge_maxage 12
-    bridge_hello 2
+        address 192.168.16.1
+        netmask 255.255.0.0
+        gateway 192.168.1.1
+        dns-nameservers 8.8.8.8 1.1.1.1
+        bridge_ports eno1
+        bridge_stp off
+        bridge_fd 0
+        bridge_maxage 12
+        bridge_hello 2
 
 
 2.
