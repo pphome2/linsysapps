@@ -30,6 +30,8 @@ if [ ! -z $list ]; then
 			fi
 		fi
 	done
+else
+	$localdir/webcl-local-server
 fi
 
 #
