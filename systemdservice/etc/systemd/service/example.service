@@ -1,0 +1,9 @@
+[Unit]
+After=local-fs.target
+
+[Service]
+ExecStart=/opt/startservice
+ExecStop=/opt/stopservice
+
+[Install]
+WantedBy=default.target

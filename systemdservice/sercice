@@ -1,0 +1,53 @@
+
+/etc/systemd/service/example.service
+------------------------------------
+
+[Unit]
+Description=VM starter
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/vm start
+ExecStop=/opt/vm stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+
+
+script
+------
+
+start() {
+  /opt/startvm
+}
+
+stop() {
+  /opt/stopvm
+}
+
+case $1 in
+  start|stop) "$1" ;;
+esac
+
+#
+
+
+jogok, indítás
+--------------
+
+chmod 744 /etc/systemd/service/example.service
+systemctl daemon-reload
+
+
+indítás
+-------
+
+systemctl start example
+
+
+automatikus indítás
+-------------------
+
+systemctl enable example
