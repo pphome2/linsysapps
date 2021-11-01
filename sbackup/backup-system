@@ -36,11 +36,12 @@ if [ $ENABLE_USER = 1 ]; then
 		done
 		if (test -f /home/$x/$BACKUPDIRFILE); then
 			for i in `cat /home/$x/$BACKUPDIRFILE`; do
-				if [ -f $DEVICENAME-$x-$i.tar.gz ]; then
-					rm $DEVICENAME-$x-$i.tar.gz 2>/dev/null >/dev/null
+				i2=`echo "$i" | sed -r 's/[\/]+/-/g'`
+				if [ -f $DEVICENAME-$x-$i2.tar.gz ]; then
+					rm $DEVICENAME-$x-$i2.tar.gz 2>/dev/null >/dev/null
 				fi
-				tar -rf $DEVICENAME-$x-$i.tar --exclude=chromium /home/$x/$i 2>/dev/null >>$LOGDIR/$LOGFILE
-				gzip -f ./$DEVICENAME-$x-$i.tar 2>/dev/null
+				tar -hrf $DEVICENAME-$x-$i2.tar --exclude=chromium /home/$x/$i 2>/dev/null >>$LOGDIR/$LOGFILE
+				gzip -f ./$DEVICENAME-$x-$i2.tar 2>/dev/null
 			done
 		fi
 	done
