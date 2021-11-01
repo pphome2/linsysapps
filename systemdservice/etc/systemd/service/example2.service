@@ -1,0 +1,10 @@
+[Unit]
+After=local-fs.target
+
+[Service]
+ExecStart=/opt/myservice start
+ExecStop=/opt/myservice stop
+ExecReload=/opt/myservice resload
+
+[Install]
+WantedBy=default.target
