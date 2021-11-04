@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# config beállítás
+#
+
+#/etc/webcl-config
+
+localdir=`dirname $0`
+. $localdir/webcl-config
+
+#

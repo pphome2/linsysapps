@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# config beállítás
+#
+
+#/etc/backup-config
+
+localdir=`dirname $0`
+. $localdir/backup-config
+
+#

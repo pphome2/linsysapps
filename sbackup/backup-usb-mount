@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # SBackup - rendszer
 #
@@ -8,7 +8,7 @@
 #
 
 d=`dirname $0`
-. $d/backup-config
+. $d/backup-init
 
 e=`cat /proc/partitions | grep sd | awk '{print $4}' | grep -v sda | grep [123456789]`
 

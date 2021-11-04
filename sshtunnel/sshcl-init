@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# config beállítás
+#
+
+#/etc/sshcl-config
+
+localdir=`dirname $0`
+. $localdir/sshcl-config
+
+#

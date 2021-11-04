@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # SBackup - rendszer
 #
@@ -8,7 +8,7 @@
 #
 
 d=`dirname $0`
-. $d/backup-config
+. $d/backup-init
 
 drv=`find /media 2>>/dev/null | grep "$USBFILENAME" | awk '{print $1 }'`
 

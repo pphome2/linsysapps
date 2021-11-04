@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # SBackup - rendszer
 #
@@ -8,7 +8,7 @@
 #
 
 d=`dirname $0`
-. $d/backup-config
+. $d/backup-init
 
 if ping -c 1 -W 1 "$NETHOST" >>/dev/null; then
 	echo $NETHOST létezik

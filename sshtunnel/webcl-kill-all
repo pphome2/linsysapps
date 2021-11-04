@@ -4,7 +4,7 @@
 #
 
 localdir=`dirname $0`
-. $localdir/webcl-config
+. $localdir/webcl-init
 
 if [ -z "$1" ]; then
 	list=`find webcl-*$PID_EXT 2>/dev/null`

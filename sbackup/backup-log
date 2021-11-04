@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # SBackup - rendszer
 #
@@ -7,7 +7,7 @@
 #
 
 d=`dirname $0`
-. $d/backup-config
+. $d/backup-init
 
 if [ $LOGROTATEDAY != "0" ]; then
 	daynum=`date '+%u'`
