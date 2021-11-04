@@ -30,8 +30,8 @@ if [ -z "$1" ]; then
 		esac
 	done
 else
-	for i in ${!TUN_SERVER_BRIDGE_PORTS[@]}; do
-		if [ "${TUN_REMOTE_PORTS[$i]}" == "$1" ]; then
+	for i in ${!TUN_LOCAL_PORTS[@]}; do
+		if [ "${TUN_LOCAL_PORTS[$i]}" == "$1" ]; then
 			pid="0"
 			sshpass -p "$TUN_SERVER_PASSWORD" \
 				ssh  -o "StrictHostKeyChecking=no" -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" \

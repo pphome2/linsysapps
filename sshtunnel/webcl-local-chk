@@ -31,7 +31,12 @@ if [ ! -z $list ]; then
 		fi
 	done
 else
-	$localdir/webcl-local-server
+	for x in ${!TUN_LOCAL_PORTS[@]}; do
+		popen=`nmap localhost | grep ${TUN_LOCAL_PORTS[$x]}`
+		if [ -z $popen ]; then
+			$localdir/webcl-local-server ${TUN_LOCAL_PORTS[$x]}
+		fi
+	done
 fi
 
 #
