@@ -21,11 +21,9 @@ if [ ! -z $list ]; then
 			x=( $y )
 			y=${x[0]}
 			IFS=$bifs
-			#echo $y
-			#$localdir/webcl-local-server $y
 			srv=`sudo lsof -i -n | egrep '\<'$TUN_SERVER_SERVER'\>'`
+			#echo $y - $srv
 			if [ -z "$srv" ]; then
-				#echo $srv
 				$localdir/webcl-local-server $y
 			fi
 		fi
@@ -34,7 +32,7 @@ else
 	for x in ${!TUN_LOCAL_PORTS[@]}; do
 		popen=`nmap localhost | grep ${TUN_LOCAL_PORTS[$x]}`
 		if [ -z $popen ]; then
-			$localdir/webcl-local-server ${TUN_LOCAL_PORTS[$x]}
+			$localdir/webcl-local-server ${TUN_REMOTE_PORTS[$x]}
 		fi
 	done
 fi
