@@ -1,1 +1,11 @@
-backup-starter
+#!/bin/bash
+#
+# SBackup - rendszer
+#
+# indítás
+#
+
+localdir=`dirname $0`
+. $localdir/backup-starter
+
+#

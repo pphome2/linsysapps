@@ -1,11 +1,14 @@
 #!/bin/bash
 #
-# config beállítás
+# SBackup - rendszer
+#
+# config betöltés
 #
 
-#/etc/backup-config
-
-localdir=`dirname $0`
-. $localdir/backup-config
+if [ -z "$TPATH" ]; then
+	# . /etc/backup-config
+	localdir=`dirname $0`
+	. $localdir/backup-config
+fi
 
 #
