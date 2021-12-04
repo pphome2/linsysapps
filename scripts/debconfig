@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# apt source
+echo "deb http://deb.debian.org/debian/ bookworm main contrib non-free" > /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian/ sid main" >> /etc/apt/sources.list
+echo "deb http://security.debian.org/debian-security bookworm-security main contrib non-free" >> /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian/ bookworm-updates main contrib non-free" >> /etc/apt/sources.list
+
+# apt preferences
+echo "Package: *" > /etc/apt/preferences.d/debian.pref
+echo "Pin: release a=stable" >> /etc/apt/preferences.d/debian.pref
+echo "Pin-Priority: 50" >> /etc/apt/preferences.d/debian.pref
+echo "" >> /etc/apt/preferences.d/debian.pref
+echo "Package: *" >> /etc/apt/preferences.d/debian.pref
+echo "Pin: release a=testing" >> /etc/apt/preferences.d/debian.pref
+echo "Pin-Priority: 900" >> /etc/apt/preferences.d/debian.pref
+echo "" >> /etc/apt/preferences.d/debian.pref
+echo "Package: *" >> /etc/apt/preferences.d/debian.pref
+echo "Pin: release a=unstable" >> /etc/apt/preferences.d/debian.pref
+echo "Pin-Priority: 500" >> /etc/apt/preferences.d/debian.pref
+
+# apt update
+apt-get upgrade
+apt-get update
+
+# alapprogramok
+apt-get install -y mc aptitude msmtp sshpass lsof nmap rdesktop rclone lynx git
+apt-get install -y cockpit cockpit-podman cockpit-machines gnome-shell-extension-dash-to-panel
+apt-get install -y firefox firefox-l10n-hu webext-privacy-badger webext-ublock-origin
+apt-get install -y gimp materia-gtk-theme gdisk filezilla evolution-rss epiphany-browser
+apt-get install -y geany geany-plugin-autoclose geany-plugin-automark geany-plugin-codenav
+apt-get install -y geany-plugin-gproject geany-plugin-projectorganizer geany-plugins-common
+apt-get install -y firmware-linux-free firmware-linux-nonfree firmware-linux firmware-misc-nonfree
+
+#
