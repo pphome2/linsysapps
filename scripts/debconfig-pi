@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# Debian RPi első indulásakor
+
+if [ -z "$1" ]; then
+    hn="hydra"
+else
+    hn=$1
+fi
+
+if [ -z "$2" ]; then
+    nu="peter"
+else
+    nu=$2
+fi
+
+# hostnév
+
+echo $hn > /etc/hostname
+echo 127.0.0.1 $hn >> /etc/hosts
+
+# DNS
+
+touch /etc/resolv.conf
+echo nameserver 8.8.8.8 >> /etc/resolv.conf
+
+# apt update
+
+apt-get update
+
+# alapprogramok
+
+apt-get install mc aptitude cockpit cockpit-podman locales msmtp task-hungarian sshpass lsof
+
+# egyes esetekben programok
+
+#apt-get install nut transmission-daemon motion
+
+# frissítések
+
+apt-get upgrade
+
+# nyelv beállítása
+
+dpkg-reconfigure locales
+
+# timezone
+
+timedatectl set-timezone Europe/Budapest
+
+# új felhasználó
+
+echo
+echo  Új felhasználó:
+adduser $nu
+
+# root jelszó
+
+echo
+echo Root jelszó beállítás:
+passwd
+
+#
