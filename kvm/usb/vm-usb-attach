@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#XML="/opt/usb.xml"
+XML="./usb.xml"
+
+if [ -z $1 ]; then
+  VIRT="virt-win"
+else
+ VIRT=$1
+fi
+
+DEV=`dmesg  | grep "New USB device found" | tail -1`
+VEN=`echo $DEV | gawk '{print $8}'`
+ID=`echo $DEV | gawk '{print $9}'`
+VEN=`echo $VEN | tr -dc '0-9'`
+ID=`echo $ID | tr -dc '0-9'`
+
+echo "<hostdev mode='subsystem' type='usb' managed='yes'>" >$XML
+echo "  <source>" >>$XML
+echo "    <vendor id='0x$VEN'/>" >> $XML
+echo "    <product id='0x$ID'/>" >> $XML
+echo "   </source>" >> $XML
+echo "</hostdev>" >>$XML
+
+#echo $VIRT $XML $VEN $ID
+virsh attach-device $VIRT $XML
+
+#

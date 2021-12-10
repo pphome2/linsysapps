@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#XML="/opt/usb.xml"
+XML="./usb.xml"
+
+if [ -z $1 ]; then
+  VIRT="virt-win"
+else
+ VIRT=$1
+fi
+
+echo $VIRT $XML
+virsh detach-device $VIRT $XML
+
+#
