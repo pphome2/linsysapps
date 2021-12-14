@@ -6,14 +6,45 @@ XML="./usb.xml"
 if [ -z $1 ]; then
   VIRT="virt-win"
 else
- VIRT=$1
+  VIRT=$1
 fi
 
-DEV=`dmesg  | grep "New USB device found" | tail -1`
-VEN=`echo $DEV | gawk '{print $8}'`
-ID=`echo $DEV | gawk '{print $9}'`
-VEN=`echo $VEN | tr -dc '0-9'`
-ID=`echo $ID | tr -dc '0-9'`
+DEV=`dmesg | grep "New USB device found" | tail -1`
+VEN=`echo $DEV | awk '{print $8}'`
+ID=`echo $DEV | awk '{print $9}'`
+VEN1=`echo $VEN | grep "="`
+ID1=`echo $ID | grep "="`
+#echo 0 - $VEN1 - $ID1
+if [ -z $VEN1 ]; then
+  VEN=`echo $DEV | awk '{print $9}'`
+  ID=`echo $DEV | awk '{print $10}'`
+  VEN1=`echo $VEN | grep "="`
+  ID1=`echo $ID | grep "="`
+fi
+#echo 1 - $VEN1 - $ID1
+if [ -z $VEN1 ]; then
+  VEN=`echo $DEV | awk '{print $10}'`
+  ID=`echo $DEV | awk '{print $11}'`
+  VEN1=`echo $VEN | grep "="`
+  ID1=`echo $ID | grep "="`
+  #  VEN=`echo $VEN | tr -dc '0-9'`
+  #  ID=`echo $ID | tr -dc '0-9'`
+fi
+#echo 2 - $VEN1 - $ID1
+
+bifs="$IFS"
+IFS=','
+read -ra n <<< "$VEN"
+read -ra i <<< "$ID"
+VEN=${n[0]}
+ID=${i[0]}
+IFS='='
+read -ra n <<< "$VEN"
+read -ra i <<< "$ID"
+VEN=${n[1]}
+ID=${i[1]}
+IFS=$bifs
+#echo = $VEN $ID
 
 echo "<hostdev mode='subsystem' type='usb' managed='yes'>" >$XML
 echo "  <source>" >>$XML
@@ -22,7 +53,8 @@ echo "    <product id='0x$ID'/>" >> $XML
 echo "   </source>" >> $XML
 echo "</hostdev>" >>$XML
 
-#echo $VIRT $XML $VEN $ID
-virsh attach-device $VIRT $XML
+echo $DEV
+echo $VIRT $XML $VEN - $ID
+#virsh attach-device $VIRT $XML
 
 #
