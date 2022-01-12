@@ -25,9 +25,6 @@ if [ -z "$1" ]; then
 						ssh  -o "StrictHostKeyChecking=no" -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" \
 						"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
 				fi
-				if [ "$?" != 0 ]; then
-					ssh-keygen -R "$TUN_SERVER"
-					ssh-keyscan -H "$TUN_SERVER" >> ~/.ssh/known_hosts
 				if [ "$?" == 0 ]; then
 					pid=$!
 					echo $pid > webcl-"${TUN_REMOTE_PORTS[$i]}""$PID_EXT"
