@@ -30,7 +30,7 @@ apt-get update
 
 # alapprogramok
 
-apt-get install mc aptitude cockpit cockpit-podman locales msmtp task-hungarian sshpass lsof
+apt-get install mc aptitude cockpit cockpit-podman locales msmtp task-hungarian sshpass autossh lsof
 
 # egyes esetekben programok
 

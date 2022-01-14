@@ -24,7 +24,7 @@ apt-get upgrade
 apt-get update
 
 # alapprogramok
-apt-get install -y mc aptitude msmtp sshpass lsof nmap rdesktop rclone lynx git
+apt-get install -y mc aptitude msmtp sshpass autossh lsof nmap rdesktop rclone lynx git
 apt-get install -y cockpit cockpit-podman cockpit-machines gnome-shell-extension-dash-to-panel
 apt-get install -y firefox firefox-l10n-hu webext-privacy-badger webext-ublock-origin
 apt-get install -y gimp materia-gtk-theme gdisk filezilla evolution-rss epiphany-browser
