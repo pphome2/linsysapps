@@ -21,7 +21,8 @@ else
 	pid=`cat $1`
 	echo $pid
 	if [ -z "$pid" ]; then
-		#killall sshpass
+		killall sshpass 2&>>/dev/null
+		killall autossh 2&>>/dev/null
 		echo
 	else
 		kill -9 $pid
