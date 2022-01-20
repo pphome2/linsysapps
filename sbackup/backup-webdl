@@ -8,9 +8,9 @@
 #
 
 d=`dirname $0`
-. $d/backup-init
+. "$d/backup-init"
 
-cd $LOCALBACKUPDIR
+cd "$LOCALBACKUPDIR"
 
 if [ "$WEBDLUSER" = "" ]; then
 	WUSER=" "
@@ -18,27 +18,27 @@ else
 	WUSER=" --user=$WEBDLUSER --password=$WEBDLPASSWD "
 fi
 
-if wget $WEBDOWNLOAD $WUSER --no-check-certificate -q --timeout 10 --spider 2>/dev/null; then
+if wget "$WEBDOWNLOAD" "$WUSER" --no-check-certificate -q --timeout 10 --spider 2>/dev/null; then
 	for x in $WEBFILES; do
 		#echo $WEBDOWNLOAD/$x
-		if [ -f $x ]; then
-			rm $x 2>/dev/null
+		if [ -f "$x" ]; then
+			rm "$x" 2>/dev/null
 		fi
-		wget $WUSER -q --no-check-certificate $x 2>>$LOGDIR/$LOGFILE
+		wget "$WUSER" -q --no-check-certificate "$x" 2>>"$LOGDIR/$LOGFILE"
 	done
 fi
 
 for x in $WEBBACKUPSITES; do
-	if wget $x $WUSER --no-check-certificate -q --timeout 10 --spider 2>/dev/null; then
+	if wget "$x" "$WUSER" --no-check-certificate -q --timeout 10 --spider 2>/dev/null; then
 		y=`echo $x | rev | cut -d'/' -f1 | rev`
-		if [ -f $y ]; then
-			rm $y 2>/dev/null
+		if [ -f "$y" ]; then
+			rm "$y" 2>/dev/null
 		fi
 		#echo $x
-		wget $WUSER -q --no-check-certificate $x 2>>$LOGDIR/$LOGFILE
+		wget "$WUSER" -q --no-check-certificate "$x" 2>>"$LOGDIR/$LOGFILE"
 	fi
 done
 
-cd $TPATH
+cd "$TPATH"
 
 #

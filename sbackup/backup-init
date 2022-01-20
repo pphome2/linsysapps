@@ -8,7 +8,7 @@
 if [ -z "$TPATH" ]; then
 	# . /etc/backup-config
 	localdir=`dirname $0`
-	. $localdir/backup-config
+	. "$localdir/backup-config"
 fi
 
 #

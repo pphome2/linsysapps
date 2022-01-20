@@ -7,12 +7,12 @@
 #
 
 d=`dirname $0`
-. $d/backup-init
+. "$d/backup-init"
 
-if [ -d $SQLDIR ]; then
-	cd $LOCALBACKUPDIR
-	if [ -f $DEVICENAME-sql.tar.gz ]; then
-		rm $DEVICENAME-sql.tar.gz 2>>/dev/null
+if [ -d "$SQLDIR" ]; then
+	cd "$LOCALBACKUPDIR"
+	if [ -f "$DEVICENAME-sql.tar.gz" ]; then
+		rm "$DEVICENAME-sql.tar.gz" 2>>/dev/null
 	fi
 
 	# egyszrre az összes adatbázis
@@ -21,18 +21,18 @@ if [ -d $SQLDIR ]; then
 	# egyessével az adatbázisok:
 	# mysqldump mysql > mysql.sql
 	# mysqldump phpmyadmin> phpmyadmin.sql
- 	for x in $SQLDIR/*; do
-	if [ -d $x ]; then
+	for x in "$SQLDIR"/*; do
+	if [ -d "$x" ]; then
 		y="${x##*/}"
-		if [ $y != "performance_schema" ]; then
-			mysqldump $y >sqldb-$y.sql 2>>$LOGDIR/$LOGFILE
+		if [ "$y" != "performance_schema" ]; then
+			mysqldump "$y" >"sqldb-$y.sql" 2>>"$LOGDIR/$LOGFILE"
 	 	fi
 	fi
 	done
 
-	tar cvvfz $DEVICENAME-sql.tar.gz *.sql 2>/dev/null >>$LOGDIR/$LOGFILE
-	rm *.sql 2>/dev/null
-	cd $TPATH
+	tar cvvfz "$DEVICENAME-sql.tar.gz" "*.sql" 2>/dev/null >>"$LOGDIR/$LOGFILE"
+	rm "*.sql" 2>/dev/null
+	cd "$TPATH"
 fi
 
 #

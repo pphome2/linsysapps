@@ -7,28 +7,28 @@
 #
 
 d=`dirname $0`
-. $d/backup-init
+. "$d/backup-init"
 
-if [ $LOGROTATEDAY != "0" ]; then
+if [ "$LOGROTATEDAY" != "0" ]; then
 	daynum=`date '+%u'`
-	if [ $LOGROTATEDAY = $daynum ]; then
-		if (test -f $LOGDIR/$LOGFILE); then
+	if [ "$LOGROTATEDAY" = "$daynum" ]; then
+		if (test -f "$LOGDIR/$LOGFILE"); then
 			for b in $LOGARCHFILE; do
 				c="$b $c"
 			done
 			for b in $c; do
 				if test -z "$n"; then
 					if (test -f "$LOGDIR/$b"); then
-						rm $LOGDIR/$b 2>/dev/null
+						rm "$LOGDIR/$b" 2>/dev/null
 					fi
 				else
-					mv $LOGDIR/$b $LOGDIR/$n 2>/dev/null
+					mv "$LOGDIR/$b" "$LOGDIR/$n" 2>/dev/null
 				fi
-				n=$b
+				n="$"b
 			done
-			mv $LOGDIR/$LOGFILE $LOGDIR/$b 2>/dev/null
+			mv "$LOGDIR/$LOGFILE" "$LOGDIR/$b" 2>/dev/null
 		fi
-		touch $LOGDIR/$LOGFILE 2>/dev/null
+		touch "$LOGDIR/$LOGFILE" 2>/dev/null
 	fi
 fi
 

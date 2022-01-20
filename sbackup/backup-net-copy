@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # SBackup - rendszer
 #
@@ -8,20 +8,24 @@
 #
 
 d=`dirname $0`
-. $d/backup-init
+. "$d/backup-config"
 
 if ping -c 1 -W 1 "$NETHOST" >>/dev/null; then
-	echo $NETHOST létezik
-	mount //$NETHOST/backupdir /mnt -o username=$NETUSER,password=$NETPASSWORD 2>>$LOGDIR/$LOGFILE
+	#echo "$NETHOST" létezik
+	mount -t cifs "//$NETHOST/$NETSHARE" "$NETTARGET" -o rw,username="$NETUSER",password="$NETPASSWORD" 2>>"$LOGDIR/$LOGFILE"
 
-	if [ -d $NETTARGET ]; then
+	if [ -d "$NETTARGET" ]; then
 		d=`date`
+		#cd $NETTARGET/$NETDIR
 	else
-		mkdir $NETTARGET 2>>/dev/null
+		#mkdir $NETTARGET 2>>/dev/null
+		d=`date`
 	fi
 
-	cp $LOCALBACKUPDIR/* $NETTARGET 2>>$LOGDIR/$LOGFILE
-	mount /mnt 2>>$LOGDIR/$LOGFILE
+	cp -r "$LOCALBACKUPDIR"/* "$NETTARGET/$NETDIR" 2>>"$LOGDIR/$LOGFILE"
+	umount "$NETTARGET" 2>>"$LOGDIR/$LOGFILE"
+else
+	echo "$NETHOST" nem elérhető. 2>>"$LOGDIR/$LOGFILE"
 fi
 
 #
