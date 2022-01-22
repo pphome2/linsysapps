@@ -8,6 +8,7 @@
 for i in *; do
 	if [ -f $i ]; then
 		cim=${i%.*}
+		mkvpropedit $i -d title 2>/dev/null
 		mkvpropedit $i -e info -s title=$cim 2>/dev/null
 	else
 		echo "Hiányzó fájl. ( $i )"

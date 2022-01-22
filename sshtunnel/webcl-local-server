@@ -16,13 +16,13 @@ if [ -z "$1" ]; then
 			$L_OPEN_YES )
 				pid="0"
 				sshpass -p "$TUN_SERVER_PASSWORD" \
-					autossh -M 0 -q  -o "StrictHostKeyChecking=no" -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" \
+					ssh -o "StrictHostKeyChecking=no" -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" \
 					"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
 				if [ "$?" != 0 ]; then
 					ssh-keygen -R "$TUN_SERVER"
 					ssh-keyscan -H "$TUN_SERVER" >> ~/.ssh/known_hosts
 					sshpass -p "$TUN_SERVER_PASSWORD" \
-						autossh -M 0 -q -o "StrictHostKeyChecking=no" -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" \
+						ssh -o "StrictHostKeyChecking=no" -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" \
 						"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
 				fi
 				if [ "$?" == 0 ]; then
@@ -41,13 +41,13 @@ else
 		if [ "${TUN_REMOTE_PORTS[$i]}" == "$1" ]; then
 			#echo $1 - "${TUN_LOCAL_PORTS[$i]}"
 			sshpass -p "$TUN_SERVER_PASSWORD" \
-				autossh -M 0 -q -o "StrictHostKeyChecking=no" -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" \
+				ssh -o "StrictHostKeyChecking=no" -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" \
 				"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
 			if [ "$?" != 0 ]; then
 				ssh-keygen -R "$TUN_SERVER"
 				ssh-keyscan -H "$TUN_SERVER" >> ~/.ssh/known_hosts
 				sshpass -p "$TUN_SERVER_PASSWORD" \
-					autossh -M 0 -q -o "StrictHostKeyChecking=no" -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" \
+					ssh -o "StrictHostKeyChecking=no" -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" \
 					"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
 			fi
 			if [ "$?" == 0 ]; then
@@ -58,7 +58,7 @@ else
 	done
 fi
 
-#echo sshpass -p "$TUN_SERVER_PASSWORD" autossh -M 0 -q -o "StrictHostKeyChecking=no" -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" "$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
+#echo sshpass -p "$TUN_SERVER_PASSWORD" ssh -o "StrictHostKeyChecking=no" -N -L "${TUN_LOCAL_PORTS[$i]}":localhost:"${TUN_SERVER_BRIDGE_PORTS[$i]}" "$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" &
 
 
 #cd $TPATH
