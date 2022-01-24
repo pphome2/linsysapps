@@ -6,8 +6,8 @@
 
 for i in *.mkv; do
 	sub=${i%.*}.srt
-	if [ -f $sub ]; then
-		mkvsub $i $sub 2>/dev/null
+	if [ -f "$sub" ]; then
+		mkvsub "$i" "$sub" 2>/dev/null
 	else
 		echo "Hiányzó fájl. (  $sub )"
 	fi

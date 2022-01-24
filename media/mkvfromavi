@@ -5,9 +5,9 @@
 # avi fájl konvertálása mkv-ra, mp3 hanggal
 #
 
-if [ -f $1 ]; then
+if [ -f "$1" ]; then
 	mkvfile=${1%.*}.mkv
-	ffmpeg -i $1 -c:a mp3 $mkvfile
+	ffmpeg -i "$1" -c:a mp3 "$mkvfile"
 else
 	echo "Hiányzó fájl. ( $1 )"
 fi

@@ -7,10 +7,10 @@
 
 for i in *.mkv; do
 	sub=${i%.*}.srt
-	if [ -z $1 ]; then
-		mkvsubiso $sub
+	if [ -z "$1" ]; then
+		mkvsubiso "$sub"
 	fi
-	mkvsub $i $sub
+	mkvsub "$i" "$sub"
 done
 
 #

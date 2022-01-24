@@ -5,22 +5,22 @@
 # egy fájlhoz felarat kapcsolása
 #
 
-if [ -f $1 ]; then
-	if [ -z $2 ]; then
-		sub=$2
+if [ -f "$1" ]; then
+	if [ -z "$2" ]; then
+		sub="$2"
 	else
 		sub=${1%.*}.srt
 	fi
-	if [ -f $sub ]; then
+	if [ -f "$sub" ]; then
 		cim=${1%.*}
-		mkvmerge -o out.mkv --no-subtitles $1 2>/dev/null
-		mkvpropedit out.mkv -e info -s title=$cim 2>/dev/null
-		mkvmerge -o out2.mkv out.mkv $sub --chapter-language hun 2>/dev/null
-		mv $1 o-$1 2>/dev/null
-		mv $sub o-$sub 2>/dev/null
+		mkvmerge -o out.mkv --no-subtitles "$1" 2>/dev/null
+		mkvpropedit out.mkv -e info -s title="$cim" 2>/dev/null
+		mkvmerge -o out2.mkv out.mkv "$sub" --chapter-language hun 2>/dev/null
+		mv "$1" o-"$1" 2>/dev/null
+		mv "$sub" o-"$sub" 2>/dev/null
 		rm out.mkv 2>/dev/null
-		mv out2.mkv $1 2>/dev/null
-		if [ -f $1 ]; then
+		mv out2.mkv "$1" 2>/dev/null
+		if [ -f "$1" ]; then
 			echo "Konvert OK."
 			#rm o-$1 2>/dev/null
 			#rm o-$2 2>/dev/null
