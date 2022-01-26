@@ -15,8 +15,8 @@ for b in $OLDDAY; do
 	c="$b $c"
 done
 for b in $c; do
-	if test -z "$n"; then
-		if [ -d $b ]; then
+	if [ -z "$n" ]; then
+		if [ -d "$b" ]; then
 			rm "$b"/*.tar* 2>/dev/null
 		else
 			mkdir "$b" 2>/dev/null
@@ -34,9 +34,9 @@ done
 if [ -d "$b" ]; then
 	rm "$b"/*.tar* 2>/dev/null
 else
-	mkdir "$"b 2>/dev/null
+	mkdir "$b" 2>/dev/null
 fi
-mv "*.tar*" "$b" 2>/dev/null
+mv *.tar* "$b" 2>/dev/null
 
 cd "$TPATH"
 

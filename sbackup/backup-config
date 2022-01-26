@@ -86,4 +86,8 @@ if [ "$DEVICENAME" = "" ]; then
 	DEVICENAME="0"
 fi
 
+if [ ! -d "$LOCALBACKUPDIR" ]; then
+	mkdir "$LOCALBACKUPDIR"
+fi
+
 #
