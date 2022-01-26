@@ -55,6 +55,13 @@ if [ "$ENABLE_SQL" = 1 ]; then
 		./backup-sql 2>>/dev/null
 fi
 
+# jelszavas védelem
+if [ "$ENABLE_ENCODING" = 1 ]; then
+		d=`date`
+		echo "$d Jelszavas védelem." >> "$LOGDIR/$LOGFILE"
+		./backup-enc 2>/dev/null
+fi
+
 # mentés felhőbe, adathordozóra
 if [ "$ENABLE_USB" = 1 ]; then
 		d=`date`

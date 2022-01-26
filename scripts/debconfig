@@ -31,5 +31,6 @@ apt-get install -y gimp materia-gtk-theme gdisk filezilla evolution-rss epiphany
 apt-get install -y geany geany-plugin-autoclose geany-plugin-automark geany-plugin-codenav
 apt-get install -y geany-plugin-gproject geany-plugin-projectorganizer geany-plugins-common
 apt-get install -y firmware-linux-free firmware-linux-nonfree firmware-linux firmware-misc-nonfree
+apt-get install -y cifs-utils openssl
 
 #
