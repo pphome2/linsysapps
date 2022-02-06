@@ -2,22 +2,27 @@
 #
 # CleanUser - felhasználói adatok törlése
 #
-# Törlés
 #
 
 CLEANUSERFILE=".cleanuser"
 
 cd /home
 
-ldir=`ls -A /home`
+read -p "Komolyan? (i) " OK
 
-for x in $ldir; do
-	if [ -f "/home/$x/$CLEANUSERFILE" ]; then
-		for i in `cat "/home/$x/$CLEANUSERFILE"`; do
-			echo "$x - $i"
-			rm -rf "$x/$i"
-		done
-	fi
-done
+if [ "$OK" == "i" ]; then
+	ldir=`ls -A /home`
+	for x in $ldir; do
+		if [ -f "/home/$x/$CLEANUSERFILE" ]; then
+			for i in `cat "/home/$x/$CLEANUSERFILE"`; do
+				echo "$x - $i"
+				#
+				# ÓVATOSAN !!!
+				#
+				rm -rf "$x/$i"
+			done
+		fi
+	done
+fi
 
 #
