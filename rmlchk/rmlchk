@@ -22,11 +22,11 @@ anywhereerror=0
 for i in $REMOTE_MACHINES; do
 	ok=0
 	globalerror=10
-	ping -c1 -q $i >/dev/null
+	ping -c1 -q $i >>/dev/null
 	if [ $? == 0 ]; then
 		for k in $PORTS; do
 			#(echo >/dev/tcp/$i/$k) >/dev/null 2>&1
-			sshok=`(cat < /dev/tcp/$i/$k) 2>/dev/null & sleep 1;killall cat 2>/dev/null`
+			sshok=`(cat < /dev/tcp/$i/$k) >>/dev/null & sleep 1;killall cat >>/dev/null`
 			if [ $? -eq 0 ]; then
 				echo "$i : $k - +" >> $OUTPUTFILE
 				globalerror=0

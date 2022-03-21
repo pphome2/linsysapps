@@ -1,0 +1,80 @@
+#!/bin/bash
+#
+# NetChk
+#
+# vezérlés
+#
+
+localdir=`dirname $0`
+. $localdir/netchk-config
+
+#cd $BINDIR
+
+d=`date`
+echo > $LOGFILE
+echo $d >> $LOGFILE
+h=`hostname`
+echo "$L_HOSTNAME: $h" >> $LOGFILE
+echo >> $LOGFILE
+
+action="1"
+
+echo $L_CHK_REMOTE >> $LOGFILE
+for i in $REMOTE_MACHINES; do
+	ping -c 1 -W 1 "$i" >>/dev/null 2>>/dev/null
+	if [ $? == "0" ]; then
+		action="0"
+	fi
+	#echo $action
+done
+
+echo >> $LOGFILE
+
+if [ $action == "1" ]; then
+	action="1"
+	echo $L_WAITING >> $LOGFILE
+	sleep $SLEEPTIME
+	echo $L_CHK_REMOTE >> $LOGFILE
+	for i in $REMOTE_MACHINES; do
+		ping -c 1 -W 1 "$i" >>/dev/null 2>>/dev/null
+		if [ $? == "0" ]; then
+			action="0"
+		fi
+		#echo $action
+	done
+fi
+
+echo >> $LOGFILE
+
+if [ $action == "1" ]; then
+	echo $L_SHUTDOWN_START >> $LOGFILE
+	#/sbin/shutdown -h +1 &
+	#$SHUTDOWN_COMMAND &
+	echo $L_ACTION >> $LOGFILE
+	# beépülő modulok
+	for i in $PLUGINS; do
+		if [ -f $i ]; then
+			echo $L_PLUGIN_START: $i >> $LOGFILE
+			. ./$i >> $LOGFILE
+			echo >> $LOGFILE
+		fi
+	done
+
+	# e-mail küldése
+	if [ $REPORT_TO_MAIL = 1 ]; then
+		#. $localdir/netchk-mail
+		echo "mail"
+	fi
+else
+	echo $L_NOACTION >> $LOGFILE
+fi
+echo >> $LOGFILE
+
+# adatfájl megjelenítése
+if [ $SHOW_LOGFILE = 1 ]; then
+	cat $LOGFILE
+fi
+
+#cd $TPATH
+
+#
