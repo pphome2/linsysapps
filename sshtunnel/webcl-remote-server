@@ -15,7 +15,7 @@ if [ -z "$1" ]; then
 		case $yn in
 			$L_OPEN_YES )
 				pid=0
-				ssh-keygen -R "$TUN_SERVER" 2>>/dev/null
+				ssh-keygen -R "$TUN_SERVER" >>/dev/null 2>>/dev/null
 				ssh-keyscan -H "$TUN_SERVER" >> ~/.ssh/known_hosts 2>>/dev/null
 				sshpass -p "$TUN_SERVER_PASSWORD" \
 					ssh -N -o "ServerAliveInterval=60" -o "ServerAliveCountMax=3"  -o "StrictHostKeyChecking=no" \
@@ -36,7 +36,7 @@ else
 	for i in ${!TUN_SERVER_BRIDGE_PORTS[@]}; do
 		if [ "${TUN_REMOTE_PORTS[$i]}" == "$1" ]; then
 			pid=0
-			ssh-keygen -R "$TUN_SERVER" 2>>/dev/null
+			ssh-keygen -R "$TUN_SERVER" >>/dev/null 2>>/dev/null
 			ssh-keyscan -H "$TUN_SERVER" >> ~/.ssh/known_hosts 2>>/dev/null
 			sshpass -p "$TUN_SERVER_PASSWORD" \
 				ssh -N -o "ServerAliveInterval=60" -o "ServerAliveCountMax=3"  -o "StrictHostKeyChecking=no" \

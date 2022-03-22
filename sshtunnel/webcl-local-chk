@@ -8,18 +8,6 @@
 localdir=`dirname $0`
 . $localdir/webcl-init
 
-for x in ${!TUN_SERVER_BRIDGE_PORTS[@]}; do
-	#popen=`nc -zvw10 ${TUN_SERVER} ${TUN_SERVER_BRIDGE_PORTS[$x]} 2>>/dev/null | grep succ`
-	popen=`sshpass -p "$TUN_SERVER_PASSWORD" \
-					ssh -o "StrictHostKeyChecking=no" \
-						"$TUN_SERVER_USER"@"$TUN_SERVER" -p "$TUN_SERVER_PORT" "nmap localhost | grep ${TUN_SERVER_BRIDGE_PORTS[$x]}" 2>>/dev/null`
-	#echo $popen
-	if [ -z "$popen" ]; then
-		#echo ${TUN_REMOTE_PORTS[$x]}
-		$localdir/webcl-local-server ${TUN_REMOTE_PORTS[$x]}
-	fi
-done
-
 list=`ls webcl-*$PID_EXT 2>>/dev/null`
 if [ ! -z $list ]; then
 	for i in $list; do

@@ -27,7 +27,7 @@ TUN_SERVER_PASSWORD="Password0"
 TUN_SERVER_BRIDGE_PORTS=(5001 5002)
 
 # tunnel-hez kapcsolódó port a távoli gépen
-TUN_REMOTE_PORTS=(80 9090)
+TUN_REMOTE_PORTS=(22 9090)
 
 # tunnel-hez kapcsolódó port a helyi gépen
 TUN_LOCAL_PORTS=(8080 8081)
