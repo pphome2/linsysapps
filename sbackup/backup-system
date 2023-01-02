@@ -12,12 +12,19 @@ cd "$LOCALBACKUPDIR"
 
 ldir=`ls -A /home`
 
+EXCLTAR="--exclude=*.tar*"
+EXCLBIGDIR="--exclude=*chrom*"
+EXCL=""
+if [ $EXCLUDEDIR != "" ]; then
+	EXCL="--exclude=*$EXCLUDEDIR"
+fi
+
 for f in $SYSDIRTOSAVE; do
 	f2=`basename "$f"`
 	if [ -f "$DEVICENAME-system-$f2.tar.gz" ]; then
 		rm "$DEVICENAME-system-$f2.tar.gz" 2>/dev/null
 	fi
-	tar rf "$DEVICENAME-system-$f2.tar" --exclude=*.tar* $f 2>/dev/null >>"$LOGDIR/$LOGFILE"
+	tar rf "$DEVICENAME-system-$f2.tar" $EXCL $EXCLTAR $f 2>/dev/null >>"$LOGDIR/$LOGFILE"
 	gzip "./$DEVICENAME-system-$f2.tar" 2>/dev/null
 done
 
@@ -31,7 +38,7 @@ if [ "$ENABLE_USER" = 1 ]; then
 			if [ -f "$DEVICENAME-$x-$f2.tar.gz" ]; then
 				rm "$DEVICENAME-$x-$f2.tar.gz" 2>/dev/null
 			fi
-			tar -rf "$DEVICENAME-$x-$f2.tar" --exclude=chromium "/home/$x/$f" 2>/dev/null >>"$LOGDIR/$LOGFILE"
+			tar -rf "$DEVICENAME-$x-$f2.tar" $EXCL $EXCLBIGDIR "/home/$x/$f" 2>/dev/null >>"$LOGDIR/$LOGFILE"
 			gzip "./$DEVICENAME-$x-$f2.tar" 2>/dev/null
 		done
 		if [ -f "/home/$x/$BACKUPDIRFILE" ]; then
@@ -40,7 +47,7 @@ if [ "$ENABLE_USER" = 1 ]; then
 				if [ -f "$DEVICENAME-$x-$i2.tar.gz" ]; then
 					rm "$DEVICENAME-$x-$i2.tar.gz" 2>/dev/null >/dev/null
 				fi
-				tar -hrf "$DEVICENAME-$x-$i2.tar" --exclude=chromium "/home/$x/$i" 2>/dev/null >>"$LOGDIR/$LOGFILE"
+				tar -hrf "$DEVICENAME-$x-$i2.tar" $EXCL $EXCLBIGDIR "/home/$x/$i" 2>/dev/null >>"$LOGDIR/$LOGFILE"
 				gzip -f "./$DEVICENAME-$x-$i2.tar" 2>/dev/null
 			done
 		fi

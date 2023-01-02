@@ -22,6 +22,12 @@ ENABLE_USB=1
 ENABLE_WEBDIR=0
 ENABLE_NETWORK=0
 
+# archivum könyvtár (mentéből kimarad - backup-system-noexcl menti)
+ARCHIVEDIR="_"
+
+# mentés helye
+LOCALBACKUPDIR="/usr/local/share/backup"
+
 # a program helye
 BINDIR="/usr/local/bin"
 
@@ -37,8 +43,6 @@ LOGARCHFILE="sbackup.log.1 sbackup.log.2 sbackup.log.3"
 # log rotáció - a héten belüli nap száma: 1-7, 0 - letiltva
 LOGROTATEDAY=5
 
-# mentés helye
-LOCALBACKUPDIR="/usr/local/share/backup"
 
 # mentés előző napok
 OLDDAY="d-1 d-2 d-3"
@@ -94,5 +98,7 @@ fi
 if [ ! -d "$LOCALBACKUPDIR" ]; then
 	mkdir "$LOCALBACKUPDIR"
 fi
+
+EXCLUDEDIR=$ARCHIVEDIR
 
 #
