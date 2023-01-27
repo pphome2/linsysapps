@@ -24,7 +24,7 @@ if [ "$LOGROTATEDAY" != "0" ]; then
 				else
 					mv "$LOGDIR"/"$b" "$LOGDIR"/"$n" 2>/dev/null
 				fi
-				n="$"b
+				n="$b"
 			done
 			mv "$LOGDIR/$LOGFILE" "$LOGDIR"/"$b" 2>/dev/null
 		fi
