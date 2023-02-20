@@ -9,8 +9,8 @@
 coder() {
     if [ ! -d "$filen" ]; then
         if [ -f "$filen" ]; then
-          	echo "$b"
-   	        openssl aes-256-cbc -salt -a -e -in "$filen" -out "tmpfile" -iter "$MN" -k "$PW" #>>/dev/null 2>>/dev/null
+			echo "$b"
+			openssl aes-256-cbc -salt -a -e -in "$filen" -out "tmpfile" -iter "$MN" -k "$PW" #>>/dev/null 2>>/dev/null
             if [ -z "$OPF" ]; then
    	            mv "tmpfile" "$FN-$filen" >>/dev/null 2>>/dev/null
        	        echo no-opf
@@ -55,7 +55,7 @@ if [ -z "$PW" ]; then
 fi
 
 if [ -z "$DIR" ]; then
-    DIR="*"
+    DIR="."
 else
     if [ -d "$DIR" ]; then
         cd "$DIR"
@@ -65,7 +65,7 @@ fi
 
 if [ -d "$DIR" ]; then
     for filen in *; do
-   	    coder
+		coder
     done
 else
     filen=$DIR

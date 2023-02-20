@@ -55,9 +55,9 @@ if [ -z "$PW" ]; then
 fi
 
 if [ -z "$DIR" ]; then
-    DIR="*"
+    DIR="."
 else
-    if [ -d "$DIR" ]; thrn
+    if [ -d "$DIR" ]; then
         cd "$DIR"
     fi
 fi
