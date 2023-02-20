@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Dir Enconding/Decoding
+#
+# beállítások
+#
+#
+
+DIR=""
+PW=""
+FN="S"
+MN="597843"
+EMPTY=""
+
+#

@@ -1,0 +1,76 @@
+#!/bin/bash
+#
+# Dir Enconding/Decoding
+#
+# visszaállítás
+#
+#
+
+coder() {
+    if [ ! -d "$filen" ]; then
+        if [ -f "$filen" ]; then
+          	echo "$filen"
+        	openssl aes-256-cbc -salt -a -d -in "$filen" -out "tmpfile" -iter "$MN" -k "$PW" #>>/dev/null 2>>/dev/null
+            if [ -z "$OPF" ]; then
+   	            mv "tmpfile" "$FN-$filen" >>/dev/null 2>>/dev/null
+       	        #echo no-opf
+            else
+                mv "tmpfile" $OPF >>/dev/null 2>>/dev/null
+                #echo opf
+            fi
+            if [ -z "$del" ]; then
+                rm "$filen" >>/dev/null 2>>/dev/null
+                #echo del
+            fi
+        fi
+    fi
+}
+
+
+LD=`dirname $0`
+if [ -f "$LD/dconfig" ]; then
+    . "$LD/dconfig"
+else
+    DIR=""
+    PW=""
+    FN="S"
+    MN="597843"
+fi
+
+del="del"
+
+while getopts p:d:o:f:r flag; do
+    case "${flag}" in
+        p) PW=${OPTARG};;
+        d) DIR=${OPTARG};;
+        o) OPF=${OPTARG};;
+        f) DIR=${OPTARG};;
+        r) del=${OPTARG};;
+    esac
+done
+
+if [ -z "$PW" ]; then
+    read -s -p "PW: " PW
+    echo # $PW
+fi
+
+if [ -z "$DIR" ]; then
+    DIR="*"
+else
+    if [ -d "$DIR" ]; thrn
+        cd "$DIR"
+    fi
+fi
+
+if [ -d "$DIR" ]; then
+    for filen in *; do
+   	    coder
+    done
+else
+    filen="$DIR"
+    coder
+fi
+
+cd "$LD"
+
+#
