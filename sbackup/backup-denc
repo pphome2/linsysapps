@@ -12,8 +12,9 @@ d=`dirname $0`
 cd "$LOCALBACKUPDIR"
 
 for b in *.tar.gz; do
-	echo $b
-	openssl enc -aes-256-cbc -d -in "$b" -out p-"$b" -k $ENCODINGPASSPHARSE >>/dev/null 2>>/dev/null
+	#echo $b
+	openssl aes-256-cbc -salt -a -d -in "$b" -out "p-$b" -iter "$MN" -k "$ENCODINGPASSPHARSE" >>/dev/null 2>>/dev/null
+	#openssl enc -aes-256-cbc -d -in "$b" -out p-"$b" -k $ENCODINGPASSPHARSE #>>/dev/null 2>>/dev/null
 	rm "$b" >>/dev/null 2>>/dev/null
 	mv p-"$b" "$b" >>/dev/null 2>>/dev/null
 done

@@ -89,6 +89,7 @@ PLUGINS=""
 
 # kódolási jelszó
 ENCODINGPASSPHARSE="titkosjelszo"
+MN="10"
 
 # alapbeállítások
 EXCLUDEDIR=$ARCHIVEDIR
