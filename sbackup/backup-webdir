@@ -14,7 +14,7 @@ if [ -d "$WEBDIR" ]; then
 	cd "$LOCALBACKUPDIR"
 
 	rm "/$WEBDIR/$DEVICENAME-backup.tar" 2>/dev/null
-	tar rf "/$WEBDIR/$DEVICENAME-backup.tar" "*.tar.gz" 2>/dev/null >>"$LOGDIR/$LOGFILE"
+	tar rf "/$WEBDIR/$DEVICENAME-backup.tar" *.tar.gz 2>/dev/null >>"$LOGDIR/$LOGFILE"
 
 	cd "$TPATH"
 fi
