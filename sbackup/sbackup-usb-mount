@@ -8,7 +8,7 @@
 #
 
 d=`dirname $0`
-. "$d/backup-init"
+. "$d/sbackup-init"
 
 e=`cat /proc/partitions | grep sd | awk '{print $4}' | grep -v sda | grep [123456789]`
 
@@ -17,7 +17,7 @@ for x in $e; do
 	/bin/mount "/dev/$x" "/media/$x" 2>/dev/null #2>>"$LOGDIR/$LOGFILE"
 done
 
-./backup-usb-copy
+./sbackup-usb-copy
 #sleep 10
 #sync
 

@@ -1,0 +1,60 @@
+#!/bin/bash
+#
+# SBackup - rendszer
+#
+# Lokális gép mentése
+#
+
+d=`dirname $0`
+. "$d/sbackup-init"
+
+cd "$BINDIR"
+
+ARCHIVEBACKUP=1
+
+d=`date`
+echo "$d Archivum - Mentés elkezdése." >> "$LOGDIR/$LOGFILE"
+
+# entés rotáció
+if [ "$ENABLE_DAYROTATE" = 1 ]; then
+	d=`date`
+	echo "$d Archivum - Napi mentés rotáció." >> "$LOGDIR/$LOGFILE"
+	./sbackup-dayrotate $ARCHIVEBACKUP 2>/dev/null
+fi
+
+# mentés
+./sbackup-system-arch 2>/dev/null
+
+# jelszavas védelem
+if [ "$ENABLE_ENCODING" = 1 ]; then
+	d=`date`
+	echo "$d Archivum - Jelszavas védelem." >> "$LOGDIR/$LOGFILE"
+	./sbackup-enc $ARCHIVEBACKUP 2>/dev/null
+fi
+
+# mentés felhőbe, adathordozóra
+if [ "$ENABLE_USB" = 1 ]; then
+	d=`date`
+	echo "$d Archivum - Mentés USB adathordozóra." >> "$LOGDIR/$LOGFILE"
+	./sbackup-usb-mount 2>/dev/null
+fi
+
+if [ "$ENABLE_RCLONE" = 1 ]; then
+	d=`date`
+	echo "$d Archivum - Mentés felhőbe." >> "$LOGDIR/$LOGFILE"
+	./sbackup-rclone 2>/dev/null
+fi
+
+# mentés hálózati meghajtóra
+if [ "$ENABLE_NETWORK" = 1 ]; then
+	d=`date`
+	echo "$d Archivum - Mentés hálózati meghajtóra." >> "$LOGDIR/$LOGFILE"
+	./sbackup-net-copy 2>/dev/null
+fi
+
+d=`date`
+echo "$d Archivum - Kész." >> "$LOGDIR/$LOGFILE"
+
+cd "$TPATH"
+
+#

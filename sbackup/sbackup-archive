@@ -10,6 +10,6 @@ TPATH=`pwd`
 
 cd $BINDIR
 localdir=`dirname $0`
-. $localdir/sbackup-starter
+. $localdir/sbackup-starter-archive
 cd $TPATH
 #

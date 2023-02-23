@@ -7,9 +7,13 @@
 #
 
 d=`dirname $0`
-. "$d/backup-init"
+. "$d/sbackup-init"
 
-cd "$LOCALBACKUPDIR"
+if [ ! -z $1 ]; then
+    cd "$LOCALBACKUPDIR/$ARCHIVEDIR"
+else
+    cd "$LOCALBACKUPDIR"
+fi
 
 for b in $OLDDAY; do
 	c="$b $c"

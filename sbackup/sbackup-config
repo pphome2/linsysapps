@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 #
 # SBackup - rendszer
 #
-# Beállítások, konfiguráció
+# Beállítások
 #
 
 # indítási könyvtár
@@ -17,12 +17,12 @@ ENABLE_MAIL=0
 ENABLE_WEBDL=0
 ENABLE_RCLONE=0
 ENABLE_SQL=0
-ENABLE_ENCODING=0
+ENABLE_ENCODING=1
 ENABLE_USB=0
 ENABLE_WEBDIR=0
-ENABLE_NETWORK=0
+ENABLE_NETWORK=1
 
-# archivum könyvtár (mentéből kimarad - backup-system-noexcl menti)
+# archivum könyvtár (mentéből kimarad - backup-system-noexcl menti
 ARCHIVEDIR="_"
 
 # mentés helye
@@ -30,10 +30,6 @@ LOCALBACKUPDIR="/usr/local/share/backup"
 
 # a program helye
 BINDIR="/usr/local/bin"
-
-# szervernév, gépnév
-# DEVICENAME="`hostname`"
-DEVICENAME="0"
 
 # logok
 LOGDIR="/var/log"
@@ -43,29 +39,19 @@ LOGARCHFILE="sbackup.log.1 sbackup.log.2 sbackup.log.3"
 # log rotáció - a héten belüli nap száma: 1-7, 0 - letiltva
 LOGROTATEDAY=5
 
-
 # mentés előző napok
 OLDDAY="d-1 d-2 d-3"
 
 # mentésre jelölt könyvtárak
-SYSDIRTOSAVE="/etc /var/www /usr/local/bin /var/lib/mysql"
-USERDIRTOSAVE=".config .local Dokumentumok public_html"
+SYSDIRTOSAVE="/etc /usr/local/bin"
+USERDIRTOSAVE=".config .local Dokumentumok"
 
 # egyedi felhasználói könyvtárak $HOME könyvtárba
 BACKUPDIRFILE=".backupdir"
 
-# webszerver és ott lévő mentésfájlok
-WEBDOWNLOAD="https://192.168.10.200/backup"
+# pi eszközön lévő mentésfájlok
+WEBDOWNLOAD="https://192.168.102.200/backup"
 WEBFILES="pi-etc.tar.gz pi-sql.tar.gz pi-web.tar.gz pi-bin.tar.gz"
-
-WEBBACKUPSITES="http://192.168.10.210/backup/griff-backup.tar http://192.168.10.88/1-backup.tar"
-
-# minden webhelyről ezzel az azonosítóval próbál letölteni
-WEBDLUSER="backup"
-WEBDLPASSWD="backup"
-
-# webszerver metéskönyvtára
-WEBDIR="/var/www/html/backup"
 
 # SQL adatbázisok helye
 SQLDIR="/var/lib/mysql"
@@ -77,22 +63,19 @@ RCLONETARGET="google:/Mentés"
 USBFILENAME=".backupusb"
 
 # hálózati mentési hely SMB kapcsolathoz
-NETHOST="192.168.0.1"
+NETHOST="192.168.100.100"
 NETSHARE="Public"
-NETDIR="Test"
-NETUSER="terstuser"
-NETPASSWORD="testpass"
+NETDIR="Backup"
+NETUSER="username"
+NETPASSWORD="secretpassword"
 NETTARGET="/mnt"
 
-# modulok
-PLUGINS=""
-
 # kódolási jelszó
-ENCODINGPASSPHARSE="titkosjelszo"
+ENCODINGPASSPHARSE="secretpassword"
 MN="10"
 
+
 # alapbeállítások
-EXCLUDEDIR=$ARCHIVEDIR
 
 if [ "$DEVICENAME" = "" ]; then
 	DEVICENAME="0"
@@ -102,8 +85,6 @@ if [ ! -d "$LOCALBACKUPDIR" ]; then
 	mkdir "$LOCALBACKUPDIR"
 fi
 
-if [ ! -d "$LOCALBACKUPDIR/$ARCHIVEDIR" ]; then
-    mkdir "$LOCALBACKUPDIR/$ARCHIVEDIR"
-fi
+EXCLUDEDIR=$ARCHIVEDIR
 
 #

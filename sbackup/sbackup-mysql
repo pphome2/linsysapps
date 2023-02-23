@@ -7,7 +7,7 @@
 #
 
 ur=`pwd`
-cd /usr/local/share/backup 2>>/var/log/sbackup.log
+cd /usr/local/share/sbackup 2>>/var/log/sbackup.log
 
 mysqldump --all-databases >mysqldb.sql
 

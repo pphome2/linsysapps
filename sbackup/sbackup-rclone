@@ -8,7 +8,7 @@
 #
 
 d=`dirname $0`
-. "$d/backup-init"
+. "$d/sbackup-init"
 
 cd "$LOCALBACKUPDIR"
 
