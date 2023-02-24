@@ -5,6 +5,10 @@
 # Beállítások
 #
 
+# /etc/cron.d/sbackup
+#0 12,20 * * *     root   /usr/local/bin/sbackup
+#0 13 * * 6        root   //usr/local/bin/sbackup-archiv
+
 # indítási könyvtár
 TPATH=`pwd`
 

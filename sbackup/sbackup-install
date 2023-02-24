@@ -7,53 +7,72 @@
 
 DD="/opt/sbackup"
 
-echo
-read -e -p "Telepítés helye (alap: $DD): " -i "$DD" DD
-DD=${DD:-/opt/sbackup}
-echo
-echo Másolás: $DD
-mkdir -p "$DD"
-if [ -e $DD ]; then
-  cp sbackup* "$DD"
+ID=`id -u`
+if [ $ID = 0 ]; then
+    echo
+    read -e -p "Telepítés helye (alap: $DD): " -i "$DD" DD
+    DD=${DD:-/opt/sbackup}
+    echo
+    echo Másolás: $DD
+    mkdir -p "$DD"
+    if [ -e $DD ]; then
+		if [ -e "$DD/sbackup-config" ]; then
+			mv -f "$DD/sbackup-config" "$DD/sbackup-config-old"
+		fi
+        cp sbackup* "$DD"
+		chmod 700 "$DD/sbackup-config"
+		chown root:root "$DD/sbackup-config"
+        echo
+        echo Indítófájlok létrehozása: "$DD/sbackup"
+        echo "#!/bin/bash" > "$DD/sbackup"
+        echo "BINDIR=\"$DD\"" >> "$DD/sbackup"
+        echo "TPATH=\`pwd\`" >> "$DD/sbackup"
+        echo "cd \$BINDIR" >> "$DD/sbackup"
+        echo "localdir=`dirname $0`" >> "$DD/sbackup"
+        echo ". \$localdir/sbackup-starter" >> "$DD/sbackup"
+        echo "cd \$TPATH" >> "$DD/sbackup"
+        echo "#" >> "$DD/sbackup"
+        echo  >> "$DD/sbackup"
+        echo Indítófájlok létrehozása: "$DD/sbackup-archive"
+        echo "#!/bin/bash" > "$DD/sbackup-archive"
+        echo "BINDIR=\"$DD\"" >> "$DD/sbackup-archive"
+        echo "TPATH=\`pwd\`" >> "$DD/sbackup-archive"
+        echo "cd \$BINDIR" >> "$DD/sbackup-archive"
+        echo "localdir=`dirname $0`" >> "$DD/sbackup-archive"
+        echo ". \$localdir/sbackup-starter-archive" >> "$DD/sbackup-archive"
+        echo "cd \$TPATH" >> "$DD/sbackup-archive"
+        echo "#" >> "$DD/sbackup-archive"
+        echo  >> "$DD/sbackup-archive"
+        echo
+        echo Linkek létrehozása.
+        if [ -e "/usr/local/bin/sbackup" ]; then
+          mv -f "/usr/local/bin/sbackup" "/usr/local/bin/sbackup-old"
+        fi
+        ln -s "$DD/sbackup" /usr/local/bin/sbackup
+        if [ -e "/usr/local/bin/sbackup-archive" ]; then
+          mv -f "/usr/local/bin/sbackup-archive" "/usr/local/bin/sbackup-archive-old"
+        fi
+        ln -s "$DD/sbackup-archive" /usr/local/bin/sbackup-archive
+        echo
+        echo Telepítés kész.
+        echo
+        echo Indítás: /usr/local/bin/sbackup vagy sbackup
+        echo Indítás: /usr/local/bin/sbackup-archive vagy sbackup-archive
+        echo
+        echo További beállítások: "$DD"/sbackup-config
+        echo
+    else
+        echo
+        echo Telepítési hiba. Célkönyvtár létrehozási/elérési hiba.
+        echo
+        echo Ellenőrizze a jogosultságokat és próbálja újra.
+        echo
+    fi
+else
+    echo
+    echo Nincs elég jogosultság a telepítéshez. A telepítéshez \"root\" jogosultság szükséges.
+    echo Ellenőrizze a jogosultságokat és próbálja újra.
+    echo
 fi
-echo
-echo Indítófájlok létrehozása: "$DD/sbackup"
-echo "#!/bin/bash" > "$DD/sbackup"
-echo "BINDIR=\"$DD\"" >> "$DD/sbackup"
-echo "TPATH=\`pwd\`" >> "$DD/sbackup"
-echo "cd \$BINDIR" >> "$DD/sbackup"
-echo "localdir=`dirname $0`" >> "$DD/sbackup"
-echo ". \$localdir/sbackup-starter" >> "$DD/sbackup"
-echo "cd \$TPATH" >> "$DD/sbackup"
-echo "#" >> "$DD/sbackup"
-echo  >> "$DD/sbackup"
-echo Indítófájlok létrehozása: "$DD/sbackup-archive"
-echo "#!/bin/bash" > "$DD/sbackup-archive"
-echo "BINDIR=\"$DD\"" >> "$DD/sbackup-archive"
-echo "TPATH=\`pwd\`" >> "$DD/sbackup-archive"
-echo "cd \$BINDIR" >> "$DD/sbackup-archive"
-echo "localdir=`dirname $0`" >> "$DD/sbackup-archive"
-echo ". \$localdir/sbackup-starter-archive" >> "$DD/sbackup-archive"
-echo "cd \$TPATH" >> "$DD/sbackup-archive"
-echo "#" >> "$DD/sbackup-archive"
-echo  >> "$DD/sbackup-archive"
-echo
-echo Linkek létrehozása.
-if [ -e "/usr/local/bin/sbackup" ]; then
-  mv -f "/usr/local/bin/sbackup" "/usr/local/bin/sbackup-old"
-fi
-ln -s "$DD/sbackup" /usr/local/bin/sbackup
-if [ -e "/usr/local/bin/sbackup-archive" ]; then
-  mv -f "/usr/local/bin/sbackup-archive" "/usr/local/bin/sbackup-archive-old"
-fi
-ln -s "$DD/sbackup-archive" /usr/local/bin/sbackup-archive
-echo
-echo Telepítés kész.
-echo
-echo Indítás: /usr/local/bin/sbackup vagy sbackup
-echo Indítás: /usr/local/bin/sbackup-archive vagy sbackup-archive
-echo
-echo További beállítások: "$DD"/sbackup-config
-echo
 
 #

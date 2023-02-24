@@ -1,7 +1,6 @@
-# /etc/cron.d/mentes: crontab fragment for save important data
+# /etc/cron.d/mentes
 
 0 12,20 * * *     root   /usr/local/bin/sbackup
-
 0 13 * * 6        root   //usr/local/bin/sbackup-archiv
 
 #
