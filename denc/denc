@@ -9,18 +9,23 @@
 coder() {
     if [ ! -d "$filen" ]; then
         if [ -f "$filen" ]; then
-			echo "$b"
-			openssl aes-256-cbc -salt -a -e -in "$filen" -out "tmpfile" -iter "$MN" -k "$PW" >>/dev/null 2>>/dev/null
-            if [ -z "$OPF" ]; then
-   	            mv "tmpfile" "$FN-$filen" >>/dev/null 2>>/dev/null
-       	        echo no-opf
-            else
-                mv "tmpfile" $OPF >>/dev/null 2>>/dev/null
-                echo opf
-            fi
-            if [ -z "$del" ]; then
-                rm "$filen" >>/dev/null 2>>/dev/null
-                echo del
+			size=${#FN}
+			if [ ${filen:0:$size} != $FN ]; then
+				echo "$filen"
+				openssl aes-256-cbc -salt -a -e -in "$filen" -out "tmpfile" -iter "$MN" -k "$PW" >>/dev/null 2>>/dev/null
+  	        	if [ -z "$OPF" ]; then
+   		      		mv "tmpfile" "$FN-$filen" >>/dev/null 2>>/dev/null
+       		    	#echo no-opf
+	            else
+  	            	mv "tmpfile" $OPF >>/dev/null 2>>/dev/null
+    	        	#echo opf
+        	    fi
+          		if [ -z "$del" ]; then
+              	  rm "$filen" >>/dev/null 2>>/dev/null
+            	  #echo del
+          		fi
+          	else
+            	echo Már kódolt fájl: $filen
             fi
         fi
     fi
