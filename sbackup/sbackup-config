@@ -78,6 +78,12 @@ NETTARGET="/mnt"
 ENCODINGPASSPHARSE="secretpassword"
 MN="10"
 
+# beépülő modulok
+PLUGINS=""
+
+# előtte, utánna script
+SC_BEFORE="";
+SC_AFTER="";
 
 # alapbeállítások
 
