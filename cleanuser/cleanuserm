@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# CleanUser - felhasználói adatok törlése - média
+#
+#
+
+./cleanuser Media
+
+#

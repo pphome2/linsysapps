@@ -23,12 +23,13 @@ if [ "$OK" == "i" ]; then
 	ldir=`ls -A /home`
 	for x in $ldir; do
 		if [ -f "/home/$x/$CLEANUSERFILE" ]; then
+		    mkdir "$x/.test" >>/dev/null 2>/dev/null
 			for i in `cat "/home/$x/$CLEANUSERFILE"`; do
 				echo "$x - $i"
 				#
 				# ÓVATOSAN !!!
 				#
-				#rm -rf "$x/$i"
+				cp -rf "$x/$i" "$x/.test"
 			done
 		fi
 	done
