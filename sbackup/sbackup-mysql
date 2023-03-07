@@ -6,10 +6,12 @@
 #
 #
 
-ur=`pwd`
-cd /usr/local/share/sbackup 2>>/var/log/sbackup.log
+ut=`pwd`
+#cd /usr/local/share/sbackup 2>>/var/log/sbackup.log
 
-mysqldump --all-databases >mysqldb.sql
+mysqldump --all-databases >./mysqldb.sql #2>>/var/log/sbackup.log
+tar cvvfz "sql.tar.gz" *.sql #2>/dev/null >>"$LOGDIR/$LOGFILE"
+rm *.sql
 
 cd $ut
 

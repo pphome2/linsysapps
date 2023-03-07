@@ -14,13 +14,14 @@ ldir=`ls -A /home`
 
 EXCLTAR="--exclude=*.tar*"
 EXCLBIGDIR="--exclude=*chrom*"
+EXCLSQL="--exclude=*sql/ib*"
 
 for f in $SYSDIRTOSAVE; do
 	f2=`basename "$f"`
 	if [ -f "$DEVICENAME-system-$f2-noexcl.tar.gz" ]; then
 		rm "$DEVICENAME-system-$f2-noexcl.tar.gz" 2>/dev/null
 	fi
-	tar rf "$DEVICENAME-system-$f2-noexcl.tar" $EXCLTAR $f 2>/dev/null >>"$LOGDIR/$LOGFILE"
+	tar rf "$DEVICENAME-system-$f2-noexcl.tar" $EXCLTAR $EXCLSQL $f 2>/dev/null >>"$LOGDIR/$LOGFILE"
 	gzip "./$DEVICENAME-system-$f2-noexcl.tar" 2>/dev/null
 done
 
