@@ -11,7 +11,7 @@ d=`dirname $0`
 d=`date`
 echo "$d Mentés elkezdése." >> "$LOGDIR/$LOGFILE"
 
-eval $SC_BEFORE >>/dev/null 2>/ev/null
+eval $SC_BEFORE >>/dev/null 2>/dev/null
 
 # log rotáció
 if [ "$ENABLE_LOG" = 1 ]; then
@@ -96,7 +96,7 @@ for i in $PLUGINS; do
 	fi
 done
 
-eval $SC_AFTER >>/dev/null 2>/ev/null
+eval $SC_AFTER >>/dev/null 2>/dev/null
 
 d=`date`
 echo "$d Kész." >> "$LOGDIR/$LOGFILE"
