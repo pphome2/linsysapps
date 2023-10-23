@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# image slideshow
+ffmpeg -framerate 0.33  -pattern_type glob -i '*.jpg' out.mp4
+
+# cut mp3
+ffmpeg -i 1.mp3 -ss 00:00 -to 04:00 -c copy out.mp3
+
+# background sound
+ffmpeg -i out.mp4 -i out.mp3 -c:a copy video.mp4
+
+# delete temp files
+rm out.mp4 out.mp3
