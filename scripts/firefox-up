@@ -1,0 +1,4 @@
+#!/bin/sh
+sudo apt-get --only-upgrade -t=sid -y install libnss3
+sudo apt-get --only-upgrade -y install firefox
+sudo apt-get --only-upgrade -y install firefox-l10n-hu
