@@ -6,7 +6,7 @@
 #
 
 d=`dirname $0`
-. "$d/sbackup-init"
+. "./sbackup-init"
 
 d=`date`
 echo "$d Mentés elkezdése." >> "$LOGDIR/$LOGFILE"
