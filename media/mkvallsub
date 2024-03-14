@@ -7,7 +7,7 @@
 for i in *.mkv; do
 	sub=${i%.*}.srt
 	if [ -f "$sub" ]; then
-		mkvsub "$i" "$sub" 2>/dev/null
+        ffmpeg -i "$i" -sub_charenc 'UTF-8' -f srt -i "$sub" -map 0 -c:v copy -c:a copy -c:s srt "s$i" >/dev/null 2>/dev/null
 	else
 		echo "Hiányzó fájl. (  $sub )"
 	fi

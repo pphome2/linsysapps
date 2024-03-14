@@ -5,7 +5,9 @@
 # felirat cseréje a megadottra
 
 for i in *.mkv; do
-    ffmpeg -i "$i" -c:v copy -c:a copy "s$i" >/dev/null 2>/dev/null
+	sub=${i%.*}.srt
+	if [ -f "$sub" ]; then
+		mkvsub "$i" "$sub" 2>/dev/null
 	else
 		echo "Hiányzó fájl. (  $sub )"
 	fi

@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# video konvertálás
+#
+# összes fájlban cím (title) mező cseréje fájlnévre
+#
+
+for i in *.mkv; do
+	if [ -f "$i" ]; then
+		cim=${i%.*}
+		echo $cim
+		ffmpeg -i "$i" -metadata Title="$cim" -c:v copy -c:a copy "t$i" 2>/dev/null >/dev/null
+	else
+		echo "Hiányzó fájl. ( $i )"
+	fi
+
+done
+
+#
