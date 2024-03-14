@@ -24,23 +24,16 @@ for b in $x; do
 	fi
 done
 
-for x in $drv; do
-	if [ -f "$x" ]; then
-		x=`echo $x | awk 'BEGIN {FS="."};{printf $1 } '`
-		for v in *; do
-			if [ ! -d "$v" ]; then
-				FS1=$(stat -c%s "$LOCALBACKUPDIR/$v")
-				FS2=$(stat -c%s "$LOCALBACKUPDIR/$old/$v")
-				if [ $FS1 != $FS2 ]; then
-					#echo "$LOCALBACKUPDIR/$v" - "$FS1" - "$FS2"
-                    rclone copy "$LOCALBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
-                    #rclone copyto "$LOCALBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
-		  		fi
-			fi
-		done
-		sync
-	else
-		drv2=""
+for v in *; do
+	if [ ! -d "$v" ]; then
+		FS1=$(stat -c%s "$LOCALBACKUPDIR/$v")
+		FS2=$(stat -c%s "$LOCALBACKUPDIR/$old/$v")
+		if [ $FS1 != $FS2 ]; then
+			#echo "$LOCALBACKUPDIR/$v" - "$FS1" - "$FS2"
+			echo $v
+            rclone copy "$LOCALBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+            #rclone copyto "$LOCALBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+  		fi
 	fi
 done
 
