@@ -12,11 +12,40 @@ d=`dirname $0`
 
 cd "$LOCALBACKUPDIR"
 
-li=`ls -a *.tar*`
+#li=`ls -a *.tar*`
+#for x in $li; do
+#	rclone copy "$x" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+#done
 
-for x in $li; do
-	rclone copy "$x" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+x=$OLDDAY
+for b in $x; do
+	if [ -z "$old" ]; then
+		old="$b"
+	fi
 done
+
+for x in $drv; do
+	if [ -f "$x" ]; then
+		x=`echo $x | awk 'BEGIN {FS="."};{printf $1 } '`
+		for v in *; do
+			if [ ! -d "$v" ]; then
+				FS1=$(stat -c%s "$LOCALBACKUPDIR/$v")
+				FS2=$(stat -c%s "$LOCALBACKUPDIR/$old/$v")
+				if [ $FS1 != $FS2 ]; then
+					#echo "$LOCALBACKUPDIR/$v" - "$FS1" - "$FS2"
+                    rclone copy "$LOCALBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+		  		fi
+			fi
+		done
+		sync
+	else
+		drv2=""
+	fi
+done
+
+cd "$TPATH"
+
+
 
 cd "$TPATH"
 

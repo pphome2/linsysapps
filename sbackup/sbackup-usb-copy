@@ -28,7 +28,7 @@ for b in $x; do
 		old="$b"
 	fi
 done
-echo $old
+#echo $old
 
 cd "$LOCALBACKUPDIR"
 
@@ -41,7 +41,8 @@ for x in $drv; do
 				FS1=$(stat -c%s "$LOCALBACKUPDIR/$v")
 				FS2=$(stat -c%s "$LOCALBACKUPDIR/$old/$v")
 				if [ $FS1 != $FS2 ]; then
-					echo "$LOCALBACKUPDIR/$v" - "$FS1" - "$FS2"
+					#echo "$LOCALBACKUPDIR/$v" - "$FS1" - "$FS2"
+            		cp -f -r -u "$LOCALBACKUPDIR/$v" "$x" 2>>"$LOGDIR/$LOGFILE"
 		  		fi
 			fi
 		done
