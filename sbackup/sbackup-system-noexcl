@@ -13,8 +13,9 @@ cd "$LOCALBACKUPDIR"
 ldir=`ls -A /home`
 
 EXCLTAR="--exclude=*.tar*"
-EXCLBIGDIR="--exclude=*chrom*"
+EXCLBIGDIR="--exclude=*chrom* --exclude=*edge* --exclude=*gnome-boxes/images*"
 EXCLSQL="--exclude=*sql/ib*"
+EXCL=""
 
 for f in $SYSDIRTOSAVE; do
 	f2=`basename "$f"`
