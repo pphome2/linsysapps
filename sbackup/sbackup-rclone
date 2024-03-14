@@ -34,6 +34,7 @@ for x in $drv; do
 				if [ $FS1 != $FS2 ]; then
 					#echo "$LOCALBACKUPDIR/$v" - "$FS1" - "$FS2"
                     rclone copy "$LOCALBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+                    #rclone copyto "$LOCALBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
 		  		fi
 			fi
 		done
