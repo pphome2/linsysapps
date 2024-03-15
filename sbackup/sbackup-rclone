@@ -37,12 +37,16 @@ for v in *; do
 		fi
 		if [ $FS1 != $FS2 ]; then
 			#echo "$LOCALBACKUPDIR/$v" - "$FS1" - "$FS2"
-			for e in $RCLONEONLYFILES; do
-				if [[ $v == *"$e"* ]]; then
-					#echo "$LOCALBACKUPDIR/$v" "$RCLONETARGET"
-          			rclone copy "$LOCALBACKUPDIR/$v" "$RCLONETARGET" #>>"$LOGDIR/$LOGFILE" 2>/dev/null
-          		fi
-            done
+			if [ -z $RCLONEONLYFILES ]; then
+          		rclone copy "$LOCALBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+			else
+				for e in $RCLONEONLYFILES; do
+					if [[ $v == *"$e"* ]]; then
+						#echo "$LOCALBACKUPDIR/$v" "$RCLONETARGET"
+          				rclone copy "$LOCALBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+          			fi
+          		done
+        	fi
   		fi
 	fi
 done
