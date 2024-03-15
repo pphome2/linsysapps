@@ -12,23 +12,16 @@ d=`dirname $0`
 
 drv=`find /media 2>>/dev/null | grep "$USBFILENAME" | awk '{print $1 }'`
 
-#for x in $drv; do
-#	if [ -f "$x" ]; then
-#		x=`echo $x | awk 'BEGIN {FS="."};{printf $1 } '`
-#		cp -f -r -u "$LOCALBACKUPDIR"/* "$x" 2>>"$LOGDIR/$LOGFILE"
-#		sync
-#	else
-#		drv2=""
-#	fi
-#done
-
 x=$OLDDAY
 for b in $x; do
 	if [ -z "$old" ]; then
 		old="$b"
 	fi
 done
-#echo $old
+
+if [ -z "$old" ]; then
+	old="."
+fi
 
 cd "$LOCALBACKUPDIR"
 
@@ -38,8 +31,16 @@ for x in $drv; do
 		#cp -f -r -u "$LOCALBACKUPDIR"/* "$x" 2>>"$LOGDIR/$LOGFILE"
 		for v in *; do
 			if [ ! -d "$v" ]; then
-				FS1=$(stat -c%s "$LOCALBACKUPDIR/$v")
-				FS2=$(stat -c%s "$LOCALBACKUPDIR/$old/$v")
+				if [ -f "$LOCALBACKUPDIR/$v" ]; then
+					FS1=$(stat -c%s "$LOCALBACKUPDIR/$v")
+				else
+					FS1=0
+				fi
+				if [ -f "$LOCALBACKUPDIR/$old/$v" ]; then
+					FS2=$(stat -c%s "$LOCALBACKUPDIR/$old/$v")
+				else
+					FS2=0
+				fi
 				if [ $FS1 != $FS2 ]; then
 					#echo "$LOCALBACKUPDIR/$v" - "$FS1" - "$FS2"
             		cp -f -r -u "$LOCALBACKUPDIR/$v" "$x" 2>>"$LOGDIR/$LOGFILE"

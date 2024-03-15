@@ -12,11 +12,6 @@ d=`dirname $0`
 
 cd "$LOCALBACKUPDIR"
 
-#li=`ls -a *.tar*`
-#for x in $li; do
-#	rclone copy "$x" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
-#done
-
 x=$OLDDAY
 for b in $x; do
 	if [ -z "$old" ]; then
@@ -24,22 +19,33 @@ for b in $x; do
 	fi
 done
 
+if [ -z "$old" ]; then
+	old="."
+fi
+
 for v in *; do
 	if [ ! -d "$v" ]; then
-		FS1=$(stat -c%s "$LOCALBACKUPDIR/$v")
-		FS2=$(stat -c%s "$LOCALBACKUPDIR/$old/$v")
+		if [ -f "$LOCALBACKUPDIR/$v" ]; then
+			FS1=$(stat -c%s "$LOCALBACKUPDIR/$v")
+		else
+			FS1=0
+		fi
+		if [ -f "$LOCALBACKUPDIR/$old/$v" ]; then
+			FS2=$(stat -c%s "$LOCALBACKUPDIR/$old/$v")
+		else
+			FS2=0
+		fi
 		if [ $FS1 != $FS2 ]; then
 			#echo "$LOCALBACKUPDIR/$v" - "$FS1" - "$FS2"
-			echo $v
-            rclone copy "$LOCALBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
-            #rclone copyto "$LOCALBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+			for e in $RCLONEONLYFILES; do
+				if [[ $v == *"$e"* ]]; then
+					#echo "$LOCALBACKUPDIR/$v" "$RCLONETARGET"
+          			rclone copy "$LOCALBACKUPDIR/$v" "$RCLONETARGET" #>>"$LOGDIR/$LOGFILE" 2>/dev/null
+          		fi
+            done
   		fi
 	fi
 done
-
-cd "$TPATH"
-
-
 
 cd "$TPATH"
 

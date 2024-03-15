@@ -62,6 +62,7 @@ SQLDIR="/var/lib/mysql"
 
 # rclone konfiguráció a felhős mentéshez
 RCLONETARGET="google:/Mentés"
+RCLONEONLYFILES="Dokumentumok"
 
 # USB-n lévő fájl neve, ha van ilyen, akkor arra megy a mentés
 USBFILENAME=".backupusb"
