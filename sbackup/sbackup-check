@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# SBackup - rendszer
+#
+# ellenőrzés
+#
+
+d=`dirname $0`
+. "./sbackup-init"
+
+SPACE=","
+echo
+
+for v in $SYSREQ; do
+    if ! type  "$v" >>/dev/null 2>>/dev/null; then
+        if [ ! -z $ERROR ]; then
+            ERR=$ERROR
+            ERROR="$ERR""$SPACE""$v"
+        else
+            ERROR="$v"
+        fi
+        echo "[ !! ] nem elérhető - $v"
+    else
+        echo "[ OK ] elérhető - $v"
+    fi
+done
+
+echo
+echo
+
+if [ ! -z $ERROR ]; then
+    echo Hibák találhatók. Hiányzó: $ERROR
+else
+    echo Hiba nincs.
+fi
+
+echo
+echo
+
+#

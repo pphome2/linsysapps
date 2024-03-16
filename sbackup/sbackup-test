@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# SBackup - rendszer
+#
+# indítás
+#
+
+d=`dirname $0`
+. "./sbackup-init"
+
+if ! type  "rclonedff" >>/dev/null 2>>/dev/null; then
+    echo "nincs"
+else
+    echo "van"
+
+fi
+
+if ! type  "rclone" >>/dev/null 2>>/dev/null; then
+    echo "nincs"
+else
+    echo "van"
+fi
+
+cat /etc/shadow | grep root | awk -F ':' '{print $2}'
+
+#

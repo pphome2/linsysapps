@@ -10,7 +10,7 @@
 d=`dirname $0`
 . "$d/sbackup-init"
 
-cd "$LOCALBACKUPDIR"
+cd "$SYSTEMBACKUPDIR"
 
 if [ "$WEBDLUSER" = "" ]; then
 	WUSER=" "

@@ -10,9 +10,9 @@ d=`dirname $0`
 . "$d/sbackup-init"
 
 if [ ! -z $1 ]; then
-    cd "$LOCALBACKUPDIR/$ARCHIVEDIR"
+    cd "$SYSTEMBACKUPDIR/$ARCHIVEDIR"
 else
-    cd "$LOCALBACKUPDIR"
+    cd "$SYSTEMBACKUPDIR"
 fi
 
 for b in $OLDDAY; do
@@ -41,6 +41,10 @@ else
 	mkdir "$b" 2>/dev/null
 fi
 mv *.tar* "$b" 2>/dev/null
+
+if [ -z $LOCALBACKUPDIR ]; then
+    cp -f -r -u "$SYSTEMBACKUPDIR" "$LOCALBACKUPDIR" 2>>"$LOGDIR/$LOGFILE"
+fi
 
 cd "$TPATH"
 

@@ -8,7 +8,7 @@
 d=`dirname $0`
 . $d/sbackup-init
 
-cd "$LOCALBACKUPDIR"
+cd "$SYSTEMBACKUPDIR"
 
 ldir=`ls -A /home`
 
@@ -47,6 +47,11 @@ if [ "$ENABLE_USER" = 1 ]; then
 			done
 		fi
 	done
+fi
+
+if [ ! -z $LOCALBACKUPDIR ]; then
+    rm "$LOCALBACKUPDIR"/*.tar* 2>>"$LOGDIR/$LOGFILE"
+    cp -f -r -u "$SYSTEMBACKUPDIR"/*.tar* "$LOCALBACKUPDIR" 2>>"$LOGDIR/$LOGFILE"
 fi
 
 cd "$TPATH"

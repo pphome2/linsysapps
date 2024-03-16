@@ -23,27 +23,27 @@ if [ -z "$old" ]; then
 	old="."
 fi
 
-cd "$LOCALBACKUPDIR"
+cd "$SYSTEMBACKUPDIR"
 
 for x in $drv; do
 	if [ -f "$x" ]; then
 		x=`echo $x | awk 'BEGIN {FS="."};{printf $1 } '`
-		#cp -f -r -u "$LOCALBACKUPDIR"/* "$x" 2>>"$LOGDIR/$LOGFILE"
+		#cp -f -r -u "$SYSTEMBACKUPDIR"/* "$x" 2>>"$LOGDIR/$LOGFILE"
 		for v in *; do
 			if [ ! -d "$v" ]; then
-				if [ -f "$LOCALBACKUPDIR/$v" ]; then
-					FS1=$(stat -c%s "$LOCALBACKUPDIR/$v")
+				if [ -f "$SYSTEMBACKUPDIR/$v" ]; then
+					FS1=$(stat -c%s "$SYSTEMBACKUPDIR/$v")
 				else
 					FS1=0
 				fi
-				if [ -f "$LOCALBACKUPDIR/$old/$v" ]; then
-					FS2=$(stat -c%s "$LOCALBACKUPDIR/$old/$v")
+				if [ -f "$SYSTEMBACKUPDIR/$old/$v" ]; then
+					FS2=$(stat -c%s "$SYSTEMBACKUPDIR/$old/$v")
 				else
 					FS2=0
 				fi
 				if [ $FS1 != $FS2 ]; then
-					#echo "$LOCALBACKUPDIR/$v" - "$FS1" - "$FS2"
-            		cp -f -r -u "$LOCALBACKUPDIR/$v" "$x" 2>>"$LOGDIR/$LOGFILE"
+					#echo "$SYSTEMBACKUPDIR/$v" - "$FS1" - "$FS2"
+            		cp -f -r -u "$SYSTEMBACKUPDIR/$v" "$x" 2>>"$LOGDIR/$LOGFILE"
 		  		fi
 			fi
 		done

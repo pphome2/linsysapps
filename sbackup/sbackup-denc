@@ -10,9 +10,9 @@ d=`dirname $0`
 . "$d/sbackup-init"
 
 if [ ! -z $1 ]; then
-    cd "$LOCALBACKUPDIR/$ARCHIVEDIR"
+    cd "$SYSTEMBACKUPDIR/$ARCHIVEDIR"
 else
-    cd "$LOCALBACKUPDIR"
+    cd "$SYSTEMBACKUPDIR"
 fi
 
 for b in *.tar.gz; do

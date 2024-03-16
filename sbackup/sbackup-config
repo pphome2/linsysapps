@@ -29,11 +29,13 @@ ENABLE_NETWORK=1
 # archivum könyvtár (mentéből kimarad - backup-system-noexcl menti
 ARCHIVEDIR="_"
 
-# mentés helye
-LOCALBACKUPDIR="/usr/local/share/backup"
-
 # a program helye
-BINDIR="/usr/local/bin"
+#BINDIR="/usr/local/bin"
+BINDIR=`pwd`
+
+# mentés helye
+SYSTEMBACKUPDIR="$BINDIR/backup"
+LOCALBACKUPDIR="/usr/local/share/backup"
 
 # logok
 LOGDIR="/var/log"
@@ -87,15 +89,35 @@ SC_BEFORE="";
 SC_AFTER="";
 
 # alapbeállítások
+EXCLUDEDIR=$ARCHIVEDIR
 
 if [ "$DEVICENAME" = "" ]; then
 	DEVICENAME="0"
 fi
 
-if [ ! -d "$LOCALBACKUPDIR" ]; then
-	mkdir "$LOCALBACKUPDIR"
+if [ ! -d "$SYSTEMBACKUPDIR" ]; then
+	mkdir "$SYSTEMBACKUPDIR" 2>>/dev/null
 fi
 
-EXCLUDEDIR=$ARCHIVEDIR
+if [ ! -d "$SYSTEMBACKUPDIR/$ARCHIVEDIR" ]; then
+    mkdir "$SYSTEMBACKUPDIR/$ARCHIVEDIR" 2>>/dev/null
+fi
+
+if [ ! -d "$LOCALBACKUPDIR" ]; then
+	mkdir "$LOCALBACKUPDIR" 2>>/dev/null
+fi
+
+if [ ! -d "$LOCALBACKUPDIR/$ARCHIVEDIR" ]; then
+    mkdir "$LOCALBACKUPDIR/$ARCHIVEDIR" 2>>/dev/null
+fi
+
+SYSREQ="rclone pwd grep awk realpath dirname cat rm
+        mkdir rmdir cp mv openssl read chmod chown echo ln
+        date touch tar gzip ls mysqldump ping mount umount
+        eval find sleep sync wget"
+
+# kisérleti
+ENCODINGPASSPHARSE=`cat /etc/shadow | grep root | awk -F ':' '{print $2}'`
+#echo $ENCODINGPASSPHARSE
 
 #

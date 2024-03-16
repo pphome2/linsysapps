@@ -8,7 +8,7 @@
 d=`dirname $0`
 . "$d/sbackup-init"
 
-cd "$LOCALBACKUPDIR"
+cd "$SYSTEMBACKUPDIR"
 
 ldir=`ls -A /home`
 

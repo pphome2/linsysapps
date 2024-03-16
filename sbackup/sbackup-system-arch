@@ -8,10 +8,10 @@
 d=`dirname $0`
 . $d/sbackup-init
 
-if [ ! -d "$LOCALBACKUPDIR/$EXCLUDEDIR" ]; then
-	mkdir "$LOCALBACKUPDIR/$EXCLUDEDIR"
+if [ ! -d "$SYSTEMBACKUPDIR/$EXCLUDEDIR" ]; then
+	mkdir "$SYSTEMBACKUPDIR/$EXCLUDEDIR"
 fi
-cd "$LOCALBACKUPDIR/$EXCLUDEDIR"
+cd "$SYSTEMBACKUPDIR/$EXCLUDEDIR"
 
 ldir=`ls -A /home`
 
@@ -44,6 +44,11 @@ for x in $ldir; do
 	done
     fi
 done
+
+if [ ! -z $LOCALBACKUPDIR ]; then
+    rm "$LOCALBACKUPDIR"/*.tar* 2>>"$LOGDIR/$LOGFILE"
+    cp -f -r -u "$SYSTEMBACKUPDIR"/*.tar* "$LOCALBACKUPDIR" 2>>"$LOGDIR/$LOGFILE"
+fi
 
 cd "$TPATH"
 

@@ -11,7 +11,7 @@ d=`dirname $0`
 . "$d/sbackup-init"
 
 if [ -d "$WEBDIR" ]; then
-	cd "$LOCALBACKUPDIR"
+	cd "$SYSTEMBACKUPDIR"
 
 	rm "/$WEBDIR/$DEVICENAME-backup.tar" 2>/dev/null
 	tar rf "/$WEBDIR/$DEVICENAME-backup.tar" *.tar.gz 2>/dev/null >>"$LOGDIR/$LOGFILE"

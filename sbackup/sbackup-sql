@@ -10,7 +10,7 @@ d=`dirname $0`
 . "$d/sbackup-init"
 
 if [ -d "$SQLDIR" ]; then
-	cd "$LOCALBACKUPDIR"
+	cd "$SYSTEMBACKUPDIR"
 	if [ -f "$DEVICENAME-sql.tar.gz" ]; then
 		rm "$DEVICENAME-sql.tar.gz" 2>>/dev/null
 	fi

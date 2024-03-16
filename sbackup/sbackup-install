@@ -16,12 +16,13 @@ if [ $ID = 0 ]; then
     echo Másolás: $DD
     mkdir -p "$DD"
     if [ -e $DD ]; then
-		if [ -e "$DD/sbackup-config" ]; then
-			mv -f "$DD/sbackup-config" "$DD/sbackup-config-old"
-		fi
+	    if [ -e "$DD/sbackup-config" ]; then
+		    mv -f "$DD/sbackup-config" "$DD/sbackup-config-old"
+	    fi
         cp sbackup* "$DD"
-		chmod 700 "$DD/sbackup-config"
-		chown root:root "$DD/sbackup-config"
+	    chmod 700 "$DD/sbackup-config"
+	    #chown root:root "$DD/sbackup-config"
+	    chown root:root *
         echo
         echo Indítófájlok létrehozása: "$DD/sbackup"
         echo "#!/bin/bash" > "$DD/sbackup"
