@@ -42,8 +42,8 @@ else
 fi
 mv *.tar* "$b" 2>/dev/null
 
-if [ -z $LOCALBACKUPDIR ]; then
-    cp -f -r -u "$SYSTEMBACKUPDIR" "$LOCALBACKUPDIR" 2>>"$LOGDIR/$LOGFILE"
+if [ ! -z $LOCALBACKUPDIR ]; then
+    cp -f -r -u "$SYSTEMBACKUPDIR"/* "$LOCALBACKUPDIR" 2>>"$LOGDIR/$LOGFILE"
 fi
 
 cd "$TPATH"
