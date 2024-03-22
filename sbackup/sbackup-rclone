@@ -7,10 +7,7 @@
 # - rclone gdrive-ba
 #
 
-d=`dirname $0`
-. "$d/sbackup-init"
-
-cd "$SYSTEMBACKUPDIR"
+. "./sbackup-init"
 
 x=$OLDDAY
 for b in $x; do
@@ -50,7 +47,5 @@ for v in *; do
   		fi
 	fi
 done
-
-cd "$TPATH"
 
 #

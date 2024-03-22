@@ -5,8 +5,7 @@
 # Felhasználók levelezésének mentése
 #
 
-d=`dirname $0`
-. "$d/sbackup-init"
+. "./sbackup-init"
 
 cd "$SYSTEMBACKUPDIR"
 
@@ -36,7 +35,5 @@ for x in $ldir; do
 		gzip "./$DEVICENAME-var-mail.tar" 2>/dev/null
 	fi
 done
-
-cd "$TPATH"
 
 #

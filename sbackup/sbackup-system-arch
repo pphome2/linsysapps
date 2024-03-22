@@ -5,8 +5,8 @@
 # Lokális gép mentése
 #
 
-d=`dirname $0`
-. $d/sbackup-init
+startdir=`dirname $0`
+. "./sbackup-init"
 
 if [ ! -d "$SYSTEMBACKUPDIR/$EXCLUDEDIR" ]; then
 	mkdir "$SYSTEMBACKUPDIR/$EXCLUDEDIR"
@@ -45,11 +45,11 @@ for x in $ldir; do
     fi
 done
 
-if [ ! -z $LOCALBACKUPDIR ]; then
-    rm "$LOCALBACKUPDIR"/*.tar* 2>>"$LOGDIR/$LOGFILE"
-    cp -f -r -u "$SYSTEMBACKUPDIR"/*.tar* "$LOCALBACKUPDIR" 2>>"$LOGDIR/$LOGFILE"
+if [ ! -z "$SYSTEMBACKUPDIR/$EXCLUDEDIR" ]; then
+    rm "$SYSTEMBACKUPDIR/$EXCLUDEDIR"/*.tar* 2>>"$LOGDIR/$LOGFILE"
+    cp -f -r -u "$SYSTEMBACKUPDIR/$EXCLUDEDIR"/*.tar* "$LOCALBACKUPDIR/$EXCLUDEDIR"" 2>>"$LOGDIR/$LOGFILE"
 fi
 
-cd "$TPATH"
+cd "$startdir"
 
 #

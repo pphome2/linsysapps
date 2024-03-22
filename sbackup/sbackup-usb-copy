@@ -7,8 +7,8 @@
 # - másolat USB adathordozóra
 #
 
-d=`dirname $0`
-. "$d/sbackup-init"
+startdir=`dirname $0`
+. "./sbackup-init"
 
 drv=`find /media 2>>/dev/null | grep "$USBFILENAME" | awk '{print $1 }'`
 
@@ -22,8 +22,6 @@ done
 if [ -z "$old" ]; then
 	old="."
 fi
-
-cd "$SYSTEMBACKUPDIR"
 
 for x in $drv; do
 	if [ -f "$x" ]; then
@@ -52,7 +50,5 @@ for x in $drv; do
 		drv2=""
 	fi
 done
-
-cd "$TPATH"
 
 #

@@ -117,7 +117,9 @@ SYSREQ="rclone pwd grep awk realpath dirname cat rm
         eval find sleep sync wget"
 
 # kisérleti
-ENCODINGPASSPHARSE=`cat /etc/shadow | grep root | awk -F ':' '{print $2}'`
+if [ -r /etc/shadow ]; then
+    ENCODINGPASSPHARSE=`cat /etc/shadow | grep root | awk -F ':' '{print $2}'`
+fi
 #echo $ENCODINGPASSPHARSE
 
 #

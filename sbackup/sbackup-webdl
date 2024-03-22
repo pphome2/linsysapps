@@ -7,8 +7,8 @@
 # - mentés letöltése web szerverről
 #
 
-d=`dirname $0`
-. "$d/sbackup-init"
+startdir=`dirname $0`
+. "./sbackup-init"
 
 cd "$SYSTEMBACKUPDIR"
 
@@ -39,6 +39,6 @@ for x in $WEBBACKUPSITES; do
 	fi
 done
 
-cd "$TPATH"
+cd "$startdir"
 
 #

@@ -6,8 +6,7 @@
 #
 #
 
-d=`dirname $0`
-. "$d/sbackup-init"
+. "./sbackup-init"
 
 if [ "$LOGROTATEDAY" != "0" ]; then
 	daynum=`date '+%u'`

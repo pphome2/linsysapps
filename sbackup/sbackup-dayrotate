@@ -6,8 +6,7 @@
 #
 #
 
-d=`dirname $0`
-. "$d/sbackup-init"
+. "./sbackup-init"
 
 if [ ! -z $1 ]; then
     cd "$SYSTEMBACKUPDIR/$ARCHIVEDIR"
@@ -45,7 +44,5 @@ mv *.tar* "$b" 2>/dev/null
 if [ ! -z $LOCALBACKUPDIR ]; then
     cp -f -r -u "$SYSTEMBACKUPDIR"/* "$LOCALBACKUPDIR" 2>>"$LOGDIR/$LOGFILE"
 fi
-
-cd "$TPATH"
 
 #

@@ -5,7 +5,6 @@
 # config betöltés
 #
 
-localdir=`dirname $0`
 if [ -f /etc/sbackup-config ]; then
   . "/etc/sbackup-config"
 else

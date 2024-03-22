@@ -5,7 +5,7 @@
 # indítás
 #
 
-d=`dirname $0`
+startdir=`dirname $0`
 . "./sbackup-init"
 
 if ! type  "rclonedff" >>/dev/null 2>>/dev/null; then

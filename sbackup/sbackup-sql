@@ -6,11 +6,12 @@
 #
 #
 
-d=`dirname $0`
-. "$d/sbackup-init"
+startdir=`dirname $0`
+. "./sbackup-init"
+
+cd "$SYSTEMBACKUPDIR"
 
 if [ -d "$SQLDIR" ]; then
-	cd "$SYSTEMBACKUPDIR"
 	if [ -f "$DEVICENAME-sql.tar.gz" ]; then
 		rm "$DEVICENAME-sql.tar.gz" 2>>/dev/null
 	fi
@@ -32,8 +33,9 @@ if [ -d "$SQLDIR" ]; then
 
 	tar cvvfz "$DEVICENAME-sql.tar.gz" *.sql 2>/dev/null >>"$LOGDIR/$LOGFILE"
 	rm *.sql 2>/dev/null
-	cd "$TPATH"
 fi
+
+cd "$startdir"
 
 #
 

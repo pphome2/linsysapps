@@ -7,8 +7,7 @@
 # - USB eszköz keresése, adatok mentése
 #
 
-d=`dirname $0`
-. "$d/sbackup-init"
+. "./sbackup-init"
 
 e=`cat /proc/partitions | grep sd | awk '{print $4}' | grep -v sda | grep [123456789]`
 

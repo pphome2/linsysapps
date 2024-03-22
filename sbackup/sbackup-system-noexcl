@@ -5,8 +5,8 @@
 # Lokális gép mentése
 #
 
-d=`dirname $0`
-. $d/sbackup-init
+startdir=`dirname $0`
+. "./sbackup-init"
 
 cd "$SYSTEMBACKUPDIR"
 
@@ -54,6 +54,6 @@ if [ ! -z $LOCALBACKUPDIR ]; then
     cp -f -r -u "$SYSTEMBACKUPDIR"/*.tar* "$LOCALBACKUPDIR" 2>>"$LOGDIR/$LOGFILE"
 fi
 
-cd "$TPATH"
+cd "$startdir"
 
 #

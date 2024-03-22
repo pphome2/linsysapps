@@ -6,8 +6,7 @@
 #
 #
 
-d=`dirname $0`
-. "$d/sbackup-init"
+. "./sbackup-init"
 
 if [ ! -z $1 ]; then
     cd "$SYSTEMBACKUPDIR/$ARCHIVEDIR"
@@ -22,7 +21,5 @@ for b in *.tar.gz; do
 	rm "$b" >>/dev/null 2>>/dev/null
 	mv p-"$b" "$b" >>/dev/null 2>>/dev/null
 done
-
-cd "$TPATH"
 
 #

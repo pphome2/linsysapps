@@ -5,11 +5,10 @@
 # ellenőrzés
 #
 
-d=`dirname $0`
 . "./sbackup-init"
 
 SPACE=","
-echo
+#echo
 
 for v in $SYSREQ; do
     if ! type  "$v" >>/dev/null 2>>/dev/null; then
@@ -19,13 +18,12 @@ for v in $SYSREQ; do
         else
             ERROR="$v"
         fi
-        echo "[ !! ] nem elérhető - $v"
+        echo "[ !! ] nem elérhető - $v" >>/dev/null
     else
-        echo "[ OK ] elérhető - $v"
+        echo "[ OK ] elérhető - $v" >>/dev/null
     fi
 done
 
-echo
 echo
 
 if [ ! -z $ERROR ]; then
@@ -34,7 +32,6 @@ else
     echo Hiba nincs.
 fi
 
-echo
 echo
 
 #

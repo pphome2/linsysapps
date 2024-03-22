@@ -5,11 +5,18 @@
 # indítás
 #
 
-BINDIR="/opt"
 TPATH=`pwd`
 
-cd $BINDIR
-localdir=`dirname $0`
-. $localdir/sbackup-starter-archive
+if [ ! -f "$TPATH/sbackup-starter-archive" ]; then
+  localdir=`realpath $0`
+  if [ ! -f "$localdir/sbackup-starterarchive" ]; then
+    localdir=${localdir%/*}
+  fi
+  cd $localdir
+fi
+
+. ./sbackup-starter-archive
+
 cd $TPATH
+
 #

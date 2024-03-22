@@ -1,67 +1,62 @@
 #!/bin/bash
 #
-# SBackup - renszer
+# SBackup - rendszer
 #
 # telepítő
 #
 
-DD="/opt/sbackup"
+DESTDIR="/opt/sbackup"
 
 ID=`id -u`
 if [ $ID = 0 ]; then
     echo
-    read -e -p "Telepítés helye (alap: $DD): " -i "$DD" DD
-    DD=${DD:-/opt/sbackup}
+    read -e -p "Telepítés helye (alap: $DESTDIR): " -i "$DESTDIR" DD
+    DESTDIR=${DESTDIR:-/opt/sbackup}
     echo
-    echo Másolás: $DD
-    mkdir -p "$DD"
-    if [ -e $DD ]; then
-	    if [ -e "$DD/sbackup-config" ]; then
-		    mv -f "$DD/sbackup-config" "$DD/sbackup-config-old"
+    echo Másolás: $DESTDIR
+    mkdir -p "$DESTDIR"
+    if [ -e $DESDIR ]; then
+	    if [ -e "$DESTDIR/sbackup-config" ]; then
+		    mv -f "$DESTDIR/sbackup-config" "$DESTDIR/sbackup-config-old"
 	    fi
-        cp sbackup* "$DD"
-	    chmod 700 "$DD/sbackup-config"
-	    #chown root:root "$DD/sbackup-config"
+        cp sbackup* "$DESTDIR"
+	    chmod 700 "$DESTDIR/sbackup-config"
+	    #chown root:root "$DESTDIR/sbackup-config"
 	    chown root:root *
         echo
-        echo Indítófájlok létrehozása: "$DD/sbackup"
-        echo "#!/bin/bash" > "$DD/sbackup"
-        echo "BINDIR=\"$DD\"" >> "$DD/sbackup"
-        echo "TPATH=\`pwd\`" >> "$DD/sbackup"
-        echo "cd \$BINDIR" >> "$DD/sbackup"
-        #echo "localdir=\`dirname $0\`" >> "$DD/sbackup"
-        #echo ". \$localdir/sbackup-starter" >> "$DD/sbackup"
-        echo "./sbackup-starter" >> "$DD/sbackup"
-        echo "cd \$TPATH" >> "$DD/sbackup"
-        echo "#" >> "$DD/sbackup"
-        echo  >> "$DD/sbackup"
-        echo Indítófájlok létrehozása: "$DD/sbackup-archive"
-        echo "#!/bin/bash" > "$DD/sbackup-archive"
-        echo "BINDIR=\"$DD\"" >> "$DD/sbackup-archive"
-        echo "TPATH=\`pwd\`" >> "$DD/sbackup-archive"
-        echo "cd \$BINDIR" >> "$DD/sbackup-archive"
-        echo "./sbackup-starter-archive" >> "$DD/sbackup-archive"
-        echo "cd \$TPATH" >> "$DD/sbackup-archive"
-        echo "#" >> "$DD/sbackup-archive"
-        echo  >> "$DD/sbackup-archive"
+        echo Indítófájlok létrehozása: "$DESTDIR/sbackup"
+        echo Indítófájlok létrehozása: "$DESTDIR/sbackup-archive"
         echo
         echo Linkek létrehozása.
         if [ -e "/usr/local/bin/sbackup" ]; then
           mv -f "/usr/local/bin/sbackup" "/usr/local/bin/sbackup-old"
         fi
-        ln -s "$DD/sbackup" /usr/local/bin/sbackup
+        ln -s "$DESTDIR/sbackup" /usr/local/bin/sbackup
         if [ -e "/usr/local/bin/sbackup-archive" ]; then
           mv -f "/usr/local/bin/sbackup-archive" "/usr/local/bin/sbackup-archive-old"
         fi
-        ln -s "$DD/sbackup-archive" /usr/local/bin/sbackup-archive
+        ln -s "$DESTDIR/sbackup-archive" /usr/local/bin/sbackup-archive
         echo
         echo Telepítés kész.
         echo
-        echo Indítás: /usr/local/bin/sbackup vagy sbackup
-        echo Indítás: /usr/local/bin/sbackup-archive vagy sbackup-archive
+        echo Indítás: $DESTDIR/sbackup vagy sbackup
+        echo Indítás: $DESTDIR/sbackup-archive vagy sbackup-archive
         echo
-        echo További beállítások: "$DD"/sbackup-config
+        echo További beállítások: "$DESTDIR"/sbackup-config
+        echo Kérem ellenőrizze a beállításokat és hangolja a mentést a rendszeréhez.
         echo
+        echo A programkörnyezet ellenőrzése:
+        ./sbackup-check
+        if [ ! -f /etc/cron.d/sbackup ]; then
+	        echo "# /etc/cron.d/sbackup" >/etc/cron.d/sbackup
+			echo "" >>/etc/cron.d/sbackup
+			echo "0 12,15,20 * * *     root   /usr/local/bin/sbackup" >>/etc/cron.d/sbackup
+			echo "0 13 * * 5,6        root   //usr/local/bin/sbackup-archiv" >>/etc/cron.d/sbackup
+			echo "#" >>/etc/cron.d/sbackup
+			echo "" >>/etc/cron.d/sbackup
+	        echo /cron.d/sbackup létrehozva, kérem elenőrizze és állítsa be a mentés idejét.
+	        echo
+        fi
     else
         echo
         echo Telepítési hiba. Célkönyvtár létrehozási/elérési hiba.
