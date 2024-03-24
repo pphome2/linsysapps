@@ -16,7 +16,7 @@ for x in $e; do
 	/bin/mount "/dev/$x" "/media/$x" 2>/dev/null #2>>"$LOGDIR/$LOGFILE"
 done
 
-./sbackup-usb-copy
+./sbackup-usb-copy $1
 #sleep 10
 #sync
 

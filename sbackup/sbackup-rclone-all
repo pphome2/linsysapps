@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# SBackup - rendszer
+#
+# Lokális gép mentése:
+#
+# - rclone gdrive-ba
+#
+
+startdir=`dirname $0`
+. "./sbackup-init"
+cd $SYSTEMBACKUPDIR
+
+for v in *; do
+	if [ ! -d "$v" ]; then
+        rclone copy "$SYSTEMBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+	fi
+done
+
+cd $startdir
+
+#

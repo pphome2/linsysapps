@@ -10,6 +10,12 @@
 startdir=`dirname $0`
 . "./sbackup-init"
 
+if [ ! -z $1 ]; then
+    cd "$SYSTEMBACKUPDIR/$ARCHIVEDIR"
+else
+    cd "$SYSTEMBACKUPDIR"
+fi
+
 drv=`find /media 2>>/dev/null | grep "$USBFILENAME" | awk '{print $1 }'`
 
 x=$OLDDAY
@@ -39,9 +45,14 @@ for x in $drv; do
 				else
 					FS2=0
 				fi
+				#echo $SYSTEMBACKUPDIR/$v $FS1 $FS2
 				if [ $FS1 != $FS2 ]; then
-					#echo "$SYSTEMBACKUPDIR/$v" - "$FS1" - "$FS2"
-            		cp -f -r -u "$SYSTEMBACKUPDIR/$v" "$x" 2>>"$LOGDIR/$LOGFILE"
+					#echo "$x/$v" - "$FS1" - "$FS2"
+                    if [ ! -z $1 ]; then
+                		cp -f -r -u "$SYSTEMBACKUPDIR/$ARCHIVEDIR/$v" "$x/$ARCHIVEDIR" 2>>"$LOGDIR/$LOGFILE"
+                    else
+                		cp -f -r -u "$SYSTEMBACKUPDIR/$v" "$x" 2>>"$LOGDIR/$LOGFILE"
+                    fi
 		  		fi
 			fi
 		done
@@ -50,5 +61,7 @@ for x in $drv; do
 		drv2=""
 	fi
 done
+
+cd $startdir
 
 #

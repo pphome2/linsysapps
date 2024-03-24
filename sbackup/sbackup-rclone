@@ -7,7 +7,14 @@
 # - rclone gdrive-ba
 #
 
+startdir=`dirname $0`
 . "./sbackup-init"
+
+if [ ! -z $1 ]; then
+    cd "$SYSTEMBACKUPDIR/$ARCHIVEDIR"
+else
+    cd "$SYSTEMBACKUPDIR"
+fi
 
 x=$OLDDAY
 for b in $x; do
@@ -34,18 +41,33 @@ for v in *; do
 		fi
 		if [ $FS1 != $FS2 ]; then
 			#echo "$SYSTEMBACKUPDIR/$v" - "$FS1" - "$FS2"
-			if [ -z "$RCLONEONLYFILES" ]; then
-          		rclone copy "$SYSTEMBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
-			else
-				for e in $RCLONEONLYFILES; do
-					if [[ "$v" == *"$e"* ]]; then
-						#echo "$SYSTEMBACKUPDIR/$v" "$RCLONETARGET"
-          				rclone copy "$SYSTEMBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
-          			fi
-          		done
+            if [ ! -z $1 ]; then
+        	    if [ -z "$RCLONEONLYFILES" ]; then
+          		    rclone copy "$SYSTEMBACKUPDIR/$ARCHIVEDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+		    	else
+			    	for e in $RCLONEONLYFILES; do
+				    	if [[ "$v" == *"$e"* ]]; then
+					    	#echo "$SYSTEMBACKUPDIR/$v" "$RCLONETARGET"
+          				    rclone copy "$SYSTEMBACKUPDIR/$ARCHIVEDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+          		    	fi
+          		    done
+        	    fi
+            else
+        	    if [ -z "$RCLONEONLYFILES" ]; then
+          		    rclone copy "$SYSTEMBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+			    else
+				    for e in $RCLONEONLYFILES; do
+					    if [[ "$v" == *"$e"* ]]; then
+						    #echo "$SYSTEMBACKUPDIR/$v" "$RCLONETARGET"
+          				    rclone copy "$SYSTEMBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+          			    fi
+          		    done
+                fi
         	fi
   		fi
 	fi
 done
+
+cd $startdir
 
 #

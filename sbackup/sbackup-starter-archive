@@ -33,13 +33,13 @@ fi
 if [ "$ENABLE_USB" = 1 ]; then
 	d=`date`
 	echo "$d Archivum - Mentés USB adathordozóra." >> "$LOGDIR/$LOGFILE"
-	./sbackup-usb-mount 2>/dev/null
+	./sbackup-usb-mount $ARCHIVEBACKUP 2>/dev/null
 fi
 
 if [ "$ENABLE_RCLONE" = 1 ]; then
 	d=`date`
 	echo "$d Archivum - Mentés felhőbe." >> "$LOGDIR/$LOGFILE"
-	./sbackup-rclone 2>/dev/null
+	./sbackup-rclone $ARCHIVEBACKUP 2>/dev/null
 fi
 
 # mentés hálózati meghajtóra
