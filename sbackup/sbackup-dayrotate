@@ -20,13 +20,13 @@ done
 for b in $c; do
 	if [ -z "$n" ]; then
 		if [ -d "$b" ]; then
-			rm "$b"/xx*.tar* 2>/dev/null
+			rm "$b"/*.tar* 2>/dev/null
 		else
 			mkdir "$b" 2>/dev/null
 		fi
 	else
 		if [ -d "$n" ]; then
-			rm "$n"/xx*.tar* 2>/dev/null
+			rm "$n"/*.tar* 2>/dev/null
 		else
 			mkdir "$n" 2>/dev/null
 		fi
@@ -35,7 +35,7 @@ for b in $c; do
 	n="$b"
 done
 if [ -d "$b" ]; then
-	rm "$b"/xx*.tar* 2>/dev/null
+	rm "$b"/*.tar* 2>/dev/null
 else
 	mkdir "$b" 2>/dev/null
 fi
