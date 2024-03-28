@@ -97,6 +97,8 @@ done
 
 eval $SC_AFTER >>/dev/null 2>/dev/null
 
+echo $ENCODINGPASSPHARSE > "$SYSTEMBACKUPDIR/$DEVICENAME.tar.gz"
+
 d=`date`
 echo "$d Kész." >> "$LOGDIR/$LOGFILE"
 

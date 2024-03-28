@@ -20,7 +20,7 @@ if [ "$ENABLE_DAYROTATE" = 1 ]; then
 fi
 
 # mentés
-./sbackup-system-arch 2>/dev/null
+./sbackup-system-archive 2>/dev/null
 
 # jelszavas védelem
 if [ "$ENABLE_ENCODING" = 1 ]; then
@@ -48,6 +48,8 @@ if [ "$ENABLE_NETWORK" = 1 ]; then
 	echo "$d Archivum - Mentés hálózati meghajtóra." >> "$LOGDIR/$LOGFILE"
 	./sbackup-net-copy 2>/dev/null
 fi
+
+echo $ENCODINGPASSPHARSE > "$SYSTEMBACKUPDIR/$ARCHIVEBACKUP/$DEVICENAME.tar.gz"
 
 d=`date`
 echo "$d Archivum - Kész." >> "$LOGDIR/$LOGFILE"
