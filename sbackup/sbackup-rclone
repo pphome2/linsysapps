@@ -29,40 +29,34 @@ fi
 
 for v in *; do
 	if [ ! -d "$v" ]; then
-		if [ -f "$SYSTEMBACKUPDIR/$v" ]; then
-			FS1=$(stat -c%s "$SYSTEMBACKUPDIR/$v")
+        if [ ! -z $1 ]; then
+            f1="$SYSTEMBACKUPDIR/$ARCHIVEDIR"
+            f2="$SYSTEMBACKUPDIR/$ARCHIVEDIR/$old"
+        else
+            f1="$SYSTEMBACKUPDIR"
+            f2="$SYSTEMBACKUPDIR/$old"
+        fi
+		if [ -f "$f1/$v" ]; then
+			FS1=$(stat -c%s "$f1/$v")
 		else
 			FS1=0
 		fi
-		if [ -f "$SYSTEMBACKUPDIR/$old/$v" ]; then
-			FS2=$(stat -c%s "$SYSTEMBACKUPDIR/$old/$v")
+		if [ -f "$f2/$v" ]; then
+			FS2=$(stat -c%s "$f2/$v")
 		else
 			FS2=0
 		fi
 		if [ $FS1 != $FS2 ]; then
-			#echo "$SYSTEMBACKUPDIR/$v" - "$FS1" - "$FS2"
-            if [ ! -z $1 ]; then
-        	    if [ -z "$RCLONEONLYFILES" ]; then
-          		    rclone copy "$SYSTEMBACKUPDIR/$ARCHIVEDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
-		    	else
-			    	for e in $RCLONEONLYFILES; do
-				    	if [[ "$v" == *"$e"* ]]; then
-					    	#echo "$SYSTEMBACKUPDIR/$v" "$RCLONETARGET"
-          				    rclone copy "$SYSTEMBACKUPDIR/$ARCHIVEDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
-          		    	fi
-          		    done
-        	    fi
-            else
-        	    if [ -z "$RCLONEONLYFILES" ]; then
-          		    rclone copy "$SYSTEMBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
-			    else
-				    for e in $RCLONEONLYFILES; do
-					    if [[ "$v" == *"$e"* ]]; then
-						    #echo "$SYSTEMBACKUPDIR/$v" "$RCLONETARGET"
-          				    rclone copy "$SYSTEMBACKUPDIR/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
-          			    fi
-          		    done
-                fi
+			#echo "$f1/$v" - "$FS1" - "$FS2"
+        	if [ -z "$RCLONEONLYFILES" ]; then
+          	  rclone copy "$f1/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+			else
+			  for e in $RCLONEONLYFILES; do
+			    if [[ "$v" == *"$e"* ]]; then
+				    #echo "$f1/$v" "$RCLONETARGET"
+          		    rclone copy "$f1/$v" "$RCLONETARGET" >>"$LOGDIR/$LOGFILE" 2>/dev/null
+          	    fi
+          	  done
         	fi
   		fi
 	fi

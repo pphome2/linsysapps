@@ -5,10 +5,12 @@
 # config betöltés
 #
 
-if [ -f /etc/sbackup-config ]; then
-  . "/etc/sbackup-config"
-else
-  . "./sbackup-config"
+if [! -z $BINDIR ]; then
+  if [ -f /etc/sbackup-config ]; then
+	. "/etc/sbackup-config"
+  else
+	. "./sbackup-config"
+  fi
 fi
 
 #

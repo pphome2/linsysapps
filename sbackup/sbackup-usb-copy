@@ -32,27 +32,28 @@ fi
 for x in $drv; do
 	if [ -f "$x" ]; then
 		x=`echo $x | awk 'BEGIN {FS="."};{printf $1 } '`
-		#cp -f -r -u "$SYSTEMBACKUPDIR"/* "$x" 2>>"$LOGDIR/$LOGFILE"
+        if [ ! -z $1 ]; then
+            f1="$SYSTEMBACKUPDIR/$ARCHIVEDIR"
+            f2="$SYSTEMBACKUPDIR/$ARCHIVEDIR/$old"
+        else
+            f1="$SYSTEMBACKUPDIR"
+            f2="$SYSTEMBACKUPDIR/$old"
+        fi
 		for v in *; do
 			if [ ! -d "$v" ]; then
-				if [ -f "$SYSTEMBACKUPDIR/$v" ]; then
-					FS1=$(stat -c%s "$SYSTEMBACKUPDIR/$v")
+				if [ -f "$f1/$v" ]; then
+					FS1=$(stat -c%s "$f1/$v")
 				else
 					FS1=0
 				fi
-				if [ -f "$SYSTEMBACKUPDIR/$old/$v" ]; then
-					FS2=$(stat -c%s "$SYSTEMBACKUPDIR/$old/$v")
+				if [ -f "$f2/$v" ]; then
+					FS2=$(stat -c%s "$f2/$v")
 				else
 					FS2=0
 				fi
-				#echo $SYSTEMBACKUPDIR/$v $FS1 $FS2
+				#echo $f1/$v $FS1 $FS2
 				if [ $FS1 != $FS2 ]; then
-					#echo "$x/$v" - "$FS1" - "$FS2"
-                    if [ ! -z $1 ]; then
-                		cp -f -r -u "$SYSTEMBACKUPDIR/$ARCHIVEDIR/$v" "$x/$ARCHIVEDIR" 2>>"$LOGDIR/$LOGFILE"
-                    else
-                		cp -f -r -u "$SYSTEMBACKUPDIR/$v" "$x" 2>>"$LOGDIR/$LOGFILE"
-                    fi
+              		cp -f -r -u "$f1" "$x" 2>>"$LOGDIR/$LOGFILE"
 		  		fi
 			fi
 		done
