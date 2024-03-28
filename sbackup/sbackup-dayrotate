@@ -30,7 +30,7 @@ for b in $c; do
 		else
 			mkdir "$n" 2>/dev/null
 		fi
-		cp -u -f "$b"/*.tar* "$n" 2>/dev/null
+		mv -u -f "$b"/*.tar* "$n" 2>/dev/null
 	fi
 	n="$b"
 done
@@ -39,7 +39,7 @@ if [ -d "$b" ]; then
 else
 	mkdir "$b" 2>/dev/null
 fi
-cp -u -f *.tar* "$b" 2>/dev/null
+mv -u -f *.tar* "$b" 2>/dev/null
 
 if [ ! -z $LOCALBACKUPDIR ]; then
     cp -f -r -u "$SYSTEMBACKUPDIR"/* "$LOCALBACKUPDIR" 2>>"$LOGDIR/$LOGFILE"
