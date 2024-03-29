@@ -51,7 +51,7 @@ if [ $ID = 0 ]; then
 	        echo "# /etc/cron.d/sbackup" >/etc/cron.d/sbackup
 			echo "" >>/etc/cron.d/sbackup
 			echo "0 12,15,20 * * *     root   /usr/local/bin/sbackup" >>/etc/cron.d/sbackup
-			echo "0 13 * * 5,6        root   //usr/local/bin/sbackup-archiv" >>/etc/cron.d/sbackup
+			echo "0 13 * * 6        root   //usr/local/bin/sbackup-archiv" >>/etc/cron.d/sbackup
 			echo "#" >>/etc/cron.d/sbackup
 			echo "" >>/etc/cron.d/sbackup
 	        echo /cron.d/sbackup létrehozva, kérem elenőrizze és állítsa be a mentés idejét.

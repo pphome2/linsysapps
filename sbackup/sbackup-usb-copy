@@ -53,7 +53,7 @@ for x in $drv; do
 				fi
 				#echo $f1/$v $FS1 $FS2
 				if [ $FS1 != $FS2 ]; then
-              		cp -f -r -u "$f1" "$x" 2>>"$LOGDIR/$LOGFILE"
+              		cp -f -r -u "$f1/$v" "$x" 2>>"$LOGDIR/$LOGFILE"
 		  		fi
 			fi
 		done
