@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# SBackup - rendszer
+#
+# Lokális gép mentése:
+#
+# - USB eszköz keresése, adatok mentése
+#
+
+startdir=`dirname $0`
+. "./sbackup-init"
+
+e=`cat /proc/partitions | grep sd | awk '{print $4}' | grep -v sda | grep [123456789]`
+
+for x in $e; do
+	mkdir "/media/$x" >/dev/null 2>>"$LOGDIR/$LOGFILE"
+	/bin/mount "/dev/$x" "/media/$x" 2>/dev/null #2>>"$LOGDIR/$LOGFILE"
+done
+
+cd "$SYSTEMBACKUPDIR"
+
+drv=`find /media 2>>/dev/null | grep "$USBFILENAME" | awk '{print $1 }'`
+
+for x in $drv; do
+	if [ -f "$x" ]; then
+		x=`echo $x | awk 'BEGIN {FS="."};{printf $1 } '`
+  		cp -f -r -u * "$x" 2>>"$LOGDIR/$LOGFILE"
+	fi
+done
+
+#sleep 10
+#sync
+
+for x in $e; do
+	/bin/umount "/media/$x" >/dev/null 2>/dev/null #2>>"$LOGDIR/$LOGFILE"
+	rmdir "/media/$x" >/dev/null 2>>"$LOGDIR/$LOGFILE"
+done
+
+cd $startdir
+
+#

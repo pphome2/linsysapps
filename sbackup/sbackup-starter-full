@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# SBackup - rendszer
+#
+# Lokális gép mentése
+#
+
+. "./sbackup-init"
+
+d=`date`
+echo "$d Mentés elkezdése." >> "$LOGDIR/$LOGFILE"
+
+./sbackup-rclone-full
+./sbackup-usb-copy-full
+
+d=`date`
+echo "$d Kész." >> "$LOGDIR/$LOGFILE"
+
+#

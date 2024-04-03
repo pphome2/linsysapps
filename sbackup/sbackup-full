@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# SBackup - rendszer
+#
+# indítás
+#
+
+TPATH=`pwd`
+
+if [ ! -f "$TPATH/sbackup-starter-archive" ]; then
+  localdir=`realpath $0`
+  if [ ! -f "$localdir/sbackup-starterarchive" ]; then
+    localdir=${localdir%/*}
+  fi
+  cd $localdir
+fi
+
+. ./sbackup-starter-full
+
+cd $TPATH
+
+#

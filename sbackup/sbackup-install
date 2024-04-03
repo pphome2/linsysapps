@@ -29,13 +29,20 @@ if [ $ID = 0 ]; then
         echo
         echo Linkek létrehozása.
         if [ -e "/usr/local/bin/sbackup" ]; then
-          mv -f "/usr/local/bin/sbackup" "/usr/local/bin/sbackup-old"
+          #mv -f "/usr/local/bin/sbackup" "/usr/local/bin/sbackup-old"
+          rm -f "/usr/local/bin/sbackup"
         fi
         ln -s "$DESTDIR/sbackup" /usr/local/bin/sbackup
         if [ -e "/usr/local/bin/sbackup-archive" ]; then
-          mv -f "/usr/local/bin/sbackup-archive" "/usr/local/bin/sbackup-archive-old"
+          #mv -f "/usr/local/bin/sbackup-archive" "/usr/local/bin/sbackup-archive-old"
+          rm -f "/usr/local/bin/sbackup-archive"
         fi
         ln -s "$DESTDIR/sbackup-archive" /usr/local/bin/sbackup-archive
+        if [ -e "/usr/local/bin/sbackup-full" ]; then
+          #mv -f "/usr/local/bin/sbackup-full" "/usr/local/bin/sbackup-full-old"
+          rm -f "/usr/local/bin/sbackup-full"
+        fi
+        ln -s "$DESTDIR/sbackup-full" /usr/local/bin/sbackup-full
         echo
         echo Telepítés kész.
         echo

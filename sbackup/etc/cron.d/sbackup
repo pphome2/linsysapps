@@ -1,6 +1,7 @@
 # /etc/cron.d/mentes
 
 0 12,15,20 * * *     root   /usr/local/bin/sbackup
-0 13 * * 6        root   //usr/local/bin/sbackup-archiv
+0 13 * * 5        root   //usr/local/bin/sbackup-archiv
+0 13 * * 6        root   //usr/local/bin/sbackup-full
 
 #
