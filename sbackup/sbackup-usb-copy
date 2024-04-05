@@ -31,36 +31,51 @@ fi
 
 for x in $drv; do
 	if [ -f "$x" ]; then
-		x=`echo $x | awk 'BEGIN {FS="."};{printf $1 } '`
-        if [ ! -z $1 ]; then
-            f1="$SYSTEMBACKUPDIR/$ARCHIVEDIR"
-            f2="$SYSTEMBACKUPDIR/$ARCHIVEDIR/$old"
-        else
-            f1="$SYSTEMBACKUPDIR"
-            f2="$SYSTEMBACKUPDIR/$old"
+        x=`echo $x | awk 'BEGIN {FS="."};{printf $1 } '`
+        #echo "$x$USBLOCKFILE"
+	    if [ ! -f "$x$USBLOCKFILE" ]; then
+	        echo $x >"$x/$USBLOCKFILE"
+	        #echo $x
+    	    if [ ! -z $1 ]; then
+    	        f1="$SYSTEMBACKUPDIR/$ARCHIVEDIR"
+    	        f2="$SYSTEMBACKUPDIR/$ARCHIVEDIR/$old"
+    	    else
+    	        f1="$SYSTEMBACKUPDIR"
+    	        f2="$SYSTEMBACKUPDIR/$old"
+    	    fi
+			for v in *; do
+				if [ ! -d "$v" ]; then
+					if [ -f "$f1/$v" ]; then
+						FS1=$(stat -c%s "$f1/$v")
+					else
+						FS1=0
+					fi
+					if [ -f "$f2/$v" ]; then
+						FS2=$(stat -c%s "$f2/$v")
+					else
+						FS2=0
+					fi
+					#echo $f1/$v $FS1 $FS2
+					if [ $FS1 != $FS2 ]; then
+    	          		cp -f -r -u "$f1/$v" "$x" 2>>"$LOGDIR/$LOGFILE"
+			  		fi
+				fi
+    		done
+	    	sync
         fi
-		for v in *; do
-			if [ ! -d "$v" ]; then
-				if [ -f "$f1/$v" ]; then
-					FS1=$(stat -c%s "$f1/$v")
-				else
-					FS1=0
-				fi
-				if [ -f "$f2/$v" ]; then
-					FS2=$(stat -c%s "$f2/$v")
-				else
-					FS2=0
-				fi
-				#echo $f1/$v $FS1 $FS2
-				if [ $FS1 != $FS2 ]; then
-              		cp -f -r -u "$f1/$v" "$x" 2>>"$LOGDIR/$LOGFILE"
-		  		fi
-			fi
-		done
-		sync
 	else
 		drv2=""
 	fi
+done
+
+for x in $drv; do
+	if [ -f "$x" ]; then
+        x=`echo $x | awk 'BEGIN {FS="."};{printf $1 } '`
+        #echo "$x$USBLOCKFILE"
+	    if [ -f "$x$USBLOCKFILE" ]; then
+	        rm "$x$USBLOCKFILE" >/dev/null  2>>"$LOGDIR/$LOGFILE"
+        fi
+    fi
 done
 
 cd $startdir

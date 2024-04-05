@@ -23,8 +23,13 @@ drv=`find /media 2>>/dev/null | grep "$USBFILENAME" | awk '{print $1 }'`
 
 for x in $drv; do
 	if [ -f "$x" ]; then
-		x=`echo $x | awk 'BEGIN {FS="."};{printf $1 } '`
-  		cp -f -r -u * "$x" 2>>"$LOGDIR/$LOGFILE"
+        x=`echo $x | awk 'BEGIN {FS="."};{printf $1 } '`
+        #echo "$x$USBLOCKFILE"
+	    if [ ! -f "$x$USBLOCKFILE" ]; then
+	        echo $x >"$x/$USBLOCKFILE"
+	        #echo $x
+  		    cp -f -r -u * "$x" 2>>"$LOGDIR/$LOGFILE"
+        fi
 	fi
 done
 
@@ -32,6 +37,14 @@ done
 #sync
 
 for x in $e; do
+echo $x
+	if [ -d "/media/$x" ]; then
+        x=`echo $x | awk 'BEGIN {FS="."};{printf $1 } '`
+        echo "$x/$USBLOCKFILE"
+	    if [ -f "$x/$USBLOCKFILE" ]; then
+	        rm "$x/$USBLOCKFILE" >/dev/null  2>>"$LOGDIR/$LOGFILE"
+        fi
+    fi
 	/bin/umount "/media/$x" >/dev/null 2>/dev/null #2>>"$LOGDIR/$LOGFILE"
 	rmdir "/media/$x" >/dev/null 2>>"$LOGDIR/$LOGFILE"
 done

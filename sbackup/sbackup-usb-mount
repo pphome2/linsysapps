@@ -21,7 +21,7 @@ done
 #sync
 
 for x in $e; do
-	/bin/umount "/media/$x" >/dev/null 2>/dev/null #2>>"$LOGDIR/$LOGFILE"
+	/bin/umount "/media/$x" >/dev/null 2>/dev/null 2>>"$LOGDIR/$LOGFILE"
 	rmdir "/media/$x" >/dev/null 2>>"$LOGDIR/$LOGFILE"
 done
 
