@@ -12,6 +12,7 @@ echo "$d Mentés elkezdése." >> "$LOGDIR/$LOGFILE"
 
 ./sbackup-rclone-full
 ./sbackup-usb-copy-full
+./sbackup-net-copy-full
 
 d=`date`
 echo "$d Kész." >> "$LOGDIR/$LOGFILE"

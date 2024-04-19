@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# SBackup - rendszer
+#
+# Lokális gép mentése:
+#
+# - mentés hálózati meghajtóra
+#
+
+startdir=`dirname $0`
+. "./sbackup-init"
+
+if [ ! -z $1 ]; then
+    cd "$SYSTEMBACKUPDIR/$ARCHIVEDIR"
+else
+    cd "$SYSTEMBACKUPDIR"
+fi
+
+if ping -c 1 -W 1 "$NETHOST" >>/dev/null; then
+	#echo "$NETHOST" létezik
+	mount -t cifs "//$NETHOST/$NETSHARE" "$NETTARGET" -o rw,username="$NETUSER",password="$NETPASSWORD" 2>>"$LOGDIR/$LOGFILE"
+
+	if [ -d "$NETTARGET/$NETDIR" ]; then
+		d=`date`
+		#cd $NETTARGET/$NETDIR
+	else
+		d=`date`
+		mkdir "$NETTARGET/$NETDIR" 2>>/dev/null
+	fi
+
+  	cp -f -r -u * "$NETTARGET/$NETDIR" 2>>"$LOGDIR/$LOGFILE"
+
+	umount "$NETTARGET" 2>>"$LOGDIR/$LOGFILE"
+else
+	echo "$NETHOST" nem elérhető. 2>>"$LOGDIR/$LOGFILE"
+fi
+
+cd $startdir
+
+#
