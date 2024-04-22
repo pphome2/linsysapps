@@ -14,8 +14,6 @@ echo "$d Mentés elkezdése." >> "$LOGDIR/$LOGFILE"
 ./sbackup-usb-copy-full
 ./sbackup-net-copy-full
 
-echo $ENCODINGPASSPHARSE > $SYSTEMBACKUPDIR/$DEVICENAME.tar.gz
-
 d=`date`
 echo "$d Kész." >> "$LOGDIR/$LOGFILE"
 
