@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# SBackup - rendszer
+#
+# Lokális gép mentése:
+#
+# - másolat más mentés program könyvtárába
+#
+
+startdir=`dirname $0`
+. "./sbackup-init"
+
+cd "$SYSTEMBACKUPDIR"
+
+for x in $OTHERBACKUPSOFTWAREDIR; do
+	if [ -d "$x" ]; then
+		for v in *; do
+			if [ ! -d "$v" ]; then
+				if [ -f "$v" ]; then
+					FS1=$(stat -c%s "$v")
+				else
+					FS1=0
+				fi
+				if [ -f "$x/$v" ]; then
+					FS2=$(stat -c%s "$x/$v")
+				else
+					FS2=0
+				fi
+				if [ $FS1 != $FS2 ]; then
+				echo $v $x/$v $FS1 $FS2
+    	      		cp -f "$v" "$x" #2>>"$LOGDIR/$LOGFILE"
+		  		fi
+			fi
+    	done
+	    sync
+	fi
+done
+
+cd $startdir
+
+#

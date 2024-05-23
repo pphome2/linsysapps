@@ -49,6 +49,9 @@ if [ "$ENABLE_NETWORK" = 1 ]; then
 	./sbackup-net-copy 2>/dev/null
 fi
 
+# másolás egyéb szoftver részére
+./sbackup-copy-other
+
 echo $ENCODINGPASSPHARSE > "$SYSTEMBACKUPDIR/$ARCHIVEBACKUP/$DEVICENAME.tar.gz"
 
 d=`date`

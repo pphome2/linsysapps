@@ -36,6 +36,7 @@ BINDIR=`pwd`
 # mentés helye
 SYSTEMBACKUPDIR="$BINDIR/backup"
 LOCALBACKUPDIR="/usr/local/share/backup"
+OTHERBACKUPSOFTWAREDIR="/home/user/Onedrive"
 
 # logok
 LOGDIR="/var/log"

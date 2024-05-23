@@ -88,6 +88,9 @@ if [ "$ENABLE_WEBDIR" = 1 ]; then
 		./sbackup-webdir 2>/dev/null
 fi
 
+# másolás egyéb szoftver részére
+./sbackup-copy-other
+
 # beépülő modulok
 for i in $PLUGINS; do
 	if [ -f "$i" ]; then
