@@ -27,7 +27,7 @@ for x in $OTHERBACKUPSOFTWAREDIR; do
 					FS2=0
 				fi
 				if [ $FS1 != $FS2 ]; then
-				echo $v $x/$v $FS1 $FS2
+				    #echo $v $x/$v $FS1 $FS2
     	      		cp -f "$v" "$x" #2>>"$LOGDIR/$LOGFILE"
 		  		fi
 			fi
