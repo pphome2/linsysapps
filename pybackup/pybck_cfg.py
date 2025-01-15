@@ -1,37 +1,64 @@
 #
+# PyBCK
+#
 # beállítások
 #
 
-# fejlesztői mód
-BCK_DEV_MODE=True
 
-# felhasználó fájljai
-BCK_DIR_USER=['Dokumentumok',
-              'Asztal']
+# beállítások objektum
+class pybck_config_obj:
+  # fejlesztői mód
+  BCK_DEV_MODE=True
 
-# mentésből kizárt könyvárak - 
-BCK_DIR_EXCLUDE_MAINDIR=['_']
+  # felhasználó fájljai
+  BCK_DIR_USER=['Dokumentumok',
+                'Asztal']
 
-# rendszer könyvtárak
-BCK_DIR_SYS=['/etc',
-             '/var/www/html',
-             '/var/www']
+  # felhasználók alapkönyvtára
+  BCK_DIR_USER_HOME="/home"
 
-# mentési célkönyvtár
-BCK_DIR_DEST="/opt/pybck"
+  # mentésből kizárt könyvárak - 
+  BCK_DIR_EXCLUDE_MAINDIR=['_']
 
-# log fájlj
-#BCK_FILE_LOG="/var/log/pybck.log"
-BCK_FILE_LOG="pybck.log"
+  # rendszer könyvtárak
+  BCK_DIR_SYS=['/etc',
+               '/var/www/html',
+               '/var/www']
 
-# archiválás: az eddig kizárt könyvtárak mentése
-BCK_ARCH_MODE=False
+  # mentési célkönyvtár
+  BCK_DIR_DEST="/opt/pybck"
+
+  # log fájlj #BCK_FILE_LOG="/var/log/pybck.log"
+  BCK_FILE_LOG="pybck.log"
+
+  # archiválás: az eddig kizárt könyvtárak mentése
+  BCK_ARCH_MODE=False
+
+  # nyelvi adatok
+  #BCK_LANG={}
+
+  # létrehozáskori beállítások
+  def __init__(self):
+    self.BCK_LANG={}
+
+  # változó módosítása
+  def newdest(self,d):
+    print(d)
+    self.BCK_DIR_DEST=d
+
+
+
+# objektum létrehozása
+pycfg=pybck_config_obj()
+
 
 # nyelvi modul
 try:
   from pybck_hu_HU import *
+  pycfg.BCK_LANG=pydict.dict_lang
 except:
-  BCK_LANG={}
+  if pycfg.BCK_DEV_MODE:
+    print("nolang")
   
 
 #
