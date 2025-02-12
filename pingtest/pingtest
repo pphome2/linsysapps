@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ping -i 5 -O -q -D $1 | awk '{ if(gsub(/\[|\]/, "", $1)) $1=strftime("[%F %T]", $1); print}' | tee ./pingtest.log
+
+#
+
