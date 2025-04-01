@@ -1,0 +1,10 @@
+#!/bin/bash
+
+rm -R /var/lib/mysql-backup/* >>/var/lib/mysql-backup/mdbbackup.log 2>>/var/lib/mysql-backup/mdbbackup.log
+echo `date` >>/var/lib/mysql-backup/mdbbackup.log
+echo MARIDB BACKUP >>/var/lib/mysql-backup/mdbbackup.log
+echo ============= >>/var/lib/mysql-backup/mdbbackup.log
+echo >>/var/lib/mysql-backup/mdbbackup.log
+mariadb-backup --backup --target-dir=/var/lib/mysql-backup/ --user=root --password= >>/var/lib/mysql-backup/mdbbackup.log 2>>/var/lib/mysql-backup/mdbbackup.log
+
+#

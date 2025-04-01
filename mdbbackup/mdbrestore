@@ -1,0 +1,14 @@
+#!/bin/bash
+
+service mariadb stop
+echo `date` >>/var/lib/mysql-backup/mdbrestore.log
+echo MARIDB RESTORE >>/var/lib/mysql-backup/mdbbackup.log
+echo ============== >>/var/lib/mysql-backup/mdbrestore.log
+echo >>/var/lib/mysql-backup/mdbrestore.log
+rm -R /var/lib/mysql/*
+mariadb-backup --prepare --target-dir=/var/lib/mysql-backup/ >>/var/lib/mysql-backup/mdbrestore.log 2>>/var/lib/mysql-backup/mdbrestore.log
+mariadb-backup --copy-back --target-dir=/var/lib/mysql-backup/ >>/var/lib/mysql-backup/mdbrestore.log 2>>/var/lib/mysql-backup/mdbrestore.log
+chown -R mysql:mysql /var/lib/mysql/
+service mariadb start
+
+#
