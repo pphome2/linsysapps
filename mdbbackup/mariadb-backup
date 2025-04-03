@@ -1,0 +1,19 @@
+#!/bin/bash
+
+bs=`command -v mariadb-backup`
+
+if [ -n "$bs" ]; then
+  rm -R /var/lib/mysql-backup/* >>/var/lib/mysql-backup/mdbbackup.log 2>>/dev/null
+  if [ ! -n "$SQL_USER" ]; then
+    SQL_USER="root"
+  fi
+  $bs --backup --target-dir=/var/lib/mysql-backup/ --user="$SQL_USER" --password="$SQL_PASSWORD" 2>>/var/lib/mysql-backup/mdbbackup.log
+  tar cvvfz "sql-bakup.tar.gz" /var/lib/mysql-backup/ >>/var/lib/mysql-backup/mdbbackup.log 2>>/var/lib/mysql-backup/mdbbackup.log
+else
+  mysqldump --all-databases >./mysqldb.sql
+  tar cvvfz "sql.tar.gz" *.sql
+  rm *.sql
+fi
+
+
+#

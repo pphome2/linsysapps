@@ -1,0 +1,28 @@
+#!/bin/bash
+#
+# SBackup - MySQL/MariaDB
+#
+# Adatbázisok mentése
+#
+#
+
+. "./sbackup-init"
+
+bs=`command -v mariadb-backup`
+
+if [ -n "$bs" ]; then
+  rm -R /var/lib/mysql-backup/* >>/var/lib/mysql-backup/mdbbackup.log 2>>/dev/null
+  if [ ! -n "$SQL_USER" ]; then
+    SQL_USER="root"
+  fi
+  $bs --backup --target-dir=/var/lib/mysql-backup/ --user="$SQL_USER" --password="$SQL_PASSWORD" 2>>/dev/null
+  tar cvvfz "$SYSTEMBACKUPDIR/$DEVICENAME-sql-bakup.tar.gz" /var/lib/mysql-backup/ 2>/dev/null >>"$LOGDIR/$LOGFILE"
+  ./sbackup-enc-file "$DEVICENAME-sql-bakup.tar.gz" "$SYSTEMBACKUPDIR" 2>/dev/null
+else
+  mysqldump --all-databases >./mysqldb.sql #2>>/var/log/sbackup.log
+  tar cvvfz "$SYSTEMBACKUPDIR/$DEVICENAME-sql.tar.gz" *.sql #2>/dev/null >>"$LOGDIR/$LOGFILE"
+  rm *.sql
+  ./sbackup-enc-file "$DEVICENAME-sql.tar.gz" "$SYSTEMBACKUPDIR" 2>/dev/null
+fi
+
+#

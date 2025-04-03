@@ -1,0 +1,19 @@
+#!/bin/bash
+
+bs=`command -v mariadb-backup`
+
+if [ -n "$bs" ]; then
+  service mariadb stop
+  rm -R /var/lib/mysql/*
+  mariadb-backup --prepare --target-dir=/var/lib/mysql-backup/ #2>>/dev/null
+  mariadb-backup --copy-back --target-dir=/var/lib/mysql-backup/ #2>>/dev/null
+  chown -R mysql:mysql /var/lib/mysql/
+  service mariadb start
+else
+  tar xvfz "sql.tar.gz"
+  mariadb <*.sql
+  rm *.sql
+fi
+
+
+#

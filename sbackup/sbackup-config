@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # SBackup - rendszer
 #
@@ -82,6 +82,10 @@ NETTARGET="/mnt"
 # kódolási jelszó
 ENCODINGPASSPHARSE="secretpassword"
 MN="10"
+
+# mariadb/mysql adatok
+SQL_USER=""
+SQL_PASSWORD=""
 
 # beépülő modulok
 PLUGINS=""
