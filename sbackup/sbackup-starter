@@ -52,6 +52,7 @@ if [ "$ENABLE_SQL" = 1 ]; then
 		d=`date`
 		echo "$d SQL adatbázisok mentése." >> "$LOGDIR/$LOGFILE"
 		./sbackup-sql 2>>/dev/null
+		./sbackup-mariadb-dump 2>>/dev/null
 fi
 
 # jelszavas védelem
