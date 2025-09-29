@@ -5,7 +5,7 @@
 #
 
 dir=`pwd`
-py=`command -v python`
+py=`command -v pythonc`
 pymain="pybck_start.py"
 
 if [ ! -n "$py" ]; then

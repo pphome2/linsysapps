@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# SBackup - MySQL/MariaDB
+#
+# Adatbázisokp mentése:
+#
+#
+
+. "./sbackup-config"
+
+mysqldump --all-databases >./mysqldb.sql 2>>/var/log/sbackup.log
+tar cvvfz "$SYSTEMBACKUPDIR/$DEVICENAME-sql.tar.gz" *.sql 2>/dev/null >>"$LOGDIR/$LOGFILE"
+rm *.sql
+
+#

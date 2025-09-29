@@ -12,38 +12,45 @@ startdir=`dirname $0`
 cd "$SYSTEMBACKUPDIR"
 
 if [ -d "$SQLDIR" ]; then
-	if [ -f "$DEVICENAME-sql.tar.gz" ]; then
-		rm "$DEVICENAME-sql.tar.gz" 2>>/dev/null
-	fi
 
     bs=`command -v mariadb-backup`
+
     if [ -n "$bs" ]; then
+	  if [ -f "$DEVICENAME-sql-backup.tar.gz" ]; then
+		rm "$DEVICENAME-sql-backup.tar.gz" 2>>/dev/null
+	  fi
       rm -R /var/lib/mysql-backup/* >>/var/lib/mysql-backup/mdbbackup.log 2>>/dev/null
       if [ ! -n "$SQL_USER" ]; then
         SQL_USER="root"
       fi
+      #
+      # a teljes mariadb/mysql adatbázis
+	  #
       $bs --backup --target-dir=/var/lib/mysql-backup/ --user="$SQL_USER" --password="$SQL_PASSWORD" 2>>/dev/null
-      tar cvvfz "$SYSTEMBACKUPDIR/$DEVICENAME-sql-bakup.tar.gz" /var/lib/mysql-backup/ 2>/dev/null >>"$LOGDIR/$LOGFILE"
+      tar cvvfz "$SYSTEMBACKUPDIR/$DEVICENAME-sql-backup.tar.gz" /var/lib/mysql-backup/ 2>/dev/null >>"$LOGDIR/$LOGFILE"
     else
-	  # egyszrre az összes adatbázis:
-	  # mysqldump --all-databases >./mysqldb.sql #2>>/var/log/sbackup.log
+      #
+  	  # egyszrre az összes adatbázis>
+	  # mysqldump --all-databases >sqldb-all.sql 2>>$LOGFILE
 	  #
-	  # vagy
+	  # vagy egyessével:
 	  #
-	  # egyessével az adatbázisok:
+	  if [ -f "$DEVICENAME-sql.tar.gz" ]; then
+		rm "$DEVICENAME-sql.tar.gz" 2>>/dev/null
+      fi
 	  for x in "$SQLDIR"/*; do
 	    if [ -d "$x" ]; then
-		  y="${x##*/}"
-		  if [ "$y" != "performance_schema" ]; then
-			mysqldump "$y" >"sqldb-$y.sql" 2>>"$LOGDIR/$LOGFILE"
-		  fi
+	      y="${x##*/}"
+	      if [ "$y" != "performance_schema" ]; then
+	        mysqldump "$y" >"sqldb-$y.sql" 2>>"$LOGDIR/$LOGFILE"
+	      fi
 	    fi
 	  done
 
 	  # tömörítés
 	  tar cvvfz "$DEVICENAME-sql.tar.gz" *.sql 2>/dev/null >>"$LOGDIR/$LOGFILE"
-	  rm *.sql 2>/dev/null
-    fi
+      rm *.sql 2>/dev/null
+	fi
 fi
 
 cd "$startdir"

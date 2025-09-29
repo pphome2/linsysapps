@@ -16,13 +16,13 @@ if [ -n "$bs" ]; then
     SQL_USER="root"
   fi
   $bs --backup --target-dir=/var/lib/mysql-backup/ --user="$SQL_USER" --password="$SQL_PASSWORD" 2>>/dev/null
-  tar cvvfz "$SYSTEMBACKUPDIR/$DEVICENAME-sql-bakup.tar.gz" /var/lib/mysql-backup/ 2>/dev/null >>"$LOGDIR/$LOGFILE"
-  ./sbackup-enc-file "$DEVICENAME-sql-bakup.tar.gz" "$SYSTEMBACKUPDIR" 2>/dev/null
+  tar cvvfz "$SYSTEMBACKUPDIR/$DEVICENAME-sql-backup.tar.gz" /var/lib/mysql-backup/ >/dev/null 2>/dev/null >>"$LOGDIR/$LOGFILE"
+  ./sbackup-enc-file "$DEVICENAME-sql-backup.tar.gz" "$SYSTEMBACKUPDIR" >/dev/null  2>/dev/null
 else
-  mysqldump --all-databases >./mysqldb.sql #2>>/var/log/sbackup.log
-  tar cvvfz "$SYSTEMBACKUPDIR/$DEVICENAME-sql.tar.gz" *.sql #2>/dev/null >>"$LOGDIR/$LOGFILE"
+  mysqldump --all-databases >./mysqldb.sql 2>>/var/log/sbackup.log
+  tar cvvfz "$SYSTEMBACKUPDIR/$DEVICENAME-sql.tar.gz" *.sql >/dev/null 2>/dev/null >>"$LOGDIR/$LOGFILE"
   rm *.sql
-  ./sbackup-enc-file "$DEVICENAME-sql.tar.gz" "$SYSTEMBACKUPDIR" 2>/dev/null
+  ./sbackup-enc-file "$DEVICENAME-sql.tar.gz" "$SYSTEMBACKUPDIR" >/dev/null 2>/dev/null
 fi
 
 #
