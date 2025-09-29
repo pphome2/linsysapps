@@ -8,11 +8,11 @@ dir=`pwd`
 py=`command -v python`
 pymain="pybck_start.py"
 
-if [ $py="" ]; then
+if [ ! -n "$py" ]; then
   py=`command -v python3`
 fi
 
-if [ $py!="" ]; then
+if [ -n "$py" ]; then
   echo "Python telepítés:$py"
 else
   echo "Python telepítés nem található."
