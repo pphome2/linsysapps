@@ -9,7 +9,14 @@
 
 . "./sbackup-init"
 
-e=`cat /proc/partitions | grep sd | awk '{print $4}' | grep -v sda | grep [123456789]`
+s=`cat /proc/partitions | grep nvme `
+
+if [ -z "$s" ]; then
+  e=`cat /proc/partitions | grep sd | awk '{print $4}' | grep -v sda | grep  [123456789] `
+else
+  e=`cat /proc/partitions | grep sd | awk '{print $4}' | grep  [123456789] `
+fi
+
 
 for x in $e; do
 	mkdir "/media/$x" >/dev/null 2>>"$LOGDIR/$LOGFILE"
