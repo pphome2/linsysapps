@@ -6,13 +6,13 @@ SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 FILE_DIR=$(pwd)
 #echo "A szkript pontos könyvtára: $FILE_DIR"
 
-if [ -f $1 ]; then
+if [ -f "$1" ]; then
   echo $1
-  cd $SCRIPT_DIR
-  ./sbackup-denc-file $FILE_DIR/$1
-  cd $FILE_DIR
+  cd "$SCRIPT_DIR"
+  ./sbackup-denc-file "$FILE_DIR/$1"
+  cd "$FILE_DIR"
   fn=${1:2}
-  mv $1 $fn
+  mv "$1" "$fn"
 fi
 
 #

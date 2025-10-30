@@ -1,0 +1,20 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+#echo "A szkript pontos könyvtára: $SCRIPT_DIR"
+
+FILE_DIR=$(pwd)
+#echo "A szkript pontos könyvtára: $FILE_DIR"
+
+for file in *; do
+  if [ -f "$file" ]; then
+    echo "$file"
+    cd "$SCRIPT_DIR"
+    ./sbackup-denc-file "$FILE_DIR/$file"
+    cd "$FILE_DIR"
+    fn=${file:2}
+    mv "$file" "$fn"
+  fi
+done
+
+#
