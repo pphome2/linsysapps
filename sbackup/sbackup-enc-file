@@ -13,10 +13,10 @@ if [ -n "$1" ]; then
       cd $2
     fi
 	echo $1
-	openssl aes-256-cbc -salt -a -e -in "$1" -out p-"$1" -iter "$MN" -k "$ENCODINGPASSPHARSE" #>>/dev/null 2>>/dev/null
+	openssl aes-256-cbc -salt -a -e -in "$1" -out "$1"-p -iter "$MN" -k "$ENCODINGPASSPHARSE" #>>/dev/null 2>>/dev/null
 	#openssl enc -aes-256-cbc -in "$b" -out p-"$b" -k $ENCODINGPASSPHARSE >>/dev/null 2>>/dev/null
 	rm "$1" >>/dev/null 2>>/dev/null
-	mv p-"$1" "$1" >>/dev/null 2>>/dev/null
+	mv "$1"-p "$1" >>/dev/null 2>>/dev/null
 fi
 
 #

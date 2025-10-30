@@ -16,10 +16,10 @@ fi
 
 for b in *.tar.gz; do
 	#echo $b
-	openssl aes-256-cbc -salt -a -e -in "$b" -out p-"$b" -iter "$MN" -k "$ENCODINGPASSPHARSE" >>/dev/null 2>>/dev/null
+	openssl aes-256-cbc -salt -a -e -in "$b" -out "$b"-p -iter "$MN" -k "$ENCODINGPASSPHARSE" >>/dev/null 2>>/dev/null
 	#openssl enc -aes-256-cbc -in "$b" -out p-"$b" -k $ENCODINGPASSPHARSE >>/dev/null 2>>/dev/null
 	rm "$b" >>/dev/null 2>>/dev/null
-	mv p-"$b" "$b" >>/dev/null 2>>/dev/null
+	mv "$b"-p "$b" >>/dev/null 2>>/dev/null
 done
 
 #
