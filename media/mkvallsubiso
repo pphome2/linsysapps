@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# video konvertálás
+#
+# feliratok kapcsolása fájlba
+#
+
+for i in *.mkv; do
+	sub=${i%.*}.srt
+	if [ -z "$1" ]; then
+		mkvsubiso "$sub"
+	fi
+	mkvsub "$i" "$sub"
+done
+
+#
