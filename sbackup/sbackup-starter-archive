@@ -52,7 +52,7 @@ fi
 # másolás egyéb szoftver részére
 ./sbackup-copy-other
 
-echo $ENCODINGPASSPHARSE > "$SYSTEMBACKUPDIR/$ARCHIVEBACKUP/$DEVICENAME.tar.gz"
+echo $ENCODINGPASSPHARSE > "$SYSTEMBACKUPDIR/$ARCHIVEDIR/$DEVICENAME.tar.gz"
 
 d=`date`
 echo "$d Archivum - Kész." >> "$LOGDIR/$LOGFILE"
