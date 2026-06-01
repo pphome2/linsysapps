@@ -1,16 +1,10 @@
 #!/bin/bash
 # qbackup - Fő vezérlő szkript
 
-# Log beállítás
-if [ "$LOG_SCREEN" == "1" ]; then
-    exec > /var/log/qbackup.log 2>&1
-else
-    exec > >(tee -a /var/log/qbackup.log) 2>&1
-fi
-
 # Megkeressük a szkript saját, valódi mappáját
 DIR="$(pwd)"
-SCRIPT_DIR="$(cd $(dirname '${BASH_SOURCE[0]}') && pwd)"
+SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
+echo $SCRIPT_NAME
 cd ${SCRIPT_DIR}
 
 # Konfiguráció beolvasása
@@ -20,6 +14,13 @@ else
     echo "Hiba: A qconfig nem található a fő szkript mellett!"
     cd ${DIR}
     exit 1
+fi
+
+# Log beállítás
+if [ "$LOG_SCREEN" = "1" ]; then
+    exec > /var/log/qbackup.log 2>&1
+else
+    exec > >(tee -a /var/log/qbackup.log) 2>&1
 fi
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup elindítva."
