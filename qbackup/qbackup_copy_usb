@@ -1,0 +1,64 @@
+#!/bin/bash
+# qbackup_copy_usb - USB eszközök detektálása, felcsatolása és mentése
+
+if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+
+echo "=== USB ESZKÖZÖK DETEKTÁLÁSA ÉS MENTÉSE ==="
+
+# 1. Ellenőrizzük, hogy root-ként fut-e
+if [ "$EUID" -ne 0 ]; then
+    echo "Hiba: Ezt a modult root-ként (sudo) kell futtatni a meghajtók csatolásához!"
+    exit 1
+fi
+
+# Létrehozzuk az ideiglenes csatolási pontot, ha nincs
+mkdir -p "$USB_MOUNT_POINT"
+
+# 2. Megkeressük az összes elérhető partíciót (pl. sdb1, sdc1, mmcblk0p1)
+# Kiszűrjük a fő rendszermeghajtókat az 'lsblk' segítségével
+PARTITIONS=$(lsblk -lnpo NAME,TYPE | grep -E 'part|rom' | awk '{print $1}')
+
+USB_FOUND=false
+
+for part in $PARTITIONS; do
+    # Kihagyjuk azokat, amik már fel vannak csatolva valahova (pl. a fő rendszer /)
+    if mountpoint -q "$part" 2>/dev/null || grep -q "$part" /proc/mounts; then
+        continue
+    fi
+
+    echo "Eszköz tesztelése: $part..."
+
+    # Megpróbáljuk felcsatolni az ideiglenes helyre
+    if mount "$part" "$USB_MOUNT_POINT" 2>/dev/null; then
+
+        # Ellenőrizzük, hogy ott van-e a jelzőfájl az USB gyökerében
+        if [ -f "${USB_MOUNT_POINT}/${USB_MARKER_FILE}" ]; then
+            echo "[TALÁLAT] Biztonságos mentési eszköz azonosítva a(z) $part partíción!"
+            USB_FOUND=true
+
+            # Meghatározzuk a mentés pontos helyét az USB-n (pl. egy 'qbackup' mappa az USB-n)
+            USB_TARGET_DIR="${USB_MOUNT_POINT}/qbackup"
+            mkdir -p "$USB_TARGET_DIR"
+
+            # Meghívjuk a qbackup_copy szkriptet, átadva neki az USB mappáját paraméterként
+            if [ -f "./qbackup_copy" ]; then
+                bash ./qbackup_copy "$USB_TARGET_DIR"
+            else
+                echo "Hiba: A qbackup_copy modul nem található!"
+            fi
+        fi
+
+        # Használat után azonnal lecsatoljuk, hogy ne maradjon nyitva az eszköz
+        umount "$USB_MOUNT_POINT"
+        echo "Eszköz lecsatolva: $part"
+        echo "------------------------------------"
+    fi
+done
+
+if [ "$USB_FOUND" = false ]; then
+    echo "Nem találtam olyan csatlakoztatott USB eszközt, amin szerepelne a(z) '$USB_MARKER_FILE' fájl."
+fi
+
+echo "=== USB MENTÉSI FOLYAMAT VÉGE ==="
+
+#

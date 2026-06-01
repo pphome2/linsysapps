@@ -1,0 +1,61 @@
+#!/bin/bash
+# qbackup_restore_file - Fájl helyreállítása (JAVÍTOTT, FIXEN A RESTORE MAPPÁBA)
+
+if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+
+if [ -z "$1" ]; then
+    echo "Hiba: Nem adtál meg keresési kifejezést!"
+    echo "Használat: $0 <fájlnév_vagy_töredék>"
+    exit 1
+fi
+
+SEARCH_TERM="$1"
+FOUND=false
+
+# Elmentjük a jelenlegi mappa teljes útvonalát, mert a cd miatt el fogunk ugrani
+CURRENT_DIR=$(pwd)
+# Biztosítjuk, hogy a restore mappa létezik, és abszolút utat csinálunk belőle
+mkdir -p "$RESTORE_DEST"
+RESTORE_ABS_PATH=$(realpath "$RESTORE_DEST")
+
+echo "=== Keresés a mentésekben a következőre: '*${SEARCH_TERM}*' ==="
+
+# 1. Mentések összegyűjtése (fordított időrend)
+ALL_BACKUPS=()
+for f in $(ls -vr ${BACKUP_DEST}/*_diff_*.tar.gz 2>/dev/null); do ALL_BACKUPS+=("$(realpath $f)"); done
+for f in $(ls ${BACKUP_DEST}/full_*.tar.gz 2>/dev/null); do ALL_BACKUPS+=("$(realpath $f)"); done
+
+# 2. Keresés és kicsomagolás
+for archive in "${ALL_BACKUPS[@]}"; do
+    MATCHING_FILES=$(tar -tzf "$archive" 2>/dev/null | grep -i "$SEARCH_TERM")
+
+    if [ ! -z "$MATCHING_FILES" ]; then
+        echo "[TALÁLAT] Itt található egyezés: $(basename $archive)"
+
+        # Átugrunk a restore mappába, így a tar fixen ide fog dolgozni
+        cd "$RESTORE_ABS_PATH" || exit 1
+
+        echo "$MATCHING_FILES" | while read -r FULL_PATH; do
+            echo "  -> Kicsomagolás ide: ${RESTORE_DEST}/${FULL_PATH}"
+
+            # A --overwrite kapcsoló biztosítja, hogy ha már ott volt egy régi verzió, felülírja
+            # Az --absolute-names segít abban, hogy a tar pontosan kezelje a belső struktúrát
+            tar -xzf "$archive" "$FULL_PATH" --overwrite 2>/dev/null
+        done
+
+        FOUND=true
+        # Visszatérünk az eredeti mappába
+        cd "$CURRENT_DIR" || exit 1
+        break
+    fi
+done
+
+if [ "$FOUND" = true ]; then
+    echo "=== A helyreállítás sikeresen befejeződött a(z) '$RESTORE_DEST' mappába! ==="
+else
+    # Biztonsági okokból visszaállunk, ha nem talált semmit
+    cd "$CURRENT_DIR" 2>/dev/null
+    echo "Sajnálom, a(z) '${SEARCH_TERM}' kifejezésre nincs találat."
+fi
+
+#

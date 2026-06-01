@@ -1,0 +1,56 @@
+#!/bin/bash
+# qbackup_tar_full - Teljes mentés készítése kizárásokkal
+
+if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+
+mkdir -p "$BACKUP_DEST" "$SNAP_DIR"
+
+if [ -f "./qbackup_clean" ]; then
+    bash ./qbackup_clean all
+fi
+
+# Kizárások kapcsolóinak összeállítása
+TAR_EXCLUDES=()
+for exc in "${EXCLUDES[@]}"; do
+    TAR_EXCLUDES+=("--exclude=$exc")
+done
+
+echo "=== TELJES MENTÉS INDÍTÁSA ==="
+
+# 1. Rendszer teljes mentés
+for dir in "${BACKUP_SYSTEM[@]}"; do
+    if [ -d "$dir" ]; then
+        name=$(basename "$dir")
+        echo "Teljes mentés: full_system_${name}"
+
+        rm -f "${SNAP_DIR}/system_${name}.snap"
+
+        # Beillesztettük a "${TAR_EXCLUDES[@]}" változót
+        tar "${TAR_EXCLUDES[@]}" -czg "${SNAP_DIR}/system_${name}.snap" -f "${BACKUP_DEST}/full_system_${name}.tar.gz" "$dir"
+    fi
+done
+
+# 2. Felhasználók teljes mentése
+for user_dir in /home/*; do
+    if [ -d "$user_dir" ]; then
+        user_name=$(basename "$user_dir")
+        for sub_dir in "${BACKUP_HOME_SUBDIRS[@]}"; do
+            full_path="${user_dir}/${sub_dir}"
+            if [ -d "$full_path" ]; then
+                echo "Teljes mentés: full_home_${user_name}_${sub_dir}"
+
+                rm -f "${SNAP_DIR}/home_${user_name}_${sub_dir}.snap"
+
+                tar "${TAR_EXCLUDES[@]}" -czg "${SNAP_DIR}/home_${user_name}_${sub_dir}.snap" -f "${BACKUP_DEST}/full_home_${user_name}_${sub_dir}.tar.gz" "$full_path"
+            fi
+        done
+    fi
+done
+
+if [ -f "./qbackup_rclone" ]; then
+    bash "./qbackup_rclone"
+fi
+
+echo "=== TELJES MENTÉS KÉSZ ==="
+
+#

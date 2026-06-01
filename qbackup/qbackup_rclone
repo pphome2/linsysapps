@@ -1,0 +1,35 @@
+#!/bin/bash
+# qbackup_rclone - Mentések szinkronizálása felhőbe rclone segítségével
+
+if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+
+echo "=== FELHŐBE MENTÉS INDÍTÁSA (RCLONE) ==="
+
+# 1. Ellenőrizzük, hogy az rclone telepítve van-e a rendszeren
+if ! command -v rclone &> /dev/null; then
+    echo "Hiba: Az 'rclone' nincs telepítve a rendszeren!"
+    echo "Telepítés pl. Ubuntu/Debian esetén: sudo apt install rclone"
+    exit 1
+fi
+
+# 2. Ellenőrizzük, hogy a helyi backup mappa létezik-e és nem üres-e
+if [ ! -d "$BACKUP_DEST" ] || [ -z "$(ls -A "$BACKUP_DEST")" ]; then
+    echo "Figyelem: A helyi mentési mappa ($BACKUP_DEST) üres vagy nem létezik. Nincs mit szinkronizálni."
+    exit 0
+fi
+
+echo "Szinkronizálás folyamatban: $BACKUP_DEST  ==>  ${RCLONE_REMOTE}:${RCLONE_DEST_DIR}"
+
+# 3. Szinkronizálás indítása
+# A --update kapcsoló biztosítja, hogy a felhőben lévő újabb fájlokat ne írja felül (bár nálunk a helyi az irányadó)
+# A --verbose (-v) kiírja, hogy épp mit csinál
+rclone sync "$BACKUP_DEST" "${RCLONE_REMOTE}:${RCLONE_DEST_DIR}" --verbose
+
+if [ $? -eq 0 ]; then
+    echo "=== A felhőbe szinkronizálás SIKERESEN befejeződött! ==="
+else
+    echo "Hiba: Az rclone szinkronizálás során hiba lépett fel!"
+    exit 1
+fi
+
+#

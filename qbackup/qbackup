@@ -1,0 +1,84 @@
+#!/bin/bash
+# qbackup - Fő vezérlő szkript
+
+# Log beállítás
+if [ "$LOG_SCREEN" == "1" ]; then
+    exec > /var/log/qbackup.log 2>&1
+else
+    exec > >(tee -a /var/log/qbackup.log) 2>&1
+fi
+
+# Megkeressük a szkript saját, valódi mappáját
+DIR="$(pwd)"
+SCRIPT_DIR="$(cd $(dirname '${BASH_SOURCE[0]}') && pwd)"
+cd ${SCRIPT_DIR}
+
+# Konfiguráció beolvasása
+if [ -f "./qconfig" ]; then
+    source ./qconfig
+else
+    echo "Hiba: A qconfig nem található a fő szkript mellett!"
+    cd ${DIR}
+    exit 1
+fi
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup elindítva."
+
+# Modul futtatása
+if [ -f "./qbackup_tar" ]; then
+    bash ./qbackup_tar
+else
+    echo "Hiba: A qbackup_tar nem található!"
+fi
+
+# Ellenőrzés a másolások előtt
+if [ -f "./qbackup_check" ]; then
+    bash ./qbackup_check
+    # Ha a check hibával tér vissza (exit 1), leállítjuk a folyamatot,
+    # így nem szinkronizáljuk a hibás fájlt a felhőbe/USB-re!
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "=================================="
+        echo ""
+        echo "A mentés sérült, a szinkronizálási folyamatok biztonsági okokból leállítva!"
+        echo ""
+        echo "=================================="
+        echo ""
+        cd ${DIR}
+        exit 1
+    fi
+fi
+
+
+# mariadb mentés
+if [ -f "./qbackup_mariadb" ]; then
+    bash ./qbackup_mariadb
+fi
+
+
+# Rclone modul futtatása a különbözeti mentés után
+if [ -f "./qbackup_rclone" ]; then
+    bash ./qbackup_rclone
+else
+    echo "Hiba: A qbackup_copy nem található!"
+fi
+
+# Copy modul futtatása a különbözeti mentés után
+if [ -f "./qbackup_copy" ]; then
+    bash ./qbackup_copy
+else
+    echo "Hiba: A qbackup_copy nem található!"
+fi
+
+# Copy USB modul futtatása a különbözeti mentés után
+if [ -f "./qbackup_copy_usb" ]; then
+    bash ./qbackup_copy_usb
+else
+    echo "Hiba: A qbackup_copy nem található!"
+fi
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup sikeresen lefutott."
+
+cd ${DIR}
+
+#

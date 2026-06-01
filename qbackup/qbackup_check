@@ -1,0 +1,55 @@
+#!/bin/bash
+# qbackup_check - Mentési archívumok integritásának és épségének ellenőrzése
+
+if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+
+echo "=== MENTÉSEK ÉPSÉGÉNEK ELLENŐRZÉSE (INTEGRITÁS TESZT) ==="
+
+if [ ! -d "$BACKUP_DEST" ] || [ -z "$(ls -A "$BACKUP_DEST")" ]; then
+    echo "Figyelem: A mentési mappa ($BACKUP_DEST) üres vagy nem létezik. Nincs mit ellenőrizni."
+    exit 0
+fi
+
+TOTAL_FILES=0
+CORRUPTED_FILES=0
+FAILED_LIST=()
+
+# Összegyűjtjük az összes tar.gz fájlt a mappából
+mapfile -t ARCHIVES < <(find "$BACKUP_DEST" -maxdepth 1 -name "*.tar.gz" -type f)
+
+for archive in "${ARCHIVES[@]}"; do
+    filename=$(basename "$archive")
+    ((TOTAL_FILES++))
+
+    echo -n "Tesztelés: $filename ... "
+
+    # A tar -tf parancs végigolvassa a fájlt. A kimenetet elnémítjuk (> /dev/null),
+    # mert csak a hibakód (exit status) érdekel minket.
+    tar -tzf "$archive" > /dev/null 2>&1
+
+    if [ $? -eq 0 ]; then
+        echo "[OK]"
+    else
+        echo "[HIBA - SÉRÜLT FÁJL!]"
+        ((CORRUPTED_FILES++))
+        FAILED_LIST+=("$filename")
+    fi
+done
+
+echo "--------------------------------------------------"
+echo "=== ELLENŐRZÉS VÉGE ==="
+echo "Összesen vizsgált fájl: $TOTAL_FILES"
+
+if [ "$CORRUPTED_FILES" -eq 0 ]; then
+    echo "Eredmény: MINDEN MENTÉS ÉP ÉS OLVASHATÓ!"
+    exit 0
+else
+    echo "Eredmény: SÉRÜLT FÁJLOKAT TALÁLTAM! ($CORRUPTED_FILES db)"
+    echo "A sérült fájlok listája:"
+    for failed in "${FAILED_LIST[@]}"; do
+        echo "  - $failed"
+    done
+    exit 1
+fi
+
+#

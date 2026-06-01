@@ -1,0 +1,54 @@
+#!/bin/bash
+# qbackup_restore_full - Teljes rendszer- és home helyreállítás
+
+if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+
+mkdir -p "$RESTORE_DEST"
+echo "=== TELJES HELYREÁLLÍTÁS INDÍTÁSA -> $RESTORE_DEST ==="
+
+# 1. RENDSZERMENTÉSEK HELYREÁLLÍTÁSA ---
+for dir in "${BACKUP_SYSTEM[@]}"; do
+    name=$(basename "$dir")
+    full_tar="${BACKUP_DEST}/full_system_${name}.tar.gz"
+
+    if [ -f "$full_tar" ]; then
+        echo "Rendszer alap kicsomagolása: system_${name}..."
+        # A --strip-components=1 opcionális, ha le akarod vágni a kezdő / jelet, 
+        # de a tar alapból relatívként csomagolja ki a -C (directory) miatt.
+        tar -xzf "$full_tar" -C "$RESTORE_DEST"
+
+        # Különbözeti mentések keresése időrendben (ls -v)
+        # Keresünk mindent, ami *_diff_system_NAME.tar.gz
+        for diff_tar in $(ls -v ${BACKUP_DEST}/*_diff_system_${name}.tar.gz 2>/dev/null); do
+            echo "  -> Különbözet alkalmazása: $(basename $diff_tar)..."
+            tar -xzf "$diff_tar" -C "$RESTORE_DEST"
+        done
+    else
+        echo "Figyelem: Nem található teljes mentés ehhez: system_${name}"
+    fi
+done
+
+# 2. FELHASZNÁLÓI MENTÉSEK HELYREÁLLÍTÁSA ---
+for user_dir in /home/*; do
+    if [ -d "$user_dir" ]; then
+        user_name=$(basename "$user_dir")
+        for sub_dir in "${BACKUP_HOME_SUBDIRS[@]}"; do
+            full_tar="${BACKUP_DEST}/full_home_${user_name}_${sub_dir}.tar.gz"
+
+            if [ -f "$full_tar" ]; then
+                echo "Home alap kicsomagolása: home_${user_name}_${sub_dir}..."
+                tar -xzf "$full_tar" -C "$RESTORE_DEST"
+
+                # Különbözeti mentések alkalmazása időrendben
+                for diff_tar in $(ls -v ${BACKUP_DEST}/*_diff_home_${user_name}_${sub_dir}.tar.gz 2>/dev/null); do
+                    echo "  -> Különbözet alkalmazása: $(basename $diff_tar)..."
+                    tar -xzf "$diff_tar" -C "$RESTORE_DEST"
+                done
+            fi
+        done
+    fi
+done
+
+echo "=== HELYREÁLLÍTÁS SIKERESEN BEFEJEZŐDÖTT ==="
+
+#

@@ -1,0 +1,64 @@
+#!/bin/bash
+# qconfig
+# Konfigurációs fájl a qbackup rendszerhez
+
+# Log képernyőre is (1 ha megjelenjen)
+LOG_SCREEN="0"
+
+# Rendszer mantés
+BACKUP_SYSTEM=("/etc" "/var/www")
+
+# home könyvtárak mentése
+BACKUP_HOME_SUBDIRS=("Dokumentumok" "public_html" "Projektek")
+
+# Mentések célmappája
+BACKUP_DEST="./backup"
+
+# KIZÁRÁSOK: ezeket a mintákat/mappákat hagyja ki a tar
+# Kizárjuk a teljes backup mappát, hogy ne mentse saját magát
+EXCLUDES=(
+    "backup"
+    "*.tmp"
+    ".cache"
+)
+
+# Hány napig tartsuk meg a különbözeti (diff) mentéseket?
+KEEP_DAYS=7
+
+# Tar snapshot fájlok helye
+SNAP_DIR="./backup/snapshots"
+
+# Helyreállítási célkönyvtár
+RESTORE_DEST="./restore"
+
+# Az rclone config-ban megadott titkosított profil neve
+# crypt típust választani
+RCLONE_USB_CRYPT_REMOTE="usb_titkos"
+
+# Visszaállítás: felcsatolni az USB-t, majd rclone config-ban az út a felcsatolt mappa
+# rclone sync "usb_titkos:" "./restore" --verbose
+
+# Rclone távoli tárhely neve (amit az 'rclone config' során megadtál, pl: gdrive)
+RCLONE_REMOTE="gdrive"
+
+# A mappa neve a felhőben (ha nem létezik, az rclone létrehozza)
+RCLONE_DEST_DIR="Mentés"
+
+# Helyi könyvtár útvonalak, ahová plusz másolatot szeretnénk a backup mappáról
+# Ide adhatsz meg abszolút utakat (pl. /mnt/nas/mentes vagy /media/user/usb_drive)
+BACKUP_COPY_DESTS=(
+    "/tmp/teszt_masolat-0"
+    "/tmp/teszt_masolat-1"
+)
+
+# Az USB-n keresendő jelzőfájl neve (ezt kézzel hozd létre az USB gyökerében, pl: touch /media/pendrive/.qbackup_target)
+USB_MARKER_FILE=".backupusb"
+
+# Ideiglenes csatolási pont az USB-knek
+USB_MOUNT_POINT="/mnt/qbackup_usb"
+
+# MariaDB / MySQL hozzáférések
+DB_USER="root"
+DB_PASS=""
+
+#

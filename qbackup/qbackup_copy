@@ -1,0 +1,47 @@
+#!/bin/bash
+# qbackup_copy - Mentések másolása egyéb helyi könyvtárakba rclone-nal
+
+if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+
+echo "=== MENTÉSEK MÁSOLÁSA HELYI MEGOSTÁSOKRA ==="
+
+# 1. Ellenőrizzük az rclone meglétét
+if ! command -v rclone &> /dev/null; then
+    echo "Hiba: Az 'rclone' nincs telepítve!"
+    exit 1
+fi
+
+# 2. Ellenőrizzük, hogy van-e mit másolni
+if [ ! -d "$BACKUP_DEST" ] || [ -z "$(ls -A "$BACKUP_DEST")" ]; then
+    echo "Figyelem: A helyi mentési mappa ($BACKUP_DEST) üres vagy nem létezik."
+    exit 0
+fi
+
+# 3. Célútvonalak meghatározása (Paraméter vagy Konfiguráció)
+if [ ! -z "$1" ]; then
+    # HA PARAMÉTERT KAP: Az USB modul hívott meg minket.
+    # Nem a fizikai mappába írunk, hanem a konfigurált rclone crypt-en keresztül!
+    echo "USB mentés detektálva. Titkosított rclone másolás indítása..."
+
+    rclone sync "$BACKUP_DEST" "${RCLONE_USB_CRYPT_REMOTE}:" --verbose
+    RCLONE_STATUS=$?
+else
+    # HA NINCS PARAMÉTER: A sima helyi másolás fut a konfigból vett mappákba
+    RCLONE_STATUS=0
+    for dest in "${BACKUP_COPY_DESTS[@]}"; do
+        echo "Szinkronizálás a következő helyre: $dest"
+        rclone sync "$BACKUP_DEST" "$dest" --verbose
+        if [ $? -ne 0 ]; then RCLONE_STATUS=1; fi
+    done
+fi
+
+# Végeredmény ellenőrzése
+if [ $RCLONE_STATUS -eq 0 ]; then
+    echo "=== MÁSOLÁSI FOLYAMAT SIKERESEN VÉGEZETT ==="
+else
+    echo "=== [HIBA] A másolás során hiba lépett fel! ==="
+    exit 1
+fi
+echo "=== MÁSOLÁSI FOLYAMAT VÉGE ==="
+
+#
