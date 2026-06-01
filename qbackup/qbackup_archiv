@@ -1,0 +1,45 @@
+#!/bin/bash
+# qbackup - Fő vezérlő szkript
+
+DIR="$(pwd)"
+# Megkeressük a szkript saját, valódi mappáját
+SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
+cd ${SCRIPT_DIR}
+
+# Konfiguráció beolvasása
+if [ -f "./qconfig" ]; then
+    source ./qconfig
+else
+    echo "Hiba: A qconfig nem található a fő szkript mellett!"
+    cd ${DIR}
+    exit 1
+fi
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup elindítva."
+
+# Modul futtatása
+if [ -f "./qbackup_tar_archiv" ]; then
+    bash ./qbackup_tar_archiv
+else
+    echo "Hiba: A qbackup_tar_archiv nem található!"
+fi
+
+# Ellenőrzés a másolások előtt
+if [ -f "./qbackup_check" ]; then
+    bash ./qbackup_check
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "=================================="
+        echo ""
+        echo "A mentés sérült, a szinkronizálási folyamatok biztonsági okokból leállítva!"
+        echo ""
+        echo "=================================="
+        echo ""
+    fi
+fi
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup_full TELJES mentés sikeresen lefutott."
+
+cd ${DIR}
+
+#

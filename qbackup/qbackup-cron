@@ -1,7 +1,0 @@
-# /etc/cron.d/qbackup
-
-0 15 * * * *        root   /opt/qbackup/qbackup
-0 13 * * * 5        root   /opt/qbackup/qbackup-full
-
-#
-

@@ -6,21 +6,31 @@
 LOG_SCREEN="0"
 
 # Rendszer mantés
-BACKUP_SYSTEM=("/etc" "/var/www")
+BACKUP_SYSTEM=("/etc"
+               "/var/www/html"
+               )
 
 # home könyvtárak mentése
-BACKUP_HOME_SUBDIRS=("Dokumentumok" "public_html" "Projektek")
+BACKUP_HOME_SUBDIRS=("Dokumentumok"
+                     "public_html"
+                     "Projektek"
+                     "Asztal"
+                     )
 
 # Mentések célmappája
 BACKUP_DEST="./backup"
 
 # KIZÁRÁSOK: ezeket a mintákat/mappákat hagyja ki a tar
 # Kizárjuk a teljes backup mappát, hogy ne mentse saját magát
-EXCLUDES=(
-    "backup"
-    "*.tmp"
-    ".cache"
-)
+EXCLUDES=("backup"
+          "_"
+          "*.tmp"
+          ".cache"
+          )
+
+# Archívum mentéshez
+ARCHIV=("_"
+        )
 
 # Hány napig tartsuk meg a különbözeti (diff) mentéseket?
 KEEP_DAYS=7
@@ -46,10 +56,9 @@ RCLONE_DEST_DIR="Mentés"
 
 # Helyi könyvtár útvonalak, ahová plusz másolatot szeretnénk a backup mappáról
 # Ide adhatsz meg abszolút utakat (pl. /mnt/nas/mentes vagy /media/user/usb_drive)
-BACKUP_COPY_DESTS=(
-    "/tmp/teszt_masolat-0"
-    "/tmp/teszt_masolat-1"
-)
+BACKUP_COPY_DESTS=("/tmp/teszt_masolat-0"
+                   "/tmp/teszt_masolat-1"
+                   )
 
 # Az USB-n keresendő jelzőfájl neve (ezt kézzel hozd létre az USB gyökerében, pl: touch /media/pendrive/.qbackup_target)
 USB_MARKER_FILE=".backupusb"

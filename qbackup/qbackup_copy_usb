@@ -55,7 +55,6 @@ for part in $PARTITIONS; do
     fi
 done
 
-# Töröljük az ideiglenes csatolási pontot
 rmdir "$USB_MOUNT_POINT"
 
 if [ "$USB_FOUND" = false ]; then

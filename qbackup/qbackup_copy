@@ -23,7 +23,7 @@ if [ ! -z "$1" ]; then
     # Nem a fizikai mappába írunk, hanem a konfigurált rclone crypt-en keresztül!
     echo "USB mentés detektálva. Titkosított rclone másolás indítása..."
 
-    rclone sync "$BACKUP_DEST" "${RCLONE_USB_CRYPT_REMOTE}:" --verbose
+    rclone sync "$BACKUP_DEST" "${RCLONE_USB_CRYPT_REMOTE}:Mentés" --verbose
     RCLONE_STATUS=$?
 else
     # HA NINCS PARAMÉTER: A sima helyi másolás fut a konfigból vett mappákba
