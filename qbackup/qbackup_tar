@@ -1,61 +1,73 @@
 #!/bin/bash
-# qbackup_tar - Különbözeti mentés (Dátummal az elején, kizárásokkal)
+#
+# QBackup
+#
+# qbackup_tar
+# Különbözeti mentés
+#
 
+# Konfiguráció betöltése
 if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
 
+# Log
 DATE=$(date +%F)
-echo "=== KÜLÖNBÖZETI MENTÉS INDÍTÁSA ==="
 
-# Kizárások kapcsolóinak összeállítása
-TAR_EXCLUDES=()
-for exc in "${EXCLUDES[@]}"; do
-    TAR_EXCLUDES+=("--exclude=$exc")
+# Log
+echo ""
+echo "=== Különbözeti mentés indítása"
+echo $0
+echo ""
+
+# Kizárások
+Q_TAR_EXCLUDES=()
+for exc in "${Q_EXCLUDES[@]}"; do
+    Q_TAR_EXCLUDES+=("--exclude=$exc")
 done
 
-# 1. Rendszer különbözeti mentés
-for dir in "${BACKUP_SYSTEM[@]}"; do
+# Rendszer
+for dir in "${Q_BACKUP_SYSTEM[@]}"; do
     if [ -d "$dir" ]; then
         name=$(basename "$dir")
 
-        if [ -f "${SNAP_DIR}/system_${name}.snap" ]; then
+        if [ -f "${Q_SNAP_DIR}/system_${name}.snap" ]; then
             echo "Különbözeti mentés: ${DATE}_diff_system_${name}"
-            cp "${SNAP_DIR}/system_${name}.snap" "${SNAP_DIR}/system_${name}_tmp.snap"
+            cp "${Q_SNAP_DIR}/system_${name}.snap" "${Q_SNAP_DIR}/system_${name}_tmp.snap"
 
-            # A fájlnév most a $DATE változóval kezdődik!
-            tar "${TAR_EXCLUDES[@]}" -czg "${SNAP_DIR}/system_${name}_tmp.snap" -f "${BACKUP_DEST}/${DATE}_diff_system_${name}.tar.gz" "$dir"
+            tar "${Q_TAR_EXCLUDES[@]}" -czg "${Q_SNAP_DIR}/system_${name}_tmp.snap" -f "${Q_BACKUP_DEST}/${DATE}_diff_system_${name}.tar.gz" "$dir"
 
-            rm -f "${SNAP_DIR}/system_${name}_tmp.snap"
+            rm -f "${Q_SNAP_DIR}/system_${name}_tmp.snap"
         else
-            echo "Hiba: Nem található teljes mentés a következőhöz: system_${name}."
+            echo "Nincs teljes mentés: system_${name}."
         fi
     fi
 done
 
-# 2. Felhasználók különbözeti mentése
+# Felhasználók
 for user_dir in /home/*; do
     if [ -d "$user_dir" ]; then
         user_name=$(basename "$user_dir")
-        for sub_dir in "${BACKUP_HOME_SUBDIRS[@]}"; do
+        for sub_dir in "${Q_BACKUP_HOME_SUBDIRS[@]}"; do
             full_path="${user_dir}/${sub_dir}"
             if [ -d "$full_path" ]; then
-                snap_file="${SNAP_DIR}/home_${user_name}_${sub_dir}.snap"
+                snap_file="${Q_SNAP_DIR}/home_${user_name}_${sub_dir}.snap"
 
                 if [ -f "$snap_file" ]; then
                     echo "Különbözeti mentés: ${DATE}_diff_home_${user_name}_${sub_dir}"
                     cp "$snap_file" "${snap_file}_tmp"
 
-                    # A fájlnév most a $DATE változóval kezdődik!
-                    tar "${TAR_EXCLUDES[@]}" -czg "${snap_file}_tmp" -f "${BACKUP_DEST}/${DATE}_diff_home_${user_name}_${sub_dir}.tar.gz" "$full_path"
+                    tar "${Q_TAR_EXCLUDES[@]}" -czg "${snap_file}_tmp" -f "${Q_BACKUP_DEST}/${DATE}_diff_home_${user_name}_${sub_dir}.tar.gz" "$full_path"
 
                     rm -f "${snap_file}_tmp"
                 else
-                    echo "Hiba: Nincs teljes mentés ehhez: home_${user_name}_${sub_dir}"
+                    echo "Nincs teljes mentés ehhez: home_${user_name}_${sub_dir}"
                 fi
             fi
         done
     fi
 done
 
-echo "=== KÜLÖNBÖZETI MENTÉS KÉSZ ==="
+echo "=== Különbözeti mentés megtörtént"
+echo ""
 
 #
+

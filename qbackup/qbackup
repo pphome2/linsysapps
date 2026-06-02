@@ -1,11 +1,16 @@
 #!/bin/bash
-# qbackup - Fő vezérlő szkript
+#
+# QBackup
+#
+# qbackup
+# Különbözeti mentés vezérlés
+#
 
-# Megkeressük a szkript saját, valódi mappáját
+# A szkript indítási mappája
 DIR="$(pwd)"
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
-echo $SCRIPT_NAME
 cd ${SCRIPT_DIR}
+#echo $SCRIPT_NAME
 
 # Konfiguráció beolvasása
 if [ -f "./qconfig" ]; then
@@ -16,70 +21,68 @@ else
     exit 1
 fi
 
-# Log beállítás
-if [ "$LOG_SCREEN" = "1" ]; then
-    exec > /var/log/qbackup.log 2>&1
-else
-    exec > >(tee -a /var/log/qbackup.log) 2>&1
-fi
+# Log
+echo ""
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Különbözeti mentés elindult"
+echo "$0"
+echo ""
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup elindítva."
-
-# Modul futtatása
+# 1.
+# Tömörítés
 if [ -f "./qbackup_tar" ]; then
     bash ./qbackup_tar
 else
     echo "Hiba: A qbackup_tar nem található!"
 fi
 
-# Ellenőrzés a másolások előtt
+# 2.
+# Fájlok ellenőrzésa a másolások előtt
 if [ -f "./qbackup_check" ]; then
     bash ./qbackup_check
-    # Ha a check hibával tér vissza (exit 1), leállítjuk a folyamatot,
-    # így nem szinkronizáljuk a hibás fájlt a felhőbe/USB-re!
+    # Hibás fájlok
     if [ $? -ne 0 ]; then
-        echo ""
-        echo "=================================="
-        echo ""
-        echo "A mentés sérült, a szinkronizálási folyamatok biztonsági okokból leállítva!"
-        echo ""
-        echo "=================================="
-        echo ""
         cd ${DIR}
         exit 1
     fi
 fi
 
-
-# mariadb mentés
+# 3.
+# Mariadb mentés
 if [ -f "./qbackup_mariadb" ]; then
     bash ./qbackup_mariadb
+else
+    echo "Hiba: A qbackup_mariadb nem található!"
 fi
 
-
-# Rclone modul futtatása a különbözeti mentés után
+# 4.
+# Rclone modul futtatása - felhős másolat készítése
 if [ -f "./qbackup_rclone" ]; then
     bash ./qbackup_rclone
 else
-    echo "Hiba: A qbackup_copy nem található!"
+    echo "Hiba: A qbackup_rclone nem található!"
 fi
 
-# Copy modul futtatása a különbözeti mentés után
+# 5.
+# Copy modul futtatása - helyi másolatok készítése
 if [ -f "./qbackup_copy" ]; then
     bash ./qbackup_copy
 else
     echo "Hiba: A qbackup_copy nem található!"
 fi
 
-# Copy USB modul futtatása a különbözeti mentés után
+# 6.
+# Copy USB modul - külső hardver mentés
 if [ -f "./qbackup_copy_usb" ]; then
     bash ./qbackup_copy_usb
 else
-    echo "Hiba: A qbackup_copy nem található!"
+    echo "Hiba: A qbackup_copy_usb nem található!"
 fi
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup sikeresen lefutott."
+# Log
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Különbözeti mentés megtörtént"
+echo ""
 
 cd ${DIR}
 
 #
+

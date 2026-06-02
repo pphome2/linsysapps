@@ -1,47 +1,59 @@
 #!/bin/bash
-# qbackup_copy - Mentések másolása egyéb helyi könyvtárakba rclone-nal
+#
+# QBackup
+#
+# qbackup_copy
+# Mentések másolása egyéb helyi könyvtárakba vagy külső meghajtóra
+#
 
+# Konfiguráció betöltése
 if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
 
-echo "=== MENTÉSEK MÁSOLÁSA HELYI MEGOSTÁSOKRA ==="
+# Log
+echo ""
+echo "=== Mentés másolása helyi mappákba"
+echo "$0"
+echo ""
 
-# 1. Ellenőrizzük az rclone meglétét
+# rclone ellenőrzése
 if ! command -v rclone &> /dev/null; then
     echo "Hiba: Az 'rclone' nincs telepítve!"
     exit 1
 fi
 
-# 2. Ellenőrizzük, hogy van-e mit másolni
-if [ ! -d "$BACKUP_DEST" ] || [ -z "$(ls -A "$BACKUP_DEST")" ]; then
-    echo "Figyelem: A helyi mentési mappa ($BACKUP_DEST) üres vagy nem létezik."
+# Mentés ellenőrzése
+if [ ! -d "$Q_BACKUP_DEST" ] || [ -z "$(ls -A "$Q_BACKUP_DEST")" ]; then
+    echo "Figyelem: A helyi mentési mappa ($Q_BACKUP_DEST) üres vagy nem létezik. Kilépés."
     exit 0
 fi
 
-# 3. Célútvonalak meghatározása (Paraméter vagy Konfiguráció)
+# Paraméter
 if [ ! -z "$1" ]; then
-    # HA PARAMÉTERT KAP: Az USB modul hívott meg minket.
-    # Nem a fizikai mappába írunk, hanem a konfigurált rclone crypt-en keresztül!
-    echo "USB mentés detektálva. Titkosított rclone másolás indítása..."
+    # USB mentés - rclone crypt
+    echo "Titkosított rclone másolás indítása..."
 
-    rclone sync "$BACKUP_DEST" "${RCLONE_USB_CRYPT_REMOTE}:Mentés" --verbose
-    RCLONE_STATUS=$?
+    rclone sync "$Q_BACKUP_DEST" "${Q_RCLONE_USB_CRYPT_REMOTE}:Mentés" --verbose
+    Q_RCLONE_STATUS=$?
 else
-    # HA NINCS PARAMÉTER: A sima helyi másolás fut a konfigból vett mappákba
-    RCLONE_STATUS=0
-    for dest in "${BACKUP_COPY_DESTS[@]}"; do
-        echo "Szinkronizálás a következő helyre: $dest"
-        rclone sync "$BACKUP_DEST" "$dest" --verbose
-        if [ $? -ne 0 ]; then RCLONE_STATUS=1; fi
+    # Helyi mappákba másolás
+    Q_RCLONE_STATUS=0
+    for q_dest in "${Q_BACKUP_COPY_DESTS[@]}"; do
+        echo "Szinkronizálás a következő helyre: $q_dest"
+        rclone sync "$Q_BACKUP_DEST" "$q_dest" --verbose
+        if [ $? -ne 0 ]; then Q_RCLONE_STATUS=1; fi
     done
 fi
 
-# Végeredmény ellenőrzése
-if [ $RCLONE_STATUS -eq 0 ]; then
-    echo "=== MÁSOLÁSI FOLYAMAT SIKERESEN VÉGEZETT ==="
+# Hiba kezelés
+if [ $Q_RCLONE_STATUS -eq 0 ]; then
+    echo "=== Másolás sikeresen végrehajtva."
 else
-    echo "=== [HIBA] A másolás során hiba lépett fel! ==="
+    echo "=== [HIBA] A másolás során hiba történt!"
     exit 1
 fi
-echo "=== MÁSOLÁSI FOLYAMAT VÉGE ==="
+
+# Log
+echo "=== Másolás megtörtént"
+echo ""
 
 #

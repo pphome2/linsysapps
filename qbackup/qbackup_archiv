@@ -1,8 +1,13 @@
 #!/bin/bash
-# qbackup - Fő vezérlő szkript
+#
+# QBackup
+#
+# qbackup_archiv
+# Archív mentés vezérlés - speciális könyvtárakból
+#
 
 DIR="$(pwd)"
-# Megkeressük a szkript saját, valódi mappáját
+# A szkript indítási mappája
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 cd ${SCRIPT_DIR}
 
@@ -15,31 +20,31 @@ else
     exit 1
 fi
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup elindítva."
+# Log
+echo ""
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup_archiv archívum mentése elindult"
+echo "$0"
+echo ""
 
-# Modul futtatása
+# Archiv mappák tömörítése
 if [ -f "./qbackup_tar_archiv" ]; then
     bash ./qbackup_tar_archiv
 else
     echo "Hiba: A qbackup_tar_archiv nem található!"
 fi
 
-# Ellenőrzés a másolások előtt
+# Elkészült fájlok ellenőrzése
 if [ -f "./qbackup_check" ]; then
     bash ./qbackup_check
-    if [ $? -ne 0 ]; then
-        echo ""
-        echo "=================================="
-        echo ""
-        echo "A mentés sérült, a szinkronizálási folyamatok biztonsági okokból leállítva!"
-        echo ""
-        echo "=================================="
-        echo ""
-    fi
+    #if [ $? -ne 0 ]; then
+    #fi
 fi
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup_full TELJES mentés sikeresen lefutott."
+# Log
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup_archiv archívum mentése megtörtént"
+echo ""
 
 cd ${DIR}
 
 #
+

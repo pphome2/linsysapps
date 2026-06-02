@@ -1,35 +1,47 @@
 #!/bin/bash
-# qbackup_rclone - Mentések szinkronizálása felhőbe rclone segítségével
+#
+# QBackup
+#
+# qbackup_rclone
+# Mentések szinkronizálása felhőbe rclone segítségével
+#
 
+# Konfiguráció betöltése
 if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
 
-echo "=== FELHŐBE MENTÉS INDÍTÁSA (RCLONE) ==="
+# Log
+echo ""
+echo "=== Felhőbe (rclone) mentés"
+echo $0
+echo ""
 
-# 1. Ellenőrizzük, hogy az rclone telepítve van-e a rendszeren
+# rclone ellenőrése
 if ! command -v rclone &> /dev/null; then
-    echo "Hiba: Az 'rclone' nincs telepítve a rendszeren!"
-    echo "Telepítés pl. Ubuntu/Debian esetén: sudo apt install rclone"
+    echo "Hiba: Az 'rclone' nem található!"
     exit 1
 fi
 
-# 2. Ellenőrizzük, hogy a helyi backup mappa létezik-e és nem üres-e
-if [ ! -d "$BACKUP_DEST" ] || [ -z "$(ls -A "$BACKUP_DEST")" ]; then
-    echo "Figyelem: A helyi mentési mappa ($BACKUP_DEST) üres vagy nem létezik. Nincs mit szinkronizálni."
+# Mentési mappa ellenőrzése
+if [ ! -d "$Q_BACKUP_DEST" ] || [ -z "$(ls -A "$Q_BACKUP_DEST")" ]; then
+    echo "A helyi mentési mappa ($Q_BACKUP_DEST) üres vagy nem létezik."
     exit 0
 fi
 
-echo "Szinkronizálás folyamatban: $BACKUP_DEST  ==>  ${RCLONE_REMOTE}:${RCLONE_DEST_DIR}"
+echo "Szinkronizálás folyamatban: $Q_BACKUP_DEST  =>  ${Q_RCLONE_REMOTE}:${Q_RCLONE_DEST_DIR}"
 
-# 3. Szinkronizálás indítása
-# A --update kapcsoló biztosítja, hogy a felhőben lévő újabb fájlokat ne írja felül (bár nálunk a helyi az irányadó)
-# A --verbose (-v) kiírja, hogy épp mit csinál
-rclone sync "$BACKUP_DEST" "${RCLONE_REMOTE}:${RCLONE_DEST_DIR}" --verbose
+# Szinkronizálás indítása
+# A --update - a felhőben lévő újabb fájlokat ne írja felül
+# A --verbose (-v) - állapot kiírása
+rclone sync "$Q_BACKUP_DEST" "${Q_RCLONE_REMOTE}:${Q_RCLONE_DEST_DIR}" --verbose
 
 if [ $? -eq 0 ]; then
-    echo "=== A felhőbe szinkronizálás SIKERESEN befejeződött! ==="
+    echo "=== A felhőbe szinkronizálásmegtörtént"
 else
-    echo "Hiba: Az rclone szinkronizálás során hiba lépett fel!"
+    echo "Hiba: Az rclone szinkronizálás során hiba történt!"
     exit 1
 fi
 
+echo ""
+
 #
+

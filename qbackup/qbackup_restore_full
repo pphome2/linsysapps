@@ -1,54 +1,65 @@
 #!/bin/bash
-# qbackup_restore_full - Teljes rendszer- és home helyreállítás
+#
+# QBackup
+#
+# qbackup_restore_full
+# Minden mentés kicsomagolása
+#
 
+# Konfiguráció betöltése
 if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
 
-mkdir -p "$RESTORE_DEST"
-echo "=== TELJES HELYREÁLLÍTÁS INDÍTÁSA -> $RESTORE_DEST ==="
+# Mappa ellenőrzés
+mkdir -p "$Q_RESTORE_DEST"
 
-# 1. RENDSZERMENTÉSEK HELYREÁLLÍTÁSA ---
-for dir in "${BACKUP_SYSTEM[@]}"; do
+# Log
+echo ""
+echo "=== Minden mentés visszaállítása"
+echo $0
+echo ""
+
+# Rendszer
+for dir in "${Q_BACKUP_SYSTEM[@]}"; do
     name=$(basename "$dir")
-    full_tar="${BACKUP_DEST}/full_system_${name}.tar.gz"
+    full_tar="${Q_BACKUP_DEST}/full_system_${name}.tar.gz"
 
     if [ -f "$full_tar" ]; then
-        echo "Rendszer alap kicsomagolása: system_${name}..."
-        # A --strip-components=1 opcionális, ha le akarod vágni a kezdő / jelet, 
-        # de a tar alapból relatívként csomagolja ki a -C (directory) miatt.
-        tar -xzf "$full_tar" -C "$RESTORE_DEST"
+        echo "${name}..."
+        tar -xzf "$full_tar" -C "$Q_RESTORE_DEST"
 
-        # Különbözeti mentések keresése időrendben (ls -v)
-        # Keresünk mindent, ami *_diff_system_NAME.tar.gz
-        for diff_tar in $(ls -v ${BACKUP_DEST}/*_diff_system_${name}.tar.gz 2>/dev/null); do
-            echo "  -> Különbözet alkalmazása: $(basename $diff_tar)..."
-            tar -xzf "$diff_tar" -C "$RESTORE_DEST"
+        # Különbözeti mentések
+        for diff_tar in $(ls -v ${Q_BACKUP_DEST}/*_diff_system_${name}.tar.gz 2>/dev/null); do
+            echo "Különbözeti mentés kicsomagolása $(basename $diff_tar)..."
+            tar -xzf "$diff_tar" -C "$Q_RESTORE_DEST"
         done
     else
-        echo "Figyelem: Nem található teljes mentés ehhez: system_${name}"
+        echo "Nem található teljes mentés ${name}"
     fi
 done
 
-# 2. FELHASZNÁLÓI MENTÉSEK HELYREÁLLÍTÁSA ---
+# home mappa visszaállítása
 for user_dir in /home/*; do
     if [ -d "$user_dir" ]; then
         user_name=$(basename "$user_dir")
-        for sub_dir in "${BACKUP_HOME_SUBDIRS[@]}"; do
-            full_tar="${BACKUP_DEST}/full_home_${user_name}_${sub_dir}.tar.gz"
+        for sub_dir in "${Q_BACKUP_HOME_SUBDIRS[@]}"; do
+            full_tar="${Q_BACKUP_DEST}/full_home_${user_name}_${sub_dir}.tar.gz"
 
             if [ -f "$full_tar" ]; then
-                echo "Home alap kicsomagolása: home_${user_name}_${sub_dir}..."
-                tar -xzf "$full_tar" -C "$RESTORE_DEST"
+                echo "Kicsomagolás: home_${user_name}_${sub_dir}..."
+                tar -xzf "$full_tar" -C "$Q_RESTORE_DEST"
 
-                # Különbözeti mentések alkalmazása időrendben
-                for diff_tar in $(ls -v ${BACKUP_DEST}/*_diff_home_${user_name}_${sub_dir}.tar.gz 2>/dev/null); do
-                    echo "  -> Különbözet alkalmazása: $(basename $diff_tar)..."
-                    tar -xzf "$diff_tar" -C "$RESTORE_DEST"
+                # Különbözeti mentések
+                for diff_tar in $(ls -v ${Q_BACKUP_DEST}/*_diff_home_${user_name}_${sub_dir}.tar.gz 2>/dev/null); do
+                    echo "Különbözet mentés kicsomagolása $(basename $diff_tar)..."
+                    tar -xzf "$diff_tar" -C "$Q_RESTORE_DEST"
                 done
             fi
         done
     fi
 done
 
-echo "=== HELYREÁLLÍTÁS SIKERESEN BEFEJEZŐDÖTT ==="
+echo "=== Visszaállítás megtörtént"
+echo ""
 
 #
+

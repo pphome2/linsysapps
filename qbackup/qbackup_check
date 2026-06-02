@@ -1,55 +1,67 @@
 #!/bin/bash
-# qbackup_check - Mentési archívumok integritásának és épségének ellenőrzése
+#
+# QBackup
+#
+# qbackup_check
+# Mentési archívumok integritásának és épségének ellenőrzése
+#
 
+# Konfiguráció betöltése
 if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
 
-echo "=== MENTÉSEK ÉPSÉGÉNEK ELLENŐRZÉSE (INTEGRITÁS TESZT) ==="
+# Log
+echo ""
+echo "=== Mentések épségének ellenőrzése (integritás teszt)"
+echo "$0"
+echo ""
 
-if [ ! -d "$BACKUP_DEST" ] || [ -z "$(ls -A "$BACKUP_DEST")" ]; then
-    echo "Figyelem: A mentési mappa ($BACKUP_DEST) üres vagy nem létezik. Nincs mit ellenőrizni."
+# Mentési mappa ellenőrzés
+if [ ! -d "$Q_BACKUP_DEST" ] || [ -z "$(ls -A "$Q_BACKUP_DEST")" ]; then
+    echo "Figyelem: A mentési mappa ($Q_BACKUP_DEST) üres vagy nem létezik. Kilépés."
     exit 0
 fi
 
-TOTAL_FILES=0
-CORRUPTED_FILES=0
-FAILED_LIST=()
+Q_TOTAL_FILES=0
+Q_CORRUPTED_FILES=0
+Q_FAILED_LIST=()
 
-# Összegyűjtjük az összes tar.gz fájlt a mappából
-mapfile -t ARCHIVES < <(find "$BACKUP_DEST" -maxdepth 1 -name "*.tar.gz" -type f)
+# Ak az összes tar.gz fájl a mappából
+mapfile -t Q_ARCHIVES < <(find "$Q_BACKUP_DEST" -maxdepth 1 -name "*.tar.gz" -type f)
 
-for archive in "${ARCHIVES[@]}"; do
-    filename=$(basename "$archive")
+#
+for q_archive in "${Q_ARCHIVES[@]}"; do
+    q_filename=$(basename "$q_archive")
     ((TOTAL_FILES++))
-
-    echo -n "Tesztelés: $filename ... "
-
-    # A tar -tf parancs végigolvassa a fájlt. A kimenetet elnémítjuk (> /dev/null),
-    # mert csak a hibakód (exit status) érdekel minket.
-    tar -tzf "$archive" > /dev/null 2>&1
-
+    echo -n "Tesztelés: $q_filename ... "
+    # A tar -tf parancs végigolvassa a fájlt
+    tar -tzf "$q_archive" > /dev/null 2>&1
+    #Kilépési statusz ellenőrzése (hiba történt-e)
     if [ $? -eq 0 ]; then
-        echo "[OK]"
+        echo "[+]"
     else
-        echo "[HIBA - SÉRÜLT FÁJL!]"
-        ((CORRUPTED_FILES++))
-        FAILED_LIST+=("$filename")
+        echo "[-] Sérült fájl."
+        ((Q_CORRUPTED_FILES++))
+        Q_FAILED_LIST+=("$q_filename")
     fi
 done
 
-echo "--------------------------------------------------"
-echo "=== ELLENŐRZÉS VÉGE ==="
-echo "Összesen vizsgált fájl: $TOTAL_FILES"
+#Log
+echo ""
+echo "=== Ellenőrzés vége"
+echo "Összesen vizsgált fájl: $Q_TOTAL_FILES"
 
-if [ "$CORRUPTED_FILES" -eq 0 ]; then
-    echo "Eredmény: MINDEN MENTÉS ÉP ÉS OLVASHATÓ!"
+if [ "$Q_CORRUPTED_FILES" -eq 0 ]; then
+    echo "Eredmény: Minden mentés rendben."
     exit 0
 else
-    echo "Eredmény: SÉRÜLT FÁJLOKAT TALÁLTAM! ($CORRUPTED_FILES db)"
+    echo "Eredmény: Sérült fájlok! ($Q_CORRUPTED_FILES db)"
     echo "A sérült fájlok listája:"
-    for failed in "${FAILED_LIST[@]}"; do
-        echo "  - $failed"
+    for q_failed in "${Q_FAILED_LIST[@]}"; do
+        echo "  - $q_failed"
     done
     exit 1
 fi
+echo ""
 
 #
+

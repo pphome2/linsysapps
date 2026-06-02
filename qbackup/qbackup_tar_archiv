@@ -1,40 +1,51 @@
 #!/bin/bash
-# qbackup_tar_full - Teljes mentés készítése kizárásokkal
+#
+# QBackup
+#
+# qbackup_tar_archiv
+# Teljes emntés az archívumokról
+#
 
+# Konfiguráció betöltése
 if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
 
-# Ellenőrizzük, hogy a változó nem üres-e, nehogy mindent kitoroljon/mentsen
-if [ -z "$ARCHIV" ]; then
-    echo "Hiba: Az ARCHIV változó üres a qconfig-ban!" >&2
+# Mappa beállítás ellenőrzése
+if [ -z "$Q_ARCHIV" ]; then
+    echo "A Q_ARCHIV változó üres a qconfig-ban!" >&2
     exit 1
 fi
 
-mkdir -p "$BACKUP_DEST" "$SNAP_DIR"
+# Mappák létrehozása
+mkdir -p "$Q_BACKUP_DEST" "$Q_SNAP_DIR"
 
-echo "=== TELJES MENTÉS INDÍTÁSA ==="
+# Log
+echo ""
+echo "=== Teljes archív mentés indítása"
+echo $0
+echo ""
 
-# Felhasználók $ARCHIV mappáinak teljes mentése
+# Felhasználók
 for user_dir in /home/*; do
     if [ -d "$user_dir" ]; then
         user_name=$(basename "$user_dir")
-        for sub_dir in "${BACKUP_HOME_SUBDIRS[@]}"; do
+        for sub_dir in "${Q_BACKUP_HOME_SUBDIRS[@]}"; do
             full_path="${user_dir}/${sub_dir}"
             if [ -d "$full_path" ]; then
+                find "$full_path" -mindepth 1 -maxdepth 1 -type d -name "$Q_ARCHIV" | while read -r archiv_dir; do
 
-                # Megkeressük a sub_dir-en belüli, $ARCHIV nevű mappát
-                find "$full_path" -mindepth 1 -maxdepth 1 -type d -name "$ARCHIV" | while read -r archiv_dir; do
+                    echo "Teljes mentés: full_home_${user_name}_${sub_dir}_${Q_ARCHIV}"
 
-                    echo "Teljes mentés: full_home_${user_name}_${sub_dir}_${ARCHIV}"
+                    rm -f "${Q_SNAP_DIR}/home_${user_name}_${sub_dir}_${Q_ARCHIV}.snap"
 
-                    rm -f "${SNAP_DIR}/home_${user_name}_${sub_dir}_${ARCHIV}.snap"
-
-                    tar -czg "${SNAP_DIR}/home_${user_name}_${sub_dir}_${ARCHIV}.snap" -f "${BACKUP_DEST}/full_home_${user_name}_${sub_dir}_${ARCHIV}.tar.gz" "$archiv_dir"
+                    tar -czg "${Q_SNAP_DIR}/home_${user_name}_${sub_dir}_${Q_ARCHIV}.snap" -f "${Q_BACKUP_DEST}/full_home_${user_name}_${sub_dir}_${Q_ARCHIV}.tar.gz" "$archiv_dir"
                 done
             fi
         done
     fi
 done
 
-echo "=== TELJES MENTÉS KÉSZ ==="
+echo "=== Teljes archív mentés megtörtént"
+echo ""
 
 #
+

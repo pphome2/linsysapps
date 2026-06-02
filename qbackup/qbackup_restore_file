@@ -1,61 +1,84 @@
 #!/bin/bash
-# qbackup_restore_file - Fájl helyreállítása (JAVÍTOTT, FIXEN A RESTORE MAPPÁBA)
+#
+# QBackup
+#
+# qbackup_restore_file
+# Fájl visszaállítása
+#
 
+# Konfiguráció betöltése
 if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
 
+# Használat ellenőrzése
 if [ -z "$1" ]; then
-    echo "Hiba: Nem adtál meg keresési kifejezést!"
-    echo "Használat: $0 <fájlnév_vagy_töredék>"
+    echo "Használat: $0 <fájlnév>"
     exit 1
 fi
 
-SEARCH_TERM="$1"
-FOUND=false
+Q_SEARCH_TERM="$1"
+Q_FOUND=false
 
-# Elmentjük a jelenlegi mappa teljes útvonalát, mert a cd miatt el fogunk ugrani
-CURRENT_DIR=$(pwd)
-# Biztosítjuk, hogy a restore mappa létezik, és abszolút utat csinálunk belőle
-mkdir -p "$RESTORE_DEST"
-RESTORE_ABS_PATH=$(realpath "$RESTORE_DEST")
+# Visszaállítási mappa létrehozása és abszolút útvonala
+mkdir -p "$Q_RESTORE_DEST"
+Q_RESTORE_ABS_PATH=$(realpath "$Q_RESTORE_DEST")
 
-echo "=== Keresés a mentésekben a következőre: '*${SEARCH_TERM}*' ==="
+# Log
+echo ""
+echo "=== Visszaállítás indítása: '*${Q_SEARCH_TERM}*'"
+echo "$0"
+echo ""
 
-# 1. Mentések összegyűjtése (fordított időrend)
+# Mentések összegyűjtése biztonságosan, tömbökkel
 ALL_BACKUPS=()
-for f in $(ls -vr ${BACKUP_DEST}/*_diff_*.tar.gz 2>/dev/null); do ALL_BACKUPS+=("$(realpath $f)"); done
-for f in $(ls ${BACKUP_DEST}/full_*.tar.gz 2>/dev/null); do ALL_BACKUPS+=("$(realpath $f)"); done
 
-# 2. Keresés és kicsomagolás
+# Különbözeti mentések (fordított sorrendben, a legfrissebb az első)
+# ha nincs ilyen fáj:
+shopt -s nullglob
+for f in "${Q_BACKUP_DEST}"/*_diff_*.tar.gz; do
+    ALL_BACKUPS+=("$(realpath "$f")")
+done
+# Fordítot sorrend
+if [ ${#ALL_BACKUPS[@]} -gt 0 ]; then
+    # tömb megfordítása
+    eval 'ALL_BACKUPS=('$(printf '"%s" ' "${ALL_BACKUPS[@]}" | tac)')'
+fi
+
+# Teljes mentések hozzáadása a végére
+for f in "${Q_BACKUP_DEST}"/full_*.tar.gz; do
+    ALL_BACKUPS+=("$(realpath "$f")")
+done
+
+shopt -u nullglob
+
+# Keresés és kicsomagolás# Keresés és kicsomagolás
 for archive in "${ALL_BACKUPS[@]}"; do
-    MATCHING_FILES=$(tar -tzf "$archive" 2>/dev/null | grep -i "$SEARCH_TERM")
+    # Keresés: a 'grep -v "/$"' itt is kell, hogy CSAK a konkrét fájlokat gyűjtsük össze.
+    # Ha a fájlokat adjuk oda a tar-nak, a tar magától felépíti hozzájuk a teljes mappautat!
+    Q_MATCHING_FILES=$(tar -tzf "$archive" 2>/dev/null | grep -i "$Q_SEARCH_TERM" | grep -v "/$")
 
-    if [ ! -z "$MATCHING_FILES" ]; then
-        echo "[TALÁLAT] Itt található egyezés: $(basename $archive)"
+    if [ -n "$Q_MATCHING_FILES" ]; then
+        echo "Találat ebben a mentésben: $(basename "$archive")"
 
-        # Átugrunk a restore mappába, így a tar fixen ide fog dolgozni
-        cd "$RESTORE_ABS_PATH" || exit 1
-
-        echo "$MATCHING_FILES" | while read -r FULL_PATH; do
-            echo "  -> Kicsomagolás ide: ${RESTORE_DEST}/${FULL_PATH}"
-
-            # A --overwrite kapcsoló biztosítja, hogy ha már ott volt egy régi verzió, felülírja
-            # Az --absolute-names segít abban, hogy a tar pontosan kezelje a belső struktúrát
-            tar -xzf "$archive" "$FULL_PATH" --overwrite 2>/dev/null
-        done
-
-        FOUND=true
-        # Visszatérünk az eredeti mappába
-        cd "$CURRENT_DIR" || exit 1
-        break
+        while read -r Q_FULL_PATH; do
+            [ -z "$Q_FULL_PATH" ] && continue
+            # Eltávolítás: / vagy ./
+            #Q_REL_PATH=$(echo "$Q_FULL_PATH" | sed -E 's/^\.\///; s/^\///')
+            echo "Kicsomagolás - ${Q_FULL_PATH}"
+            # Célmappában kicsomagolás
+            ( cd "$Q_RESTORE_ABS_PATH" && tar -xzf "$archive" "$Q_FULL_PATH" --overwrite 2>/dev/null )
+        done <<< "$Q_MATCHING_FILES"
+        Q_FOUND=true
+        break # Megvan a legfrissebb verzió, leállhatunk
     fi
 done
 
-if [ "$FOUND" = true ]; then
-    echo "=== A helyreállítás sikeresen befejeződött a(z) '$RESTORE_DEST' mappába! ==="
+if [ "$Q_FOUND" = true ]; then
+    echo "=== A visszaállítás megtörtént ide: '$Q_RESTORE_ABS_PATH'"
 else
-    # Biztonsági okokból visszaállunk, ha nem talált semmit
-    cd "$CURRENT_DIR" 2>/dev/null
-    echo "Sajnálom, a(z) '${SEARCH_TERM}' kifejezésre nincs találat."
+    echo "'${Q_SEARCH_TERM}': nincs találat a mentésekben."
 fi
 
+echo ""
+
 #
+

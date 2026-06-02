@@ -1,0 +1,52 @@
+#!/bin/bash
+#
+# QBackup
+#
+# qfile_denc
+# Kódolt fájl visszaállítása
+#
+
+# Konfiguráció betöltése
+if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+
+# Ellenőrzés
+if ! command -v rclone &> /dev/null; then
+    echo "Az 'rclone' nincs telepítve!"
+    exit 1
+fi
+
+# Log
+echo "=== Kódolt fájl visszaállítása"
+echo ""
+
+# Paraméter ellenőrzés
+if [ ! -d "$1" ] && [ ! -f "$1" ]; then
+    echo "A kódolái mappa ($1) üres vagy nem létezik."
+    exit 0
+fi
+
+# Fájlnév
+Q_ORIG_NAME=$(rclone backend decode "${Q_RCLONE_USB_CRYPT_REMOTE}:" "$1" --crypt-remote "$PWD")
+
+# 2. Ha a fájl már létezik helyben, módosítjuk az új nevet (pl. utótaggal)
+if [ -f "$Q_ORIG_NAME" ]; then
+    Q_DEST_NAME="${Q_ORIG_NAME}.restored"
+else
+    Q_DEST_NAME="$Q_ORIG_NAME"
+fi
+
+# Visszaállítás
+rclone copyto "${Q_RCLONE_USB_CRYPT_REMOTE}:${Q_ORIG_NAME}" "./${Q_DEST_NAME}" --crypt-remote "$PWD" --verbose
+RCLONE_STATUS=$?
+
+# Végeredmény ellenőrzése
+if [ $RCLONE_STATUS -eq 0 ]; then
+    echo "=== Visszaállítás megtörtént."
+else
+    echo "=== Hibás visszaállítás"
+    exit 1
+fi
+echo ""
+
+#
+

@@ -1,6 +1,12 @@
 #!/bin/bash
-# qbackup - Fő vezérlő szkript
+#
+# QBackup
+#
+# qbackup_full
+# Teljes mentés
+#
 
+# Indítási mappa
 DIR="$(pwd)"
 # Megkeressük a szkript saját, valódi mappáját
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
@@ -15,46 +21,64 @@ else
     exit 1
 fi
 
-# Log törlése
-rm /var/log/qbackup.log
+# Log
+echo ""
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup_full teljes mentés elindítva"
+echo $0
+echo ""
 
-# Log beállítás
-if [ "$LOG_SCREEN" = "1" ]; then
-    exec > /var/log/qbackup.log 2>&1
-else
-    exec > >(tee -a /var/log/qbackup.log) 2>&1
-fi
-
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup elindítva."
-
-# Modul futtatása
+# 1. Teljes mentés futtatása
 if [ -f "./qbackup_tar_full" ]; then
     bash ./qbackup_tar_full
 else
     echo "Hiba: A qbackup_tar_full nem található!"
 fi
 
-# Ellenőrzés a másolások előtt
+# 2. Ellenőrzés
 if [ -f "./qbackup_check" ]; then
     bash ./qbackup_check
     if [ $? -ne 0 ]; then
-        echo ""
-        echo "=================================="
-        echo ""
-        echo "A mentés sérült, a szinkronizálási folyamatok biztonsági okokból leállítva!"
-        echo ""
-        echo "=================================="
-        echo ""
+        cd ${DIR}
+        exit 1
     fi
 fi
 
-# Mariadb mentés teljes
+# 3.
+# Mariadb mentés
 if [ -f "./qbackup_mariadb" ]; then
     bash ./qbackup_mariadb full
+else
+    echo "Hiba: A qbackup_mariadb nem található!"
 fi
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup_full TELJES mentés sikeresen lefutott."
+# 4.
+# Rclone modul futtatása - felhős másolat készítése
+if [ -f "./qbackup_rclone" ]; then
+    bash ./qbackup_rclone
+else
+    echo "Hiba: A qbackup_rclone nem található!"
+fi
+
+# 5.
+# Copy modul futtatása - helyi másolatok készítése
+if [ -f "./qbackup_copy" ]; then
+    bash ./qbackup_copy
+else
+    echo "Hiba: A qbackup_copy nem található!"
+fi
+
+# 6.
+# Copy USB modul - külső hardver mentés
+if [ -f "./qbackup_copy_usb" ]; then
+    bash ./qbackup_copy_usb
+else
+    echo "Hiba: A qbackup_copy_usb nem található!"
+fi
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] teljes mentés megtörtént"
+echo ""
 
 cd ${DIR}
 
 #
+

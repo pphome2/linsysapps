@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# QBackup
+#
+# starter
+# Indító
+#
+
+# A szkript indítási mappája
+DIR="$(pwd)"
+SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
+cd ${SCRIPT_DIR}
+#echo $SCRIPT_NAME
+
+# Konfiguráció beolvasása
+if [ -f "./qconfig" ]; then
+    source ./qconfig
+else
+    echo "Hiba: A qconfig nem található a fő szkript mellett!"
+    cd ${DIR}
+    exit 1
+fi
+
+# Log törlése
+if [ "$2" == "1" ]; then
+    rm "$Q_LOG_FILE"
+fi
+
+# Indítás, log-ok kezelésével
+if [ "$Q_LOG_SCREEN" = "1" ]; then
+    bash "./$1" 2>&1 | tee -a "$Q_LOG_FILE"
+else
+    bash "./$1" >> "$Q_LOG_FILE" 2>&1
+fi
+
+cd ${DIR}
+
+#
+

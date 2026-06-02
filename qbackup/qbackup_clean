@@ -1,19 +1,34 @@
 #!/bin/bash
-# qbackup_clean - Mentések takarítása
+#
+# QBackup
+#
+# qbackup_clean
+# Mentések törlése
+#
 
+# Konfiguráció betöltése
 if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
 
-# Ha "all" paramétert kap, mindent töröl, egyébként csak a régieket
+# Log
+echo ""
+echo "== Tisztítás"
+echo "$0"
 
+# Ha "all" paramétert kap, mindent töröl, egyébként csak a régieket
 if [ "$1" == "all" ]; then
-    echo "Teljes mentés indul, az összes eddigi különbözeti mentés törlése..."
-    rm -f ${BACKUP_DEST}/*_diff_*.tar.gz
-    rm -f ${SNAP_DIR}/*.snap
+    # Log
+    echo "Az összes eddigi különbözeti mentés törlése..."
+    rm -f ${Q_BACKUP_DEST}/*_diff_*.tar.gz
+    rm -f ${Q_SNAP_DIR}/*.snap
 else
-    echo "Régi különbözeti mentések törlése (${KEEP_DAYS} napnál régebbiek)..."
-    if [ -d "$BACKUP_DEST" ]; then
-        find "$BACKUP_DEST" -name "*_diff_*.tar.gz" -type f -mtime +${KEEP_DAYS} -delete
+    echo "Régi különbözeti mentések törlése (${Q_KEEP_DAYS} napnál régebbiek)..."
+    if [ -d "$Q_BACKUP_DEST" ]; then
+        find "$Q_BACKUP_DEST" -name "*_diff_*.tar.gz" -type f -mtime +${Q_KEEP_DAYS} -delete
     fi
 fi
 
+echo "== Tisztítás megtörtént"
+echo ""
+
 #
+

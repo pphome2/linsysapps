@@ -1,75 +1,88 @@
 #!/bin/bash
-# qbackup_restore_from_file - Helyreállítás egy megadott mentési fájlból kiindulva
+#
+# QBackup
+#
+# qbackup_restore_from_file
+# Mentésekből visszaállítás
+#
 
+# Konfiguráció betöltése
 if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
 
 # Paraméterek ellenőrzése
 if [ -z "$1" ] || [ -z "$2" ]; then
-    echo "Hiba: Hiányzó paraméterek!"
-    echo "Használat: $0 <mentés_fájl_neve.tar.gz> <keresett_fájlnév_vagy_töredék>"
-    echo "Példa: $0 2026-06-02_diff_home_bela_Dokumentumok.tar.gz szakdoga.txt"
+    echo "Használat: $0 <mentés_fájl_neve.tar.gz> <keresett_elem>"
     exit 1
 fi
 
-TARGET_ARCHIVE="$1"
-SEARCH_TERM="$2"
+Q_TARGET_ARCHIVE="$1"
+Q_SEARCH_TERM="$2"
 
-# Ellenőrizzük, hogy a megadott mentés létezik-e
-if [ ! -f "${BACKUP_DEST}/${TARGET_ARCHIVE}" ] && [ ! -f "$TARGET_ARCHIVE" ]; then
-    echo "Hiba: A megadott mentési fájl nem található: $TARGET_ARCHIVE"
+# Megadott mentés ellenőrzése
+if [ ! -f "${Q_BACKUP_DEST}/${Q_TARGET_ARCHIVE}" ] && [ ! -f "$Q_TARGET_ARCHIVE" ]; then
+    echo "Hiba: A megadott mentési fájl nem található: $Q_TARGET_ARCHIVE"
     exit 1
 fi
 
 # Ha csak a fájlnevet adta meg a user, kiegészítjük a backup mappával
-if [ -f "${BACKUP_DEST}/${TARGET_ARCHIVE}" ]; then
-    ARCHIVE_PATH="${BACKUP_DEST}/${TARGET_ARCHIVE}"
+if [ -f "${Q_BACKUP_DEST}/${Q_TARGET_ARCHIVE}" ]; then
+    Q_ARCHIVE_PATH="${Q_BACKUP_DEST}/${Q_TARGET_ARCHIVE}"
 else
-    ARCHIVE_PATH="$TARGET_ARCHIVE"
+    Q_ARCHIVE_PATH="$Q_TARGET_ARCHIVE"
 fi
 
-mkdir -p "$RESTORE_DEST"
-echo "=== Helyreállítás indítása a(z) $(basename "$ARCHIVE_PATH") alapján ==="
+# Mappa létrehozása
+mkdir -p "$Q_RESTORE_DEST"
 
-# 1. Megkeressük a pontos belső útvonalat az adott archívumban
-MATCHING_FILES=$(tar -tzf "$ARCHIVE_PATH" 2>/dev/null | grep -i "$SEARCH_TERM")
+# Log
+echo ""
+echo "=== Visszaállítás indítása: "$Q_ARCHIVE_PATH""
+echo $0
+echo ""
 
-if [ -z "$MATCHING_FILES" ]; then
-    echo "Hiba: A(z) '${SEARCH_TERM}' nem található ebben a mentésben: $(basename "$ARCHIVE_PATH")"
+# Pontos belső útvonal
+Q_MATCHING_FILES=$(tar -tzf "$Q_ARCHIVE_PATH" 2>/dev/null | grep -i "$Q_SEARCH_TERM")
+
+if [ -z "$Q_MATCHING_FILES" ]; then
+    echo "'${SEARCH_TERM}' nem található a mentésben"
     exit 1
 fi
 
-# 2. Logika: Teljes vagy különbözeti mentést kaptunk?
-filename=$(basename "$ARCHIVE_PATH")
+# Mentés típus
+filename=$(basename "$Q_ARCHIVE_PATH")
 
-echo "$MATCHING_FILES" | while read -r FULL_PATH; do
-    echo "Talált útvonal: $FULL_PATH"
+# Kicsomagolás
+while read -r Q_FULL_PATH; do
+    # Üres sor, kilépés
+    [ -z "$Q_FULL_PATH" ] && continue
+
+    echo "Talált útvonal: $Q_FULL_PATH"
 
     if [[ "$filename" == *"_diff_"* ]]; then
-        # KÜLÖNBÖZETI MENTÉS ESETÉN: meg kell keresni a hozzá tartozó FULL mentést
-        # Példa: 2026-06-02_diff_home_bela_Dokumentumok.tar.gz -> full_home_bela_Dokumentumok.tar.gz
-
-        # Levágjuk a dátumot és a diff tag-et a név elejéről
+        # Különbözeti mentés
         base_name=$(echo "$filename" | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}_diff_//')
-        full_archive_path="${BACKUP_DEST}/full_${base_name}"
+        full_archive_path="${Q_BACKUP_DEST}/full_${base_name}"
 
         if [ -f "$full_archive_path" ]; then
-            echo "  -> 1. Lépés: Alapfájl kicsomagolása a TELJES mentésből ($(basename "$full_archive_path"))..."
-            tar -xzf "$full_archive_path" "$FULL_PATH" -C "$RESTORE_DEST" 2>/dev/null
+            echo "- Kicsomagolás a teljes mentésből ($(basename "$full_archive_path"))..."
+            ( cd "$Q_RESTORE_DEST" && tar -xzf "../$full_archive_path" "$Q_FULL_PATH" -C "$Q_RESTORE_DEST" 2>/dev/null )
 
-            echo "  -> 2. Lépés: Módosítások alkalmazása a KÜLÖNBÖZETI mentésből ($filename)..."
-            tar -xzf "$ARCHIVE_PATH" "$FULL_PATH" -C "$RESTORE_DEST" 2>/dev/null
+            echo "- Keresés a különbözeti mentésekben ($filename)..."
+            ( cd "$Q_RESTORE_DEST" && tar -xzf "../$Q_ARCHIVE_PATH" "$Q_FULL_PATH" -C "$Q_RESTORE_DEST" 2>/dev/null )
         else
-            echo "  [Figyelem] Nem találtam meg a hozzá tartozó teljes mentést (${full_archive_path})!"
-            echo "  Megpróbálom csak a különbözeti fájlból kicsomagolni (ha új fájl volt, sikerülni fog)..."
-            tar -xzf "$ARCHIVE_PATH" "$FULL_PATH" -C "$RESTORE_DEST" 2>/dev/null
+            echo "Nincs teljes mentés (${full_archive_path})"
+            ( cd "$Q_RESTORE_DEST" && tar -xzf "../$Q_ARCHIVE_PATH" "$Q_FULL_PATH" -C "$Q_RESTORE_DEST" 2>/dev/null )
         fi
     else
-        # TELJES MENTÉS ESETÉN: csak simán kicsomagoljuk
-        echo "  -> Kicsomagolás a teljes mentésből..."
-        tar -xzf "$ARCHIVE_PATH" "$FULL_PATH" -C "$RESTORE_DEST"
+        # Teljes mentés
+        echo "- Kicsomagolás a teljes mentésből..."
+        ( cd "$Q_RESTORE_DEST" && tar -xzf "../$Q_ARCHIVE_PATH" "$Q_FULL_PATH" -C "$Q_RESTORE_DEST" )
     fi
-done
+done <<< "$Q_MATCHING_FILES"
 
-echo "=== Helyreállítás kész! Ellenőrizd a '$RESTORE_DEST' mappát. ==="
+
+echo "=== Visszaállítás megtörtént"
+echo ""
 
 #
+

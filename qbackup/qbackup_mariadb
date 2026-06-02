@@ -1,58 +1,70 @@
 #!/bin/bash
-# qbackup_mariadb - MariaDB/MySQL adatbázisok mentése
+#
+# QBackup
+#
+# qbackup_mariadb
+# MariaDB/MySQL adatbázisok mentése
+#
 
+# Konfiguráció betöltése
 if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
 
-echo "=== MARIADB ADATBÁZISOK MENTÉSE ==="
+# Log
+echo ""
+echo "=== Mariadb adatbázisok mentése"
+echo $0
+echo ""
 
-# 1. Ellenőrizzük, hogy a dump eszköz elérhető-e
+# db dump elérése
 if command -v mariadb-dump &> /dev/null; then
-    DUMP_CMD="mariadb-dump"
+    Q_DUMP_CMD="mariadb-dump"
 elif command -v mysqldump &> /dev/null; then
-    DUMP_CMD="mysqldump"
+    Q_DUMP_CMD="mysqldump"
 else
-    echo "Hiba: Sem a 'mariadb-dump', sem a 'mysqldump' nem található!"
+    echo "Hiba: adatbázis mentéshez program nem található!"
     exit 1
 fi
 
-# 2. Fájlnév meghatározása a paraméter alapján
+# Paraméter alapján mentés típus
 if [ "$1" == "full" ]; then
     # Teljes mentés esetén fix név
-    FINAL_TAR="${BACKUP_DEST}/full_mariadb_all_databases.tar.gz"
+    Q_FINAL_TAR="${Q_BACKUP_DEST}/full_mariadb_all_databases.tar.gz"
     echo "Típus: Teljes mentés (felülírással)"
 else
     # Napi mentés esetén dátummal ellátott név
     DATE=$(date +%F)
-    FINAL_TAR="${BACKUP_DEST}/${DATE}_diff_mariadb_all_databases.tar.gz"
+    Q_FINAL_TAR="${Q_BACKUP_DEST}/${DATE}_diff_mariadb_all_databases.tar.gz"
     echo "Típus: Napi mentés (időzített)"
 fi
 
 # Ideiglenes tiszta .sql fájl helye
-TMP_SQL="/tmp/all_databases_dump.sql"
+Q_TMP_SQL="/tmp/all_databases_dump.sql"
 
-# 3. Dump elkészítése
-# Az --all-databases mindent ment. A jelszót biztonságosan adjuk át.
+# DB-ből adatok mentése
 echo "Adatbázisok exportálása..."
-if [ "$DB_PASS" == "" ]; then
-    $DUMP_CMD -u "$DB_USER" --all-databases --single-transaction --quick --lock-tables=false > "$TMP_SQL"
+if [ "$Q_DB_PASS" == "" ]; then
+    $Q_DUMP_CMD -u "$Q_DB_USER" --all-databases --single-transaction --quick --lock-tables=false > "$Q_TMP_SQL"
 else
-    $DUMP_CMD -u "$DB_USER" -p"$DB_PASS" --all-databases --single-transaction --quick --lock-tables=false > "$TMP_SQL"
+    $Q_DUMP_CMD -u "$Q_DB_USER" -p"$Q_DB_PASS" --all-databases --single-transaction --quick --lock-tables=false > "$Q_TMP_SQL"
 fi
 
+# Tömörítés
 if [ $? -eq 0 ]; then
     echo "Tömörítés és mentés a célmappába..."
-    # Becsomagoljuk a tar.gz-be, a -C /tmp miatt a tar-ban tiszta lesz az útvonal
-    tar -czf "$FINAL_TAR" -C /tmp "$(basename "$TMP_SQL")"
+    tar -czf "$Q_FINAL_TAR" -C /tmp "$(basename "$Q_TMP_SQL")"
 
     # Kitakarítjuk a felesleges ideiglenes fájlt a /tmp-ből
-    rm -f "$TMP_SQL"
-    echo "-> Sikeresen elmentve: $(basename "$FINAL_TAR")"
+    rm -f "$Q_TMP_SQL"
+    echo "Az adatbázisok mentése megtörtént."
 else
-    echo "-> [HIBA] Az adatbázis exportálás sikertelen volt!"
-    rm -f "$TMP_SQL"
+    echo "Az adatbázisok mentése hibás."
+    rm -f "$Q_TMP_SQL"
     exit 1
 fi
 
-echo "=== MARIADB MENTÉS VÉGE ==="
+# Log
+echo "=== Mariadb mentés megtörtént"
+echo ""
 
 #
+

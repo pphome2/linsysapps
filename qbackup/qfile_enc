@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# QBackup
+#
+# qfile_enc
+# Fájl kódolása
+#
+
+# Konfiguráció betöltése
+if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+
+# Log
+echo "=== Fájl kódolása"
+echo ""
+
+# Ellenőrzés
+if ! command -v rclone &> /dev/null; then
+    echo "Az 'rclone' nincs telepítve!"
+    exit 1
+fi
+
+# Fájl ellenőrzés
+if [ ! -d "$1" ] && [ ! -f "$1" ]; then
+    echo "A mappa vagy fájl ($1) üres vagy nem létezik."
+    exit 0
+fi
+
+# Kódolás
+rclone copy "$1" "${Q_RCLONE_USB_CRYPT_REMOTE}:" --crypt-remote "." --verbose
+Q_RCLONE_STATUS=$?
+
+# Végeredmény ellenőrzése
+if [ $Q_RCLONE_STATUS -eq 0 ]; then
+    echo "=== Kódolás megtörtént"
+else
+    echo "=== Hiba történt!"
+    exit 1
+fi
+
+echo ""
+
+#
