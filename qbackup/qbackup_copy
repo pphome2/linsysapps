@@ -32,7 +32,10 @@ if [ ! -z "$1" ]; then
     # USB mentés - rclone crypt
     echo "Titkosított rclone másolás indítása..."
     dir=`pwd`
-    ( cd "$1" && rclone sync "$dir/$Q_BACKUP_DEST" "${Q_RCLONE_USB_CRYPT_REMOTE}:Mentés" --verbose )
+    #( cd "$1" && rclone sync "$dir/$Q_BACKUP_DEST" "${Q_RCLONE_USB_CRYPT_REMOTE}:Mentés" --verbose )
+    mkdir -p "$1/$Q_BACKUP_CRYPT_DEST"
+    #cd "$1/$Q_BACKUP_CRYPT_DEST"
+    rclone sync "$Q_BACKUP_CRYPT_DEST" "$1/$Q_BACKUP_CRYPT_DEST" --verbose
     Q_RCLONE_STATUS=$?
 else
     # Helyi mappákba másolás
