@@ -51,7 +51,7 @@ for q_part in $Q_PARTITIONS; do
 
             # qbackup_copy imndítása a célmappa átadásával
             if [ -f "./qbackup_copy" ]; then
-                bash ./qbackup_copy "$Q_USB_TARGET_DIR"
+                bash ./qbackup_copy "$Q_USB_MOUNT_POINT"
             else
                 echo "Hiba: A qbackup_copy modul nem található!"
             fi

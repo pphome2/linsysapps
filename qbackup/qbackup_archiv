@@ -40,6 +40,13 @@ if [ -f "./qbackup_check" ]; then
     #fi
 fi
 
+# Kódolás
+if [ -f "./qbackup_crypt" ]; then
+    bash ./qbackup_crypt
+else
+    echo "Hiba: A qbackup_crypt nem található!"
+fi
+
 # Log
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] qbackup_archiv archívum mentése megtörtént"
 echo ""

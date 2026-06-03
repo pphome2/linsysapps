@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+# QBackup
+#
+# qbackup_crypt
+# Kódolt mentés előállítása
+#
+
+# Konfiguráció betöltése
+if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+
+# Log
+echo ""
+echo "=== Kódolt mentés előállítása"
+echo "$0"
+echo ""
+
+# rclone ellenőrzése
+if ! command -v rclone &> /dev/null; then
+    echo "Hiba: Az 'rclone' nincs telepítve!"
+    exit 1
+fi
+
+# Előkészítés
+mkdir -p "$Q_BACKUP_CRYPT_DEST"
+
+# Mentés ellenőrzése
+if [ ! -d "$Q_BACKUP_DEST" ] || [ -z "$(ls -A "$Q_BACKUP_DEST")" ]; then
+    echo "Figyelem: A helyi mentési mappa ($Q_BACKUP_DEST) üres vagy nem létezik. Kilépés."
+    exit 0
+fi
+
+# Kódolás
+cd "$Q_BACKUP_CRYPT_DEST"
+#pwd
+#echo "$dir/$Q_BACKUP_DEST"
+rclone sync "../$Q_BACKUP_DEST" "${Q_RCLONE_USB_CRYPT_REMOTE}:Mentés" --verbose
+Q_RCLONE_STATUS=$?
+
+# Hiba kezelés
+if [ $Q_RCLONE_STATUS -eq 0 ]; then
+    echo "=== Kódolás megtörtént"
+else
+    echo "=== [HIBA] A kódolás során hiba történt!"
+    exit 1
+fi
+
+# Log
+echo ""
+
+#

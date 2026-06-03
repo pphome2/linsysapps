@@ -52,6 +52,14 @@ else
 fi
 
 # 4.
+# Kódolás
+if [ -f "./qbackup_crypt" ]; then
+    bash ./qbackup_crypt
+else
+    echo "Hiba: A qbackup_crypt nem található!"
+fi
+
+# 5.
 # Rclone modul futtatása - felhős másolat készítése
 if [ -f "./qbackup_rclone" ]; then
     bash ./qbackup_rclone
@@ -59,7 +67,7 @@ else
     echo "Hiba: A qbackup_rclone nem található!"
 fi
 
-# 5.
+# 6.
 # Copy modul futtatása - helyi másolatok készítése
 if [ -f "./qbackup_copy" ]; then
     bash ./qbackup_copy
@@ -67,7 +75,7 @@ else
     echo "Hiba: A qbackup_copy nem található!"
 fi
 
-# 6.
+# 7.
 # Copy USB modul - külső hardver mentés
 if [ -f "./qbackup_copy_usb" ]; then
     bash ./qbackup_copy_usb

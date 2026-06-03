@@ -26,6 +26,7 @@ Q_BACKUP_HOME_SUBDIRS=("Dokumentumok"
 
 # Mentések célmappája
 Q_BACKUP_DEST="./backup"
+Q_BACKUP_CRYPT_DEST="./backup_crypt"
 
 # Kizárásk: ezeket a mintákat/mappákat hagyja ki a tar
 Q_EXCLUDES=("backup"
