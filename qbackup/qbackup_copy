@@ -41,9 +41,11 @@ else
     # Helyi mappákba másolás
     Q_RCLONE_STATUS=0
     for q_dest in "${Q_BACKUP_COPY_DESTS[@]}"; do
-        echo "Szinkronizálás a következő helyre: $q_dest"
-        rclone sync "$Q_BACKUP_DEST" "$q_dest" --verbose
-        if [ $? -ne 0 ]; then Q_RCLONE_STATUS=1; fi
+  		if [ -d $q_dest ]; then
+      		echo "Szinkronizálás a következő helyre: $q_dest"
+      		rclone sync "$Q_BACKUP_DEST" "$q_dest" --verbose
+      		if [ $? -ne 0 ]; then Q_RCLONE_STATUS=1; fi
+        fi
     done
 fi
 
