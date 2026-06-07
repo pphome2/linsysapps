@@ -31,7 +31,7 @@ fi
 
 # Paraméter
 if [ -z "$1" ]; then
-    cmd="qbackup"
+    cmd="qbackup_full"
 else
     cmd=$1
 fi
