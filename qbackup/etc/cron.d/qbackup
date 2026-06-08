@@ -1,6 +1,6 @@
 # /etc/cron.d/mentes: crontab fragment for save important data
 
-0 20 * * *      root   /opt/qbackup/starter qbackup
-0 12 * * 6      root   /opt/qbackup/starter qbackup_full 1
+0 20 * * *      root   /opt/qbackup/starter
+0 12 * * 6      root   /opt/qbackup/starter_full
 
 #

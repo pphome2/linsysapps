@@ -66,6 +66,9 @@ Q_BACKUP_COPY_DESTS=("/tmp/teszt_masolat-0"
                      "/tmp/teszt_masolat-1"
                      )
 
+# Felhasználói map könyvtár
+Q_USER_MAP_ROOT="/run/media"
+
 # Az USB-n keresendő jelzőfájl neve
 Q_USB_MARKER_FILE=".backupusb"
 

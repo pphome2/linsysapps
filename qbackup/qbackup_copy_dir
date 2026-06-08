@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# QBackup
+#
+# qbackup_copy_usb
+# Mentések másolása külső meghajtóra
+#
+
+# Konfiguráció betöltése
+if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+
+# Log
+echo ""
+echo "=== Külső eszközön könyvtár keresése és mentés (felhasználó által felcsatolva)"
+echo "$0"
+echo ""
+
+# Elérés ellenőrzése
+if [ ! -d "$Q_USER_MAP_ROOT" ]; then
+    echo "Hiba: A keresési könyvtár nem található!"
+fi
+
+# Külső eszközön könyvtár keresés és mentés
+find "$Q_USER_MAP_ROOT" -type f -name "$Q_USB_MARKER_FILE" -printf "%h\n" | while read -r q_dirn; do
+    # qbackup_copy imndítása a célmappa átadásával
+    if [ -f "$q_dirn/$Q_USB_MARKER_FILE" ]; then
+        if [ -f "./qbackup_copy" ]; then
+            bash ./qbackup_copy "$q_dirn"
+            echo "$q_dirn"
+        else
+            echo "Hiba: A qbackup_copy modul nem található!"
+        fi
+    fi
+done
+
+echo "=== Külső eszközön könyvtárba mentés megtörtént"
+echo ""
+
+#
+

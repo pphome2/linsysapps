@@ -76,6 +76,14 @@ else
 fi
 
 # 7.
+# Copy modul futtatása - felhasználó felmappelt külső eszközének keresése
+if [ -f "./qbackup_copy_dir" ]; then
+    bash ./qbackup_copy_dir
+else
+    echo "Hiba: A qbackup_copy_dir nem található!"
+fi
+
+# 8.
 # Copy USB modul - külső hardver mentés
 if [ -f "./qbackup_copy_usb" ]; then
     bash ./qbackup_copy_usb

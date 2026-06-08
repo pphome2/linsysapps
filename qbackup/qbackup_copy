@@ -32,8 +32,8 @@ if [ ! -z "$1" ]; then
     # USB mentés - rclone crypt
     echo "Titkosított rclone másolás indítása..."
     dir=`pwd`
-    #( cd "$1" && rclone sync "$dir/$Q_BACKUP_DEST" "${Q_RCLONE_USB_CRYPT_REMOTE}:Mentés" --verbose )
     mkdir -p "$1/$Q_BACKUP_CRYPT_DEST"
+    #echo "$1/$Q_BACKUP_CRYPT_DEST"
     #cd "$1/$Q_BACKUP_CRYPT_DEST"
     rclone sync "$Q_BACKUP_CRYPT_DEST" "$1/$Q_BACKUP_CRYPT_DEST" --verbose
     Q_RCLONE_STATUS=$?
@@ -41,10 +41,10 @@ else
     # Helyi mappákba másolás
     Q_RCLONE_STATUS=0
     for q_dest in "${Q_BACKUP_COPY_DESTS[@]}"; do
-  		if [ -d $q_dest ]; then
-      		echo "Szinkronizálás a következő helyre: $q_dest"
-      		rclone sync "$Q_BACKUP_DEST" "$q_dest" --verbose
-      		if [ $? -ne 0 ]; then Q_RCLONE_STATUS=1; fi
+      if [ -d $q_dest ]; then
+          echo "Szinkronizálás a következő helyre: $q_dest"
+          rclone sync "$Q_BACKUP_DEST" "$q_dest" --verbose
+          if [ $? -ne 0 ]; then Q_RCLONE_STATUS=1; fi
         fi
     done
 fi

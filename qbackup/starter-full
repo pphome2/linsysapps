@@ -2,7 +2,7 @@
 #
 # QBackup
 #
-# starter
+# starter_full
 # Indító
 #
 
@@ -10,42 +10,9 @@
 DIR="$(pwd)"
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 cd ${SCRIPT_DIR}
-#echo $SCRIPT_NAME
 
-# Konfiguráció beolvasása
-if [ -f "./qconfig" ]; then
-    source ./qconfig
-else
-    echo "Hiba: A qconfig nem található a fő szkript mellett!"
-    cd ${DIR}
-    exit 1
-fi
-
-# Log törlése
-if [ "$2" == "1" ]; then
-    rm "$Q_LOG_FILE"
-fi
-if [[ "$1" == *"full"* ]]; then
-    rm "$Q_LOG_FILE"
-fi
-
-# Paraméter
-if [ -z "$1" ]; then
-    cmd="qbackup_full"
-else
-    cmd=$1
-fi
-
-# Indítás, log-ok kezelésével
-if [ -f "./$cmd" ]; then
-    if [ "$Q_LOG_SCREEN" = "1" ]; then
-        bash "./$cmd" 2>&1 | tee -a "$Q_LOG_FILE"
-    else
-        bash "./$cmd" >> "$Q_LOG_FILE" 2>&1
-    fi
-fi
+bash ./starter qbackup_full
 
 cd ${DIR}
 
 #
-
