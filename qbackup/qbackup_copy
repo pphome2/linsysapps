@@ -21,30 +21,37 @@ if ! command -v rclone &> /dev/null; then
     exit 1
 fi
 
-# Mentés ellenőrzése
-if [ ! -d "$Q_BACKUP_DEST" ] || [ -z "$(ls -A "$Q_BACKUP_DEST")" ]; then
-    echo "Figyelem: A helyi mentési mappa ($Q_BACKUP_DEST) üres vagy nem létezik. Kilépés."
-    exit 0
-fi
-
 # Paraméter
 if [ ! -z "$1" ]; then
+    # Mentés ellenőrzése
+    if [ ! -d "$Q_BACKUP_CRYPT_DEST" ] || [ -z "$(ls -A "$Q_BACKUP_CRYPT_DEST")" ]; then
+        echo "Figyelem: A helyi mentési mappa ($Q_BACKUP_CRYPT_DEST) üres vagy nem létezik. Kilépés."
+        exit 0
+    fi
     # USB mentés - rclone crypt
     echo "Titkosított rclone másolás indítása..."
-    dir=`pwd`
-    mkdir -p "$1/$Q_BACKUP_CRYPT_DEST"
-    #echo "$1/$Q_BACKUP_CRYPT_DEST"
+    #dir=`pwd`
     #cd "$1/$Q_BACKUP_CRYPT_DEST"
-    rclone sync "$Q_BACKUP_CRYPT_DEST" "$1/$Q_BACKUP_CRYPT_DEST" --verbose
-    Q_RCLONE_STATUS=$?
+    #echo "$1/$Q_BACKUP_CRYPT_DEST"
+    mkdir -p "$1/$Q_BACKUP_CRYPT_DEST"
+    if [ -d "$1/$Q_BACKUP_CRYPT_DEST" ]; then
+        rclone sync "$Q_BACKUP_CRYPT_DEST" "$1/$Q_BACKUP_CRYPT_DEST" --verbose
+        Q_RCLONE_STATUS=$?
+    fi
 else
+    # Mentés ellenőrzése
+    if [ ! -d "$Q_BACKUP_DEST" ] || [ -z "$(ls -A "$Q_BACKUP_DEST")" ]; then
+        echo "Figyelem: A helyi mentési mappa ($Q_BACKUP_DEST) üres vagy nem létezik. Kilépés."
+        exit 0
+    fi
     # Helyi mappákba másolás
     Q_RCLONE_STATUS=0
     for q_dest in "${Q_BACKUP_COPY_DESTS[@]}"; do
-      if [ -d $q_dest ]; then
-          echo "Szinkronizálás a következő helyre: $q_dest"
-          rclone sync "$Q_BACKUP_DEST" "$q_dest" --verbose
-          if [ $? -ne 0 ]; then Q_RCLONE_STATUS=1; fi
+        mkdir -p "$q_dest"
+        if [ -d "$q_dest" ]; then
+            echo "Szinkronizálás a következő helyre: $q_dest"
+            rclone sync "$Q_BACKUP_DEST" "$q_dest" --verbose
+            if [ $? -ne 0 ]; then Q_RCLONE_STATUS=1; fi
         fi
     done
 fi
