@@ -2,5 +2,6 @@
 
 0 20 * * *      root   /opt/qbackup/starter
 0 12 * * 6      root   /opt/qbackup/starter_full
+0 13 * * 6      root   /opt/qbackup/starter_sync
 
 #

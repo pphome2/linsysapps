@@ -6,35 +6,20 @@
 # Konfigurációs fájl a qbackup rendszerhez
 #
 
+
+#
+# Log
+#
 # Log kiírása képernyőre is (1 ha megjelenjen)
 Q_LOG_SCREEN="0"
 
 # Log fájl
 Q_LOG_FILE="qbackup.log"
 
-# Rendszer könyvtárak mentés
-Q_BACKUP_SYSTEM=("/etc"
-                 "/var/www/html"
-                 )
 
-# A home könyvtárban felhasználói alkönyvtárak mentése
-Q_BACKUP_HOME_SUBDIRS=("Dokumentumok"
-                       "public_html"
-                       "Projektek"
-                       "Asztal"
-                       )
-
-# A home könyvtárban felhasználói alkönyvtárak szinkronizálása 
-Q_SYNC_HOME_SUBDIRS=("Dokumentumok"
-                     "Képek"
-                     "Projektek"
-                     "Asztal"
-                     "Adathalom"
-                     )
-
-# Szinkronizálás célja
-Q_SYNC_DEST="/home/user/Backup"
-
+#
+# Mentés és visszaállítás rendszerbeállítások
+#
 # Mentések célmappája
 Q_BACKUP_DEST="./backup"
 Q_BACKUP_CRYPT_DEST="./backup_crypt"
@@ -59,6 +44,41 @@ Q_SNAP_DIR="./backup/snapshots"
 # Helyreállítási célkönyvtár
 Q_RESTORE_DEST="./restore"
 
+
+#
+# Mentés alatt álló könyvtárak
+#
+# Rendszer könyvtárak mentés
+Q_BACKUP_SYSTEM=("/etc"
+                 "/var/www/html"
+                 )
+
+# A home könyvtárban felhasználói alkönyvtárak mentése
+Q_BACKUP_HOME_SUBDIRS=("Dokumentumok"
+                       "public_html"
+                       "Projektek"
+                       "Asztal"
+                       )
+
+
+#
+# Könyvtárak szinkronizálása
+#
+# A home könyvtárban felhasználói alkönyvtárak szinkronizálása 
+Q_SYNC_HOME_SUBDIRS=("Dokumentumok"
+                     "Képek"
+                     "Projektek"
+                     "Asztal"
+                     "Adathalom"
+                     )
+
+# Szinkronizálás célja
+Q_SYNC_DEST="/home/user/Backup"
+
+
+#
+# rclone kódolás
+#
 # Az rclone config-ban megadott titkosított profil neve
 # crypt típust választani, mappát megadni, jelszavakat megadni
 Q_RCLONE_USB_CRYPT_REMOTE="usb_secret"
@@ -72,20 +92,36 @@ Q_RCLONE_REMOTE="gdrive"
 # A mappa neve a felhőben
 Q_RCLONE_DEST_DIR="Mentés"
 
+
+#
+# Elkészült mentés másolása helyi könyvtárakba
+#
 # Helyi könyvtár útvonalak, ahová másolatot kerül
 Q_BACKUP_COPY_DESTS=("/tmp/teszt_masolat-0"
                      "/tmp/teszt_masolat-1"
                      )
 
+
+#
+# Grafikus felületen elérhető külső meghajtók elérése
+#
 # Felhasználói map könyvtár
 Q_USER_MAP_ROOT="/run/media"
 
+
+#
+# Külső meghajtók keresése
+#
 # Az USB-n keresendő jelzőfájl neve
 Q_USB_MARKER_FILE=".backupusb"
 
 # Ideiglenes csatolási pont az USB-knek
 Q_USB_MOUNT_POINT="/mnt/qbackup_usb"
 
+
+#
+# SQL adatbázisok mentése
+#
 # MariaDB / MySQL hozzáférések
 Q_DB_USER="root"
 Q_DB_PASS=""
