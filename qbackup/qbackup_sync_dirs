@@ -32,13 +32,14 @@ if [ -d "$Q_SYNC_DEST" ]; then
             user_name=$(basename "$user_dir")
             mkdir -p "$Q_SYNC_DEST/$user_name"
             for sub_dir in "${Q_SYNC_HOME_SUBDIRS[@]}"; do
-                Q_RCLONE_STATUS=0
-                mkdir -p "$Q_SYNC_DEST/$user_name/$sub_dir"
-                if [ -d "$Q_SYNC_DEST/$user_name/$sub_dir" ]; then
-                    echo "Szinkronizálás a következő helyre: "$Q_SYNC_DEST/$user_name/$sub_dir""
-                    rclone sync "/home/$user_name/$sub_dir" "$Q_SYNC_DEST/$user_name/$sub_dir" --verbose
-                    #echo "/home/$user_name/$sub_dir" -  "$Q_SYNC_DEST/$user_name/$sub_dir"
-                    if [ $? -ne 0 ]; then Q_RCLONE_STATUS=1; fi
+                if [ -d "/home/$user_name/$sub_dir" ]; then
+                    mkdir -p "$Q_SYNC_DEST/$user_name/$sub_dir"
+                    if [ -d "$Q_SYNC_DEST/$user_name/$sub_dir" ]; then
+                        echo "Szinkronizálás a következő helyre: "$Q_SYNC_DEST/$user_name/$sub_dir""
+                        Q_RCLONE_STATUS=0
+                        rclone sync "/home/$user_name/$sub_dir" "$Q_SYNC_DEST/$user_name/$sub_dir" --verbose
+                        if [ $? -ne 0 ]; then Q_RCLONE_STATUS=1; fi
+                    fi
                 fi
             done
         fi
