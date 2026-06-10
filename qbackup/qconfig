@@ -24,6 +24,17 @@ Q_BACKUP_HOME_SUBDIRS=("Dokumentumok"
                        "Asztal"
                        )
 
+# A home könyvtárban felhasználói alkönyvtárak szinkronizálása 
+Q_SYNC_HOME_SUBDIRS=("Dokumentumok"
+                     "Képek"
+                     "Projektek"
+                     "Asztal"
+                     "Adathalom"
+                     )
+
+# Szinkronizálás célja
+Q_SYNC_DEST="/home/user/Backup"
+
 # Mentések célmappája
 Q_BACKUP_DEST="./backup"
 Q_BACKUP_CRYPT_DEST="./backup_crypt"

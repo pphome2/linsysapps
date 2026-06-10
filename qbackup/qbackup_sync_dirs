@@ -1,0 +1,60 @@
+#!/bin/bash
+#
+# QBackup
+#
+# qbackup_sync_dirs
+# Kijelölt könyvtárak szikronizálása másik helyre
+#
+
+# Konfiguráció betöltése
+if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+
+# Log
+echo ""
+echo "=== Könyvtárak szinkronizálása"
+echo "$0"
+echo ""
+
+# rclone ellenőrzése
+if ! command -v rclone &> /dev/null; then
+    echo "Hiba: Az 'rclone' nincs telepítve!"
+    exit 1
+fi
+
+# Paraméter
+Q_RCLONE_STATUS=0
+if [ -d "$Q_SYNC_DEST" ]; then
+    dir=`pwd`
+    # Helyi mappák szinkronizálása
+    # Felhasználók
+    for user_dir in /home/*; do
+        if [ -d "$user_dir" ]; then
+            user_name=$(basename "$user_dir")
+            mkdir -p "$Q_SYNC_DEST/$user_name"
+            for sub_dir in "${Q_SYNC_HOME_SUBDIRS[@]}"; do
+                Q_RCLONE_STATUS=0
+                mkdir -p "$Q_SYNC_DEST/$user_name/$sub_dir"
+                if [ -d "$Q_SYNC_DEST/$user_name/$sub_dir" ]; then
+                    echo "Szinkronizálás a következő helyre: "$Q_SYNC_DEST/$user_name/$sub_dir""
+                    rclone sync "/home/$user_name/$sub_dir" "$Q_SYNC_DEST/$user_name/$sub_dir" --verbose
+                    #echo "/home/$user_name/$sub_dir" -  "$Q_SYNC_DEST/$user_name/$sub_dir"
+                    if [ $? -ne 0 ]; then Q_RCLONE_STATUS=1; fi
+                fi
+            done
+        fi
+    done
+fi
+
+# Hiba kezelés
+if [ $Q_RCLONE_STATUS -eq 0 ]; then
+    echo "=== Szinkronizálás sikeresen végrehajtva."
+else
+    echo "=== [HIBA] A szinkronizálás során hiba történt!"
+    exit 1
+fi
+
+# Log
+echo "=== Szinkronizálás megtörtént"
+echo ""
+
+#
