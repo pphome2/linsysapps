@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# git kezelés
+#
+# lokális változások feltöltése
+#
+
+#localdir=`dirname $0`
+#. $localdir/git-config
+
+d=`date +%Y%m%d`
+
+if [ -z $1 ]; then
+  m="$d"
+else
+  m=$1
+fi
+
+git add *
+git commit -m "$m"
+git push
+
+#

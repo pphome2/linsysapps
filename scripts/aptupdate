@@ -1,16 +1,23 @@
 #!/bin/bash
 
-rm /var/lib/apt/lists/*_*
-apt update
+sudo -v
 
-apt upgrade -y
-apt dist-upgrade -y
-apt full-upgrade -y
+# paraméter
+if [ $# -gt 0 ]; then
+    sudo rm -f /var/lib/apt/lists/*_*
+fi
 
-apt clean
-apt autoclean
-apt autoremove -y
+sudo apt update
+apt list --upgradable
 
-#aptitude
+read -r -p "[ENTER]" valasz
+
+if [ -n "$valasz" ]; then
+    exit 1
+fi
+
+sudo apt full-upgrade -y
+sudo apt autoclean
+sudo apt autoremove -y
 
 #
