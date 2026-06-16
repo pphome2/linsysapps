@@ -12,14 +12,8 @@ SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 cd ${SCRIPT_DIR}
 #echo $SCRIPT_NAME
 
-# Konfiguráció beolvasása
-if [ -f "./qconfig" ]; then
-    source ./qconfig
-else
-    echo "Hiba: A qconfig nem található a fő szkript mellett!"
-    cd ${DIR}
-    exit 1
-fi
+# Konfiguráció betöltése
+if [ -f "./qconfig" ]; then source "./qconfig"; else echo "Beállítás fájl hiba."; cd $DIR; exit 1; fi
 
 # Log törlése
 if [ "$2" == "1" ]; then
@@ -48,3 +42,4 @@ fi
 cd ${DIR}
 
 #
+

@@ -8,18 +8,12 @@
 
 # A szkript indítási mappája
 DIR="$(pwd)"
-SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
-cd ${SCRIPT_DIR}
+SCRIPT_DIR=$(dirname "$BASH_SOURCE[0]")
+cd "$SCRIPT_DIR"
 #echo $SCRIPT_NAME
 
-# Konfiguráció beolvasása
-if [ -f "./qconfig" ]; then
-    source ./qconfig
-else
-    echo "Hiba: A qconfig nem található a fő szkript mellett!"
-    cd ${DIR}
-    exit 1
-fi
+# Konfiguráció betöltése
+if [ -f "./qconfig" ]; then source "./qconfig"; else echo "Beállítás fájl hiba."; cd "$DIR"; exit 1; fi
 
 # Log
 echo ""
@@ -41,7 +35,7 @@ if [ -f "./qbackup_check" ]; then
     bash ./qbackup_check
     # Hibás fájlok
     if [ $? -ne 0 ]; then
-        cd ${DIR}
+        cd $"DIR"
         exit 1
     fi
 fi
@@ -98,7 +92,7 @@ fi
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Különbözeti mentés megtörtént"
 echo ""
 
-cd ${DIR}
+cd "$DIR"
 
 #
 

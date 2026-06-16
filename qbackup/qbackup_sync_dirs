@@ -7,7 +7,7 @@
 #
 
 # Konfiguráció betöltése
-if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+if [ -f "./qconfig" ]; then source "./qconfig"; else echo "Konfigfájl hiba."; exit 1; fi
 
 # Log
 echo ""
@@ -30,14 +30,14 @@ if [ -d "$Q_SYNC_DEST" ]; then
     for user_dir in /home/*; do
         if [ -d "$user_dir" ]; then
             user_name=$(basename "$user_dir")
-            mkdir -p "$Q_SYNC_DEST/$user_name"
+            mkdir -p "${Q_SYNC_DEST}/${user_name}"
             for sub_dir in "${Q_SYNC_HOME_SUBDIRS[@]}"; do
-                if [ -d "/home/$user_name/$sub_dir" ]; then
-                    mkdir -p "$Q_SYNC_DEST/$user_name/$sub_dir"
-                    if [ -d "$Q_SYNC_DEST/$user_name/$sub_dir" ]; then
-                        echo "Szinkronizálás a következő helyre: "$Q_SYNC_DEST/$user_name/$sub_dir""
+                if [ -d "/home/$user_name/${sub_dir}" ]; then
+                    mkdir -p "${Q_SYNC_DEST}/${user_name}/${sub_dir}"
+                    if [ -d "${Q_SYNC_DEST}/${user_name}/${sub_dir}" ]; then
+                        echo "Szinkronizálás a következő helyre: "${Q_SYNC_DEST}/${user_name}/${sub_dir}""
                         Q_RCLONE_STATUS=0
-                        rclone sync "/home/$user_name/$sub_dir" "$Q_SYNC_DEST/$user_name/$sub_dir" --verbose
+                        rclone sync "/home/${user_name}/${sub_dir}" "${Q_SYNC_DEST}/${user_name}/${sub_dir}" --verbose
                         if [ $? -ne 0 ]; then Q_RCLONE_STATUS=1; fi
                     fi
                 fi

@@ -22,6 +22,7 @@ Q_LOG_FILE="qbackup.log"
 #
 # Mentések célmappája
 Q_BACKUP_DEST="./backup"
+Q_BACKUP_DEST_OLD="./backup_old"
 Q_BACKUP_CRYPT_DEST="./backup_crypt"
 
 # Kizárásk: ezeket a mintákat/mappákat hagyja ki a tar

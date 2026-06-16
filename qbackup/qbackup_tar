@@ -7,7 +7,7 @@
 #
 
 # Konfiguráció betöltése
-if [ -f "./qconfig" ]; then source "./qconfig"; else exit 1; fi
+if [ -f "./qconfig" ]; then source "./qconfig"; else echo "Beállítás fájl hiba."; exit 1; fi
 
 # Log
 DATE=$(date +%F)
