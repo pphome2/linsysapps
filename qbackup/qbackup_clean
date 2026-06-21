@@ -22,8 +22,10 @@ if [ "$1" == "all" ]; then
         rm -rf "$Q_BACKUP_DEST_OLD"
     fi
     mv "$Q_BACKUP_DEST" "$Q_BACKUP_DEST_OLD"
-    #rm -f ${Q_BACKUP_DEST}/*_diff_*.tar.gz
-    #rm -f ${Q_SNAP_DIR}/*.snap
+    mkdir -p "$Q_BACKUP_DEST"
+    find "$BACKUP_DEST_OLD" -mindepth 1 -maxdepth 1 -type d -name "$Q_ARCHIV" | while read -r archiv_dir; do
+  		cp "$archiv_dir" "$Q_BACKUP_DEST"
+    done
 else
     echo "Régi különbözeti mentések törlése ($Q_KEEP_DAYS napnál régebbiek)..."
     if [ -d "$Q_BACKUP_DEST" ]; then
