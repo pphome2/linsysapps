@@ -9,13 +9,13 @@
 # Konfiguráció betöltése
 if [ -f "./qconfig" ]; then source "./qconfig"; else echo "Konfigfájl hiba."; exit 1; fi
 
-# Mappák létrehozása
-mkdir -p "$Q_BACKUP_DEST" "$Q_SNAP_DIR"
-
 # Különbözeti mentések törlése
 if [ -f "./qbackup_clean" ]; then
     bash ./qbackup_clean all
 fi
+
+# Mappák létrehozása
+mkdir -p "$Q_BACKUP_DEST" "$Q_SNAP_DIR"
 
 # Kizárások kapcsolóinak összeállítása
 Q_TAR_EXCLUDES=()
