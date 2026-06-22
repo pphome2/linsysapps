@@ -31,7 +31,7 @@ for user_dir in /home/*; do
         for sub_dir in "${Q_BACKUP_HOME_SUBDIRS[@]}"; do
             full_path="${user_dir}/${sub_dir}"
             if [ -d "$full_path" ]; then
-                find "$full_path" -mindepth 1 -maxdepth 1 -type d -name "$Q_ARCHIV" | while read -r archiv_dir; do
+                find "$full_path" -mindepth 1 -maxdepth 1 -type f -name "*${Q_ARCHIV}*" | while read -r archiv_dir; do
                     echo "Teljes mentés: full_home_${user_name}_${sub_dir}_${Q_ARCHIV}"
                     rm -f "${Q_SNAP_DIR}/home_${user_name}_${sub_dir}_${Q_ARCHIV}.snap"
                     tar -czg "${Q_SNAP_DIR}/home_${user_name}_${sub_dir}_${Q_ARCHIV}.snap" -f "${Q_BACKUP_DEST}/full_home_${user_name}_${sub_dir}_${Q_ARCHIV}.tar.gz" "$archiv_dir"
