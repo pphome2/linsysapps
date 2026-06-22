@@ -20,10 +20,12 @@ if [ "$1" == "all" ]; then
     echo "Az összes eddigi különbözeti mentés törlése..."
     if [ -d "$Q_BACKUP_DEST_OLD" ]; then
         rm -rf "$Q_BACKUP_DEST_OLD"
+        echo
     fi
     mv "$Q_BACKUP_DEST" "$Q_BACKUP_DEST_OLD"
     mkdir -p "$Q_BACKUP_DEST"
-    find "$BACKUP_DEST_OLD" -mindepth 1 -maxdepth 1 -type d -name "$Q_ARCHIV" | while read -r archiv_dir; do
+    find "$Q_BACKUP_DEST_OLD" -mindepth 1 -maxdepth 1 -type f -name "*${Q_ARCHIV}*" | while read -r archiv_dir; do
+        echo "$archiv_dir"
   		cp "$archiv_dir" "$Q_BACKUP_DEST"
     done
 else

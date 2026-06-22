@@ -25,16 +25,16 @@ Q_BACKUP_DEST="./backup"
 Q_BACKUP_DEST_OLD="./backup_old"
 Q_BACKUP_CRYPT_DEST="./backup_crypt"
 
+# Archívum mappa külön archív mentéshez
+Q_ARCHIV="00_Archiv"
+
 # Kizárásk: ezeket a mintákat/mappákat hagyja ki a tar
-Q_EXCLUDES=("backup"
-            "_"
+Q_EXCLUDES=("$Q_ARCHIV"
             "*.tmp"
             ".cache"
+            ".thumbnails"
+            "Trash"
             )
-
-# Archívum mappa külön archív mentéshez
-Q_ARCHIV=("_"
-          )
 
 # Hány napig tartsuk meg a különbözeti (diff) mentéseket
 Q_KEEP_DAYS=7
