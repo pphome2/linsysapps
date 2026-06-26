@@ -54,14 +54,6 @@ else
 fi
 
 # 5.
-# Rclone modul futtatása - felhős másolat készítése
-if [ -f "./qbackup_rclone" ]; then
-    bash ./qbackup_rclone
-else
-    echo "Hiba: A qbackup_rclone nem található!"
-fi
-
-# 6.
 # Copy modul futtatása - helyi másolatok készítése
 if [ -f "./qbackup_copy" ]; then
     bash ./qbackup_copy
@@ -69,7 +61,7 @@ else
     echo "Hiba: A qbackup_copy nem található!"
 fi
 
-# 7.
+# 6.
 # Copy modul futtatása - felhasználó felmappelt külső eszközének keresése
 if [ -f "./qbackup_copy_dir" ]; then
     bash ./qbackup_copy_dir
@@ -77,7 +69,7 @@ else
     echo "Hiba: A qbackup_copy_dir nem található!"
 fi
 
-# 8.
+# 7.
 # Copy USB modul - külső hardver mentés
 if [ -f "./qbackup_copy_usb" ]; then
     bash ./qbackup_copy_usb
@@ -85,6 +77,15 @@ else
     echo "Hiba: A qbackup_copy_usb nem található!"
 fi
 
+#85.
+# Rclone modul futtatása - felhős másolat készítése
+if [ -f "./qbackup_rclone" ]; then
+    bash ./qbackup_rclone
+else
+    echo "Hiba: A qbackup_rclone nem található!"
+fi
+
+# Log
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] teljes mentés megtörtént"
 echo ""
 
